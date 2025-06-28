@@ -25,7 +25,7 @@ import { cn } from '@/lib/cn';
 import { buttonVariants } from '@/components/ui/button';
 import { CodeBlock } from '@/components/code-block';
 import { UwuHero } from '@/app/(home)/uwu'; // Keep if you want this specific animation, otherwise remove
-import SourceImage from '@/public/source.png'; // Replace with relevant JKT48Connect image
+import SourceImage from '@/public/1751117998520.png'; // Replace with relevant JKT48Connect image
 import ContributorCounter from '@/components/contributor-count';
 import {
   CreateAppAnimation,
