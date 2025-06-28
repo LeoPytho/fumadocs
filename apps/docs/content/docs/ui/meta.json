@@ -1,6 +1,6 @@
 {
-  "title": "Framework",
-  "description": "The docs framework",
+  "title": "API",
+  "description": "The docs api instead",
   "icon": "Building",
   "root": true,
   "pages": [
