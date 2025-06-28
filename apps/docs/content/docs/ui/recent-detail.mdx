@@ -44,7 +44,7 @@ curl "https://v2.jkt48connect.my.id/api/jkt48/recent?apikey=YOUR_API_KEY"
 ### Fetch Stream Details
 Use the `data_id` to get detailed information:
 ```bash
-curl "https://v2.jkt48connect.my.id/api/jkt48/recent/detail/{data_id}?apikey=YOUR_API_KEY"
+curl "https://v2.jkt48connect.my.id/api/jkt48/recent/{data_id}?apikey=YOUR_API_KEY"
 ```
 </Step>
 </Steps>
@@ -55,7 +55,7 @@ curl "https://v2.jkt48connect.my.id/api/jkt48/recent/detail/{data_id}?apikey=YOU
 
 <Tab value="Overview">
 **Base URL:** `https://v2.jkt48connect.my.id`  
-**Endpoint:** `/api/jkt48/recent/detail/{data_id}`  
+**Endpoint:** `/api/jkt48/recent/{data_id}`  
 **Method:** `GET`  
 **Authentication:** API Key required
 </Tab>
@@ -69,7 +69,7 @@ curl "https://v2.jkt48connect.my.id/api/jkt48/recent/detail/{data_id}?apikey=YOU
 
 **Example:**
 ```http
-GET /api/jkt48/recent/detail/125100001751127046?apikey=YOUR_API_KEY HTTP/1.1
+GET /api/jkt48/recent/125100001751127046?apikey=YOUR_API_KEY HTTP/1.1
 Host: v2.jkt48connect.my.id
 ```
 </Tab>
@@ -102,7 +102,7 @@ const BASE_URL = 'https://v2.jkt48connect.my.id';
 async function getStreamDetail(dataId) {
   try {
     const response = await fetch(
-      `${BASE_URL}/api/jkt48/recent/detail/${dataId}?apikey=${API_KEY}`
+      `${BASE_URL}/api/jkt48/recent/${dataId}?apikey=${API_KEY}`
     );
     
     if (!response.ok) {
@@ -144,7 +144,7 @@ BASE_URL = 'https://v2.jkt48connect.my.id'
 
 def get_stream_detail(data_id):
     """Get detailed information for a specific stream"""
-    url = f"{BASE_URL}/api/jkt48/recent/detail/{data_id}"
+    url = f"{BASE_URL}/api/jkt48/recent/{data_id}"
     params = {'apikey': API_KEY}
     
     try:
@@ -212,7 +212,7 @@ type RecentStream struct {
 }
 
 func getStreamDetail(dataID string) (*StreamDetail, error) {
-    url := fmt.Sprintf("%s/api/jkt48/recent/detail/%s?apikey=%s", BaseURL, dataID, APIKey)
+    url := fmt.Sprintf("%s/api/jkt48/recent/%s?apikey=%s", BaseURL, dataID, APIKey)
     
     client := &http.Client{Timeout: 10 * time.Second}
     resp, err := client.Get(url)
@@ -278,7 +278,7 @@ The Recent Live Detail API is designed to work in conjunction with the Recent Li
 
 1. **Fetch Recent Streams**: Use `/api/jkt48/recent` to get list of recent streams
 2. **Extract data_id**: Get the `data_id` from desired stream in the response
-3. **Fetch Details**: Use the `data_id` with `/api/jkt48/recent/detail/{data_id}`
+3. **Fetch Details**: Use the `data_id` with `/api/jkt48/recent/{data_id}`
 4. **Process Data**: Handle the detailed response based on your application needs
 
 ## Error Handling
@@ -312,7 +312,7 @@ async function fetchStreamDetailSafely(dataId) {
   while (retryCount < maxRetries) {
     try {
       const response = await fetch(
-        `${BASE_URL}/api/jkt48/recent/detail/${dataId}?apikey=${API_KEY}`
+        `${BASE_URL}/api/jkt48/recent/${dataId}?apikey=${API_KEY}`
       );
       
       if (response.status === 404) {
