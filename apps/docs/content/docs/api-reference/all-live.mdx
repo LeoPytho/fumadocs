@@ -64,8 +64,9 @@ A successful request returns a JSON array of objects, each representing a live m
     "type": "idn"
   }
 ]
-```
 
+Code Implementations
+Here's how to fetch live data using different programming languages. Replace YOUR_API_KEY with your actual API key.
 <Tabs defaultValue="js">
 <TabsList>
 <TabsTrigger value="js">JavaScript</TabsTrigger>
@@ -99,10 +100,9 @@ getLiveMembers();
 <TabsContent value="py">
 ```python
 import requests
-API_KEY = 'YOUR_API_KEY' # Get your API key from [https://www.jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi)
-BASE_URL = '[https://v2.jkt48connect.my.id](https://v2.jkt48connect.my.id)'
+API_KEY = 'YOUR_API_KEY' # Get your API key from https://www.jkt48connect.my.id/buyapi
+BASE_URL = 'https://v2.jkt48connect.my.id'
 ENDPOINT = '/api/jkt48/live'
-
 def get_live_members():
     try:
         response = requests.get(f"{BASE_URL}{ENDPOINT}?apikey={API_KEY}")
@@ -120,10 +120,9 @@ if __name__ == "__main__":
 <TabsContent value="php">
 ```php
 <?php
-$apiKey = 'YOUR_API_KEY'; // Get your API key from [https://www.jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi)
-$baseUrl = '[https://v2.jkt48connect.my.id](https://v2.jkt48connect.my.id)';
+$apiKey = 'YOUR_API_KEY'; // Get your API key from https://www.jkt48connect.my.id/buyapi
+$baseUrl = 'https://v2.jkt48connect.my.id';
 $endpoint = '/api/jkt48/live';
-
 $url = "{$baseUrl}{$endpoint}?apikey={$apiKey}";
 
 $ch = curl_init();
@@ -149,12 +148,11 @@ curl_close($ch);
 ```go
 package main
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"net/http"
+"encoding/json"
+"fmt"
+"io/ioutil"
+"net/http"
 )
-
 const (
 	apiKey  = "YOUR_API_KEY" // Get your API key from [https://www.jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi)
 	baseURL = "[https://v2.jkt48connect.my.id](https://v2.jkt48connect.my.id)"
