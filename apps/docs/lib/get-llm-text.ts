@@ -16,8 +16,8 @@ const processor = remark()
 export async function getLLMText(page: Page) {
   const category =
     {
-      ui: 'Fumadocs Framework',
-      headless: 'Fumadocs Core (core library of framework)',
+      ui: 'JKT48Connect API',
+      headless: 'JKT48Connect Core',
       mdx: 'Fumadocs MDX (the built-in content source)',
       cli: 'Fumadocs CLI (the CLI tool for automating Fumadocs apps)',
     }[page.slugs[0]] ?? page.slugs[0];
@@ -29,7 +29,6 @@ export async function getLLMText(page: Page) {
 
   return `# ${category}: ${page.data.title}
 URL: ${page.url}
-Source: https://raw.githubusercontent.com/fuma-nama/fumadocs/refs/heads/main/apps/docs/content/docs/${page.path}
 
 ${page.data.description}
         
