@@ -19,13 +19,8 @@ export const linkItems: LinkItemType[] = [
     active: 'url',
   },
   {
-    text: 'Sponsors',
-    url: '/sponsors',
-    icon: <Heart />,
-  },
-  {
     type: 'icon',
-    url: 'https://github.com/fuma-nama/fumadocs',
+    url: 'https://github.com/j-forces',
     text: 'Github',
     icon: (
       <svg role="img" viewBox="0 0 24 24" fill="currentColor">
@@ -39,11 +34,11 @@ export const linkItems: LinkItemType[] = [
 export const logo = (
   <>
     <Image
-      alt="Fumadocs"
+      alt="JKT48Connect docs"
       src={Logo}
       sizes="100px"
       className="hidden w-20 md:w-24 [.uwu_&]:block"
-      aria-label="Fumadocs"
+      aria-label="JKT48Connect docs"
     />
 
     <FumadocsIcon className="size-5 [.uwu_&]:hidden" fill="currentColor" />
@@ -56,7 +51,7 @@ export const baseOptions: BaseLayoutProps = {
       <>
         {logo}
         <span className="font-medium [.uwu_&]:hidden [header_&]:text-[15px]">
-          Fumadocs
+          JKT48Connect
         </span>
       </>
     ),
