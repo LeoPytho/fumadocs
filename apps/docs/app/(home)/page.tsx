@@ -394,15 +394,15 @@ function Hero() {
       </p>
       <div className="inline-flex items-center gap-3 max-md:mx-auto">
         <Link
-          href="/docs/api-reference" // Replace with your API documentation link
+          href="/docs" // Replace with your API documentation link
           className={cn(
             buttonVariants({ size: 'lg', className: 'rounded-full' }),
           )}
         >
-          Get Started with API
+          Get Started
         </Link>
         <a
-          href="[LINK_DEMO_JKT48CONNECT]" // Replace with your API demo link
+          href="https://www.jkt48connect.my.id" // Replace with your API demo link
           target="_blank"
           rel="noreferrer noopener"
           className={cn(
