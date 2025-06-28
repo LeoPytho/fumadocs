@@ -1,4 +1,3 @@
-
 ---
 title: Quick Start
 description: Getting Started with JKT48Connect API
@@ -7,152 +6,129 @@ icon: Album
 
 ## Introduction
 
-JKT48Connect is a **REST API framework** designed to provide fast, flexible, and comprehensive data related to JKT48, powered by a robust backend.
+JKT48Connect API <span className='text-fd-muted-foreground text-sm'>(JKT48 Connect API)</span> is a **REST API** providing data related to JKT48. It's designed for quick and easy integration into your applications.
 
-JKT48Connect has different parts:
+JKT48Connect API offers:
 
 <Cards>
 
-<Card icon={<CpuIcon className="text-purple-300" />} title='API Core'>
+<Card icon={<CpuIcon className="text-purple-300" />} title='API Endpoints'>
 
-Handles most of the API logic, including data retrieval, filtering, and ensuring high performance.
-
-</Card>
-
-<Card icon={<PanelsTopLeft className="text-blue-300" />} title='API Endpoints'>
-
-The various endpoints offered by JKT48Connect provide structured access to JKT48 data.
+Access various JKT48 data through well-defined REST endpoints.
 
 </Card>
 
-<Card icon={<Database />} title='Data Source'>
+<Card icon={<PanelsTopLeft className="text-blue-300" />} title='Structured Responses'>
 
-The source of our JKT48 data, constantly updated to ensure accuracy and freshness.
+Receive consistent JSON responses for easy parsing and usage.
 
 </Card>
 
-<Card icon={<Terminal />} title='Client SDKs (Coming Soon)'>
+<Card icon={<Database />} title='Up-to-Date Data'>
 
-Tools and libraries to easily integrate JKT48Connect API into your applications.
+Continuously updated data, ensuring you get the latest information.
+
+</Card>
+
+<Card icon={<Terminal />} title='No Modules Required'>
+
+Integrate directly using standard HTTP requests from any programming language.
 
 </Card>
 
 </Cards>
 
 <Callout title="Want to learn more?">
-  Read our in-depth [What is JKT48Connect](/docs/api-reference/what-is-jkt48connect) introduction.
+  Explore our in-depth [API Reference](/docs/api-reference) for all endpoints.
 </Callout>
 
 ### Terminology
 
-**REST API:** Representational State Transfer Application Programming Interface. JKT48Connect provides data through a RESTful interface.
+**REST API:** A set of architectural principles for designing networked applications. JKT48Connect API follows these principles.
 
-Although not required, some basic knowledge of making HTTP requests would be useful for further customisations and integration.
+Basic knowledge of HTTP requests and JSON data structures is useful.
 
 ## Getting Started
 
-A minimum version of Node.js 18 is recommended for interacting with the API.
+The base URL for all JKT48Connect API requests is `https://v2.jkt48connect.my.id`.
 
-<Tabs groupId='example-usage' persist items={['Fetch API', 'Axios', 'cURL']} label='Example API Call'>
+### Examples
 
-```javascript tab="Fetch API"
-// Example: Get a list of all members
-fetch('[https://v2.jkt48connect.my.id/api/jkt48/members](https://v2.jkt48connect.my.id/api/jkt48/members)')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error));
+Here are some common endpoints:
 
-// Example: Get a list of all members
-const axios = require('axios');
+- **Members Data:**
+  `GET https://v2.jkt48connect.my.id/api/jkt48/members`
 
-axios.get('[https://v2.jkt48connect.my.id/api/jkt48/members](https://v2.jkt48connect.my.id/api/jkt48/members)')
-  .then(response => {
-    console.log(response.data);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+- **Live Schedule:**
+  `GET https://v2.jkt48connect.my.id/api/jkt48/live`
 
-# Example: Get a list of all members
-curl [https://v2.jkt48connect.my.id/api/jkt48/members](https://v2.jkt48connect.my.id/api/jkt48/members)
+- **Theater Schedule:**
+  `GET https://v2.jkt48connect.my.id/api/jkt48/theater`
 
-</Tabs>
-You can now start integrating JKT48Connect API into your projects!
-<Callout title='Looking for specific data?'>
-Explore our [API Endpoints Reference](/docs/openapi) to find specific data points.
+### Enjoy!
 
-</Callout>
-Enjoy!
-Start by trying a simple API call in your preferred development environment.
-[https://v2.jkt48connect.my.id/api/jkt48/theater](https://v2.jkt48connect.my.id/api/jkt48/theater)
+Start sending requests to the API and integrate JKT48 data into your projects!
 
-Run your application and see the data flow!
-FAQ
+## FAQ
+
 Some common questions you may encounter.
+
 <Accordions>
-<Accordion id='base-url' title="What is the base URL for the API?">
-The base URL for all JKT48Connect API requests is https://v2.jkt48connect.my.id. All endpoint paths should be appended to this base URL.
-export const API_BASE_URL = '[https://v2.jkt48connect.my.id](https://v2.jkt48connect.my.id)'; // [!code highlight]
+    <Accordion id='base-url' title="What is the base URL for the API?">
 
-</Accordion>
-<Accordion id='performance' title="Is the API performant?">
+The base URL for all JKT48Connect API requests is: `https://v2.jkt48connect.my.id`.
 
-Yes, JKT48Connect API is designed for performance, utilizing efficient data retrieval methods and caching strategies to ensure quick response times.
-</Accordion>
-<Accordion id='custom-requests' title='How to make specific requests (e.g., filter by generation)?'>
+    </Accordion>
+    <Accordion id='data-format' title="What data format does the API return?">
 
-The API supports various query parameters for filtering and customizing requests. Please refer to the API Endpoints Reference for detailed information on available parameters for each endpoint.
-For example, to get members from a specific generation:
-[https://v2.jkt48connect.my.id/members?generation=10](https://v2.jkt48connect.my.id/members?generation=10)
+All API responses are returned in **JSON** format.
 
-</Accordion>
+    </Accordion>
+    <Accordion id='authentication' title='Does the API require authentication?'>
 
-<Accordion id='multiple-data-sources' title="Can I combine data from different endpoints?">
-    Yes, you can combine data from different endpoints in your application logic to build richer features.
-</Accordion>
+Currently, the JKT48Connect API does not require authentication for public endpoints. Check specific endpoint documentation for any future changes.
+
+    </Accordion>
+
+    <Accordion id='rate-limits' title="Are there any rate limits?">
+        Currently, no strict rate limits are enforced. Please use the API responsibly to ensure service availability for all users.
+    </Accordion>
 
 </Accordions>
-Learn More
-New to JKT48Connect API? Don't worry, we are here to help with your questions.
-If you find anything confusing or have suggestions, please give your feedback on Github Discussion (mentioning JKT48Connect API)!
-Exploring the API
-For understanding and utilizing the API, make sure to read:
+
+## Learn More
+
+New to here? Don't worry, we welcome your questions.
+
+If you find anything confusing, please give your feedback on [WhatsApp](https://wa.me/6285701479245)!
+
+### Using the API
+
+For consuming the API, make sure to read:
+
 <Cards>
-<Card href="https://www.google.com/search?q=/docs/openapi" title="API Endpoints">
-Discover all available endpoints and their functionalities.
-</Card>
-<Card href="/docs/openapi" title="Query Parameters">
-Learn how to filter and sort data using parameters.
-</Card>
-<Card href="/docs/openapi" title="Response Formats">
-Understand the structure of API responses.
-</Card>
-<Card
-href="/docs/openapi"
-title="Usage Examples"
-description="See practical examples of API calls"
-/>
+  <Card href="/docs/api-reference" title="API Reference">
+    Comprehensive list of all available endpoints and their usage.
+  </Card>
+  <Card href="/docs/guides/http-requests" title="Making Requests">
+    Learn how to send HTTP requests to the API.
+  </Card>
+  <Card href="/docs/guides/json-parsing" title="Handling Responses">
+    Understand how to parse and use JSON responses.
+  </Card>
 </Cards>
-Advanced Topics
+
+### Contributions & Support
+
 <Cards>
-<Card
-href="/docs/api/rate-limiting"
-title="Rate Limiting"
-description="Understand API request limits"
-/>
-<Card
-href="/docs/api/error-handling"
-title="Error Handling"
-description="Learn how to handle API errors"
-/>
-<Card
-href="/docs/api/authentication"
-title="Authentication (Future)"
-description="Information on future authentication methods"
-/>
-<Card
-href="/docs/api/best-practices"
-title="Best Practices"
-description="Tips for efficient API usage"
-/>
+  <Card
+    href="/docs/contributing"
+    title="Contributing"
+    description="Learn how to contribute to the JKT48Connect project."
+  />
+  <Card
+    href="/docs/support"
+    title="Support"
+    description="Find out how to get help and support for the API."
+  />
 </Cards>
