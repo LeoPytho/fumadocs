@@ -43,7 +43,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           <>
             {logo}
             <span className="font-medium [.uwu_&]:hidden max-md:hidden">
-              Fumadocs
+              JKT48Connect
             </span>
           </>
         ),
