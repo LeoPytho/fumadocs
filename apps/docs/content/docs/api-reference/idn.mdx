@@ -1,0 +1,307 @@
+
+---
+title: IDN Live
+description: Getting JKT48 Live Data from IDN Platform via JKT48Connect API
+---
+
+## Introduction
+
+The JKT48Connect IDN Live API specifically provides **real-time data** on JKT48 members currently **live on the IDN Live platform**. It’s designed for quick and easy integration into applications needing instant live status updates from IDN.
+
+<Callout title="What this API offers">
+  This IDN Live API focuses on providing live streaming data exclusively from IDN, ensuring real-time updates and detailed information for live sessions, all accessible via simple HTTP requests.
+</Callout>
+
+### Terminology
+
+**API Key:** A unique key required for authenticating your requests.
+**Endpoint:** The specific URL path for accessing a particular API resource.
+
+---
+
+## Getting Started
+
+The base URL for all JKT48Connect API requests is `https://v2.jkt48connect.my.id`.
+
+### Endpoint
+
+To retrieve live JKT48 member data from IDN, use the following endpoint:
+
+`GET /api/jkt48/live/idn`
+
+### Authentication
+
+This endpoint requires an **API Key** for access. Append `?apikey=YOUR_API_KEY` to your request URL. You can obtain your API key from the [official JKT48Connect website](https://www.jkt48connect.my.id/buyapi).
+
+**Example Request:**
+`GET https://v2.jkt48connect.my.id/api/jkt48/live/idn?apikey=YOUR_API_KEY`
+
+Remember to replace `YOUR_API_KEY` with your actual API key.
+
+### Example JSON Output
+
+A successful request returns a JSON array of objects, each representing a live member on IDN:
+
+```json
+[
+  {
+    "name": "Fritzy",
+    "img": "[https://cdn.idntimes.com/content-images/post/20250406/717109e0-a064-4f15-8187-5c4d46e56a58-250406190348.jpg](https://cdn.idntimes.com/content-images/post/20250406/717109e0-a064-4f15-8187-5c4d46e56a58-250406190348.jpg)",
+    "img_alt": "[https://cdn.idn.media/idnaccount/avatar/500/f4d25811b1b50effd560fb480cac8ba0.webp?v=1712299807](https://cdn.idn.media/idnaccount/avatar/500/f4d25811b1b50effd560fb480cac8ba0.webp?v=1712299807)",
+    "url_key": "jkt48_fritzy",
+    "slug": "yuk-diborong-250406190348",
+    "room_id": 510011,
+    "is_graduate": false,
+    "is_group": false,
+    "chat_room_id": "arn:aws:ivschat:us-east-1:050891932989:room/dsKjuKRqfoRE",
+    "started_at": "2025-04-06T12:03:58.000Z",
+    "streaming_url_list": [
+      {
+        "label": "original",
+        "quality": 1,
+        "url": "[https://4b964ca68cf1.us-east-1.playback.live-video.net/api/video/v1/us-east-1.050891932989.channel.K9fM2uTS2hX3.m3u8](https://4b964ca68cf1.us-east-1.playback.live-video.net/api/video/v1/us-east-1.050891932989.channel.K9fM2uTS2hX3.m3u8)"
+      }
+    ],
+    "type": "idn"
+  }
+]
+
+Response Object Structure
+<TypeTable
+type={{
+name: {
+description: 'Name of the JKT48 member.',
+type: 'string',
+},
+img: {
+description: 'URL to the member's main image.',
+type: 'string',
+},
+img_alt: {
+description: 'Alternative URL for the member's image (e.g., avatar).',
+type: 'string',
+},
+url_key: {
+description: 'Unique URL key for the member on the platform.',
+type: 'string',
+},
+slug: {
+description: 'Slug for the live stream session.',
+type: 'string',
+},
+room_id: {
+description: 'Unique room ID for the live stream.',
+type: 'number',
+},
+is_graduate: {
+description: 'Indicates if the member is a graduate.',
+type: 'boolean',
+},
+is_group: {
+description: 'Indicates if the stream is a group stream.',
+type: 'boolean',
+},
+chat_room_id: {
+description: 'ID for the live stream chat room.',
+type: 'string',
+},
+started_at: {
+description: 'Timestamp when the live stream started (ISO 8601 format).',
+type: 'string',
+},
+streaming_url_list: {
+description: 'Array of streaming URLs for different qualities.',
+type: 'array',
+properties: {
+label: {
+type: 'string',
+description: 'Label for the streaming quality (e.g., "original").',
+},
+quality: {
+type: 'number',
+description: 'Numerical indicator of streaming quality.',
+},
+url: {
+type: 'string',
+description: 'Actual streaming URL.',
+},
+},
+},
+type: {
+description: 'Platform type (e.g., "idn").',
+type: 'string',
+},
+}}
+/>
+Code Implementations
+Here's how to fetch live data from IDN using different programming languages. Replace YOUR_API_KEY with your actual API key.
+<Tabs defaultValue="js">
+<TabsList>
+<TabsTrigger value="js">JavaScript</TabsTrigger>
+<TabsTrigger value="py">Python</TabsTrigger>
+<TabsTrigger value="php">PHP</TabsTrigger>
+<TabsTrigger value="go">Go</TabsTrigger>
+</TabsList>
+<TabsContent value="js">
+```javascript
+// Using Fetch API
+const API_KEY = 'YOUR_API_KEY'; // Get your API key from https://www.jkt48connect.my.id/buyapi
+const BASE_URL = 'https://v2.jkt48connect.my.id';
+const ENDPOINT = '/api/jkt48/live/idn'; // Changed endpoint
+async function getLiveMembersIDN() {
+  try {
+    const response = await fetch(`${BASE_URL}${ENDPOINT}?apikey=${API_KEY}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error('Error fetching IDN live members:', error);
+  }
+}
+
+getLiveMembersIDN();
+```
+
+</TabsContent>
+<TabsContent value="py">
+```python
+import requests
+API_KEY = 'YOUR_API_KEY' # Get your API key from [https://www.jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi)
+BASE_URL = '[https://v2.jkt48connect.my.id](https://v2.jkt48connect.my.id)'
+ENDPOINT = '/api/jkt48/live/idn' # Changed endpoint
+
+def get_live_members_idn():
+    try:
+        response = requests.get(f"{BASE_URL}{ENDPOINT}?apikey={API_KEY}")
+        response.raise_for_status()  # Raise an exception for HTTP errors
+        data = response.json()
+        print(data)
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching IDN live members: {e}")
+
+if __name__ == "__main__":
+    get_live_members_idn()
+```
+
+</TabsContent>
+<TabsContent value="php">
+```php
+<?php
+$apiKey = 'YOUR_API_KEY'; // Get your API key from [https://www.jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi)
+$baseUrl = '[https://v2.jkt48connect.my.id](https://v2.jkt48connect.my.id)';
+$endpoint = '/api/jkt48/live/idn'; // Changed endpoint
+
+$url = "{$baseUrl}{$endpoint}?apikey={$apiKey}";
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+
+if (curl_errno($ch)) {
+    echo 'Error fetching IDN live members: ' . curl_error($ch);
+} else {
+    $data = json_decode($response, true);
+    print_r($data);
+}
+
+curl_close($ch);
+
+?>
+```
+
+</TabsContent>
+<TabsContent value="go">
+```go
+package main
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+)
+
+const (
+	apiKey  = "YOUR_API_KEY" // Get your API key from [https://www.jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi)
+	baseURL = "[https://v2.jkt48connect.my.id](https://v2.jkt48connect.my.id)"
+	endpoint = "/api/jkt48/live/idn" // Changed endpoint
+)
+
+type LiveMember struct {
+	Name            string `json:"name"`
+	Img             string `json:"img"`
+	ImgAlt          string `json:"img_alt"`
+	URLKey          string `json:"url_key"`
+	Slug            string `json:"slug"`
+	RoomID          int    `json:"room_id"`
+	IsGraduate      bool   `json:"is_graduate"`
+	IsGroup         bool   `json:"is_group"`
+	ChatRoomID      string `json:"chat_room_id"`
+	StartedAt       string `json:"started_at"`
+	StreamingURLList []struct {
+		Label   string `json:"label"`
+		Quality int    `json:"quality"`
+		URL     string `json:"url"`
+	} `json:"streaming_url_list"`
+	Type string `json:"type"`
+}
+
+func main() {
+	url := fmt.Sprintf("%s%s?apikey=%s", baseURL, endpoint, apiKey)
+
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Printf("Error fetching IDN live members: %v\n", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		fmt.Printf("HTTP Error: %d %s\n", resp.StatusCode, resp.Status)
+		return
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Printf("Error reading response body: %v\n", err)
+		return
+	}
+
+	var liveMembers []LiveMember
+	err = json.Unmarshal(body, &liveMembers)
+	if err != nil {
+		fmt.Printf("Error unmarshaling JSON: %v\n", err)
+		return
+	}
+
+	for _, member := range liveMembers {
+		fmt.Printf("Name: %s, Type: %s, URL: %s\n", member.Name, member.Type, member.StreamingURLList[0].URL)
+	}
+}
+```
+
+</TabsContent>
+</Tabs>
+Learn More
+To effectively use the JKT48Connect API, follow these steps:
+<Steps>
+<Step>
+Explore the API Reference
+Check out the comprehensive list of all available endpoints and their detailed usage.
+</Step>
+<Step>
+Understand How to Make Requests
+Learn the fundamentals of sending HTTP requests to the API.
+</Step>
+<Step>
+Handle JSON Responses
+Familiarize yourself with parsing and utilizing JSON responses from the API.
+</Step>
+</Steps>
+<Callout title="Need further assistance?">
+If you have any questions, feel free to reach out to us on WhatsApp.
+</Callout>
+
