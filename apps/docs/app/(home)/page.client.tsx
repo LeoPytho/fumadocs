@@ -16,7 +16,7 @@ import { cn } from '@/lib/cn';
 import { buttonVariants } from '@/components/ui/button';
 import Image from 'next/image';
 import MainImg from './20250628_211230.png'; // Replace with an image showing your JKT48Connect powered app
-import OpenAPIImg from './openapi.png'; // Replace with an image showing your JKT48Connect API docs/playground
+import OpenAPIImg from './20250628_211911.png'; // Replace with an image showing your JKT48Connect API docs/playground
 import { cva } from 'class-variance-authority';
 
 export function CreateAppAnimation() {
