@@ -1,3 +1,4 @@
+
 ---
 title: All live
 description: Getting Live JKT48 Data from JKT48Connect API
@@ -67,12 +68,19 @@ A successful request returns a JSON array of objects, each representing a live m
 
 Code Implementations
 Here's how to fetch live data using different programming languages. Replace YOUR_API_KEY with your actual API key.
-JavaScript (Node.js/Browser)
+<Tabs defaultValue="js">
+<TabsList>
+<TabsTrigger value="js">JavaScript</TabsTrigger>
+<TabsTrigger value="py">Python</TabsTrigger>
+<TabsTrigger value="php">PHP</TabsTrigger>
+<TabsTrigger value="go">Go</TabsTrigger>
+</TabsList>
+<TabsContent value="js">
+```javascript
 // Using Fetch API
-const API_KEY = 'YOUR_API_KEY'; // Get your API key from [https://www.jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi)
-const BASE_URL = '[https://v2.jkt48connect.my.id](https://v2.jkt48connect.my.id)';
+const API_KEY = 'YOUR_API_KEY'; // Get your API key from https://www.jkt48connect.my.id/buyapi
+const BASE_URL = 'https://v2.jkt48connect.my.id';
 const ENDPOINT = '/api/jkt48/live';
-
 async function getLiveMembers() {
   try {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?apikey=${API_KEY}`);
@@ -87,10 +95,12 @@ async function getLiveMembers() {
 }
 
 getLiveMembers();
+```
 
-Python
+</TabsContent>
+<TabsContent value="py">
+```python
 import requests
-
 API_KEY = 'YOUR_API_KEY' # Get your API key from [https://www.jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi)
 BASE_URL = '[https://v2.jkt48connect.my.id](https://v2.jkt48connect.my.id)'
 ENDPOINT = '/api/jkt48/live'
@@ -106,10 +116,12 @@ def get_live_members():
 
 if __name__ == "__main__":
     get_live_members()
+```
 
-PHP
+</TabsContent>
+<TabsContent value="php">
+```php
 <?php
-
 $apiKey = 'YOUR_API_KEY'; // Get your API key from [https://www.jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi)
 $baseUrl = '[https://v2.jkt48connect.my.id](https://v2.jkt48connect.my.id)';
 $endpoint = '/api/jkt48/live';
@@ -132,10 +144,12 @@ if (curl_errno($ch)) {
 curl_close($ch);
 
 ?>
+```
 
-Go
+</TabsContent>
+<TabsContent value="go">
+```go
 package main
-
 import (
 	"encoding/json"
 	"fmt"
@@ -200,7 +214,16 @@ func main() {
 		fmt.Printf("Name: %s, Type: %s, URL: %s\n", member.Name, member.Type, member.StreamingURLList[0].URL)
 	}
 }
+```
 
+</TabsContent>
+</Tabs>
+Learn More
+For detailed information on the JKT48Connect API, consider these resources:
+ * API Reference: Comprehensive list of all available endpoints and their usage.
+ * Making Requests: Learn how to send HTTP requests to the API.
+ * Handling Responses: Understand how to parse and use JSON responses.
 <Callout title="Need further assistance?">
 If you have any questions, feel free to reach out to us on WhatsApp.
 </Callout>
+
