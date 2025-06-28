@@ -8,10 +8,10 @@ import { Geist, Geist_Mono } from 'next/font/google';
 
 export const metadata = createMetadata({
   title: {
-    template: '%s | Fumadocs',
-    default: 'Fumadocs',
+    template: '%s | JKT48Connect',
+    default: 'JKT48Connect',
   },
-  description: 'The Next.js framework for building documentation sites',
+  description: 'JKT48Connect documentation web for api and core library.',
   metadataBase: baseUrl,
 });
 
