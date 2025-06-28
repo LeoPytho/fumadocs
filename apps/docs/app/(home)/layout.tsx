@@ -129,16 +129,16 @@ function Footer() {
     <footer className="mt-auto border-t bg-fd-card py-12 text-fd-secondary-foreground">
       <div className="container flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="mb-1 text-sm font-semibold">Fumadocs</p>
+          <p className="mb-1 text-sm font-semibold">JKT48Connect</p>
           <p className="text-xs">
             Built with ❤️ by{' '}
             <a
-              href="https://fuma-dev.vercel.app"
+              href="https://www.jkt48connect.my.id"
               rel="noreferrer noopener"
               target="_blank"
               className="font-medium"
             >
-              Fuma
+              Valzy
             </a>
           </p>
         </div>
