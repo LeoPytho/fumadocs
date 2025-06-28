@@ -15,12 +15,12 @@ import scrollIntoView from 'scroll-into-view-if-needed';
 import { cn } from '@/lib/cn';
 import { buttonVariants } from '@/components/ui/button';
 import Image from 'next/image';
-import MainImg from './main.png';
-import OpenAPIImg from './openapi.png';
+import MainImg from './main.png'; // Replace with an image showing your JKT48Connect powered app
+import OpenAPIImg from './openapi.png'; // Replace with an image showing your JKT48Connect API docs/playground
 import { cva } from 'class-variance-authority';
 
 export function CreateAppAnimation() {
-  const installCmd = 'npm create fumadocs-app';
+  const installCmd = 'npm create jkt48-app'; // Changed command
   const tickTime = 100;
   const timeCommandEnter = installCmd.length;
   const timeCommandRun = timeCommandEnter + 3;
@@ -61,19 +61,19 @@ export function CreateAppAnimation() {
         {tick > timeCommandRun + 1 && (
           <>
             <span className="font-bold">◇ Project name</span>
-            <span>│ my-app</span>
+            <span>│ jkt48-app</span> {/* Changed project name */}
           </>
         )}
         {tick > timeCommandRun + 2 && (
           <>
             <span>│</span>
-            <span className="font-bold">◆ Choose a content source</span>
+            <span className="font-bold">◆ installing @jkt48/core </span> {/* Changed prompt */}
           </>
         )}
         {tick > timeCommandRun + 3 && (
           <>
-            <span>│ ● Fumadocs MDX</span>
-            <span>│ ○ Content Collections</span>
+            <span>│ ● Next.js App Router (Recommended)</span> {/* Changed option */}
+            <span>│ ○ React (SPA)</span> {/* Changed option */}
           </>
         )}
       </Fragment>,
@@ -94,7 +94,7 @@ export function CreateAppAnimation() {
       <pre className="overflow-hidden rounded-xl border text-[13px] shadow-lg">
         <div className="flex flex-row items-center gap-2 border-b px-4 py-2">
           <TerminalIcon className="size-4" />{' '}
-          <span className="font-bold">Terminal</span>
+          <span className="font-bold">JKT48Connect CLI</span> {/* Changed title */}
           <div className="grow" />
           <div className="size-2 rounded-full bg-red-400" />
         </div>
@@ -118,9 +118,9 @@ function LaunchAppWindow(
       )}
     >
       <div className="relative flex h-6 flex-row items-center border-b bg-fd-muted px-4 text-xs text-fd-muted-foreground">
-        <p className="absolute inset-x-0 text-center">localhost:3000</p>
+        <p className="absolute inset-x-0 text-center">jkt48connect.app:3000</p> {/* Changed URL */}
       </div>
-      <div className="p-4 text-sm">New App launched!</div>
+      <div className="p-4 text-sm">JKT48 App Launched!</div> {/* Changed text */}
     </div>
   );
 }
@@ -134,11 +134,11 @@ export function WhyInteractive(props: {
 }) {
   const [active, setActive] = useState(0);
   const items = [
-    'Full-text Search',
-    'Design System & Tailwind CSS',
-    'Generate from TypeScript & OpenAPI',
-    'Interactive Examples',
-    'Automation & Server',
+    'Comprehensive Data Search', // Changed item
+    'Flexible Integration & Styling', // Changed item
+    'Generate from API Schemas & Types', // Changed item
+    'Engaging UI Components', // Changed item
+    'Automated Data Sync & Server-side Logic', // Changed item
   ];
 
   return (
@@ -189,89 +189,90 @@ export function WhyInteractive(props: {
       <div className="flex-1 p-4 border border-fd-primary/10 bg-fd-card/40 rounded-lg shadow-lg">
         {active === 0 ? (
           <WhyPanel>
-            <h3>We made it simple.</h3>
+            <h3>We made data discovery simple.</h3> {/* Changed heading */}
             <p>
-              Fumadocs offers native support for Orama and Algolia Search, it is
-              as easy as plugging a route handler. You can also use your own
-              search modal to allow full control over the search UI.
+              JKT48Connect offers robust search capabilities, allowing you to
+              easily query and retrieve specific data on members, songs, or events.
+              Integrate with powerful search engines or use our built-in filters.
             </p>
-            {props.codeblockSearchRouter}
+            {props.codeblockSearchRouter} {/* This codeblock needs to be relevant to API searching */}
           </WhyPanel>
         ) : null}
 
         {active === 1 ? (
           <WhyPanel>
-            <h3>Tailwind CSS Plugin</h3>
+            <h3>Seamless Integration & Customizable Styles.</h3> {/* Changed heading */}
             <p>
-              Share the same design system cross the docs and your app with
-              Tailwind CSS. Works great with <b>Shadcn UI</b>.
+              JKT48Connect is designed for flexible integration with any frontend framework.
+              Easily connect with your existing design system or use our recommended
+              styling approaches for a consistent look.
             </p>
-            {props.codeblockTheme}
+            {props.codeblockTheme} {/* This codeblock should be relevant to styling within a JKT48 app */}
             <Link
-              href="/docs/ui/theme"
+              href="/docs/integration/styling" // Changed link
               className={cn(buttonVariants(), 'not-prose')}
             >
-              See Themes
+              See Integration Guides
             </Link>
           </WhyPanel>
         ) : null}
 
         {active === 2 ? (
           <WhyPanel>
-            <h3>Never repeat yourself again.</h3>
+            <h3>Automate your data models.</h3> {/* Changed heading */}
             <p>
-              Fumadocs has a smart Type Table component that renders the
-              properties of interface/type automatically, from the source of
-              truth, powered by the TypeScript Compiler API.
+              JKT48Connect provides detailed API schemas and type definitions.
+              Automatically generate client-side types from our API definitions
+              to ensure type-safe data handling in your applications.
             </p>
-            {props.typeTable}
+            {props.typeTable} {/* This should be a TypeTable for JKT48Connect API response types */}
             <p>
-              We also have a built-in OpenAPI playground and docs generator.
+              We also provide an interactive API playground for exploring endpoints and responses.
             </p>
 
             <div className="mt-4 flex flex-row items-center gap-1.5 not-prose">
               <Link
-                href="/docs/ui/components/auto-type-table"
+                href="/docs/api-reference/data-types" // Changed link
                 className={cn(buttonVariants())}
               >
-                Type Table
+                API Data Types
               </Link>
               <Link
-                href="/docs/ui/openapi"
+                href="/docs/api-reference/playground" // Changed link
                 className={cn(buttonVariants({ variant: 'ghost' }))}
               >
-                OpenAPI Integration
+                API Playground
               </Link>
             </div>
           </WhyPanel>
         ) : null}
         {active === 3 ? (
           <WhyPanel>
-            <h3>Interactive docs with React.</h3>
+            <h3>Create interactive fan experiences.</h3> {/* Changed heading */}
             <p>
-              Fumadocs offers many useful components, from File Tree, Tabs, to
-              Zoomable Image.
+              Leverage JKT48Connect data to build dynamic and engaging user interfaces.
+              Display member profiles, live schedules, and fan interactions with ease.
             </p>
-            {props.codeblockInteractive}
+            {props.codeblockInteractive} {/* This should be code for an interactive JKT48 component */}
             <Link
-              href="/docs/ui/components"
+              href="/docs/examples/ui-components" // Changed link
               className={cn(buttonVariants(), 'not-prose')}
             >
-              View Components
+              View UI Examples
             </Link>
           </WhyPanel>
         ) : null}
         {active === 4 ? (
           <WhyPanel>
-            <h3>Connect your content and server.</h3>
+            <h3>Connect your app to real-time JKT48 data.</h3> {/* Changed heading */}
 
             <p>
-              React Server Component made it very easy to automate docs. Use
-              server data, server components, and even client components in MDX
-              documents.
+              With server-side capabilities, JKT48Connect allows you to pre-fetch
+              and serve data efficiently. Use API data to power server-rendered
+              pages or client-side interactions.
             </p>
 
-            {props.codeblockMdx}
+            {props.codeblockMdx} {/* This should be relevant to server-side data fetching for JKT48 data */}
           </WhyPanel>
         ) : null}
       </div>
@@ -321,18 +322,18 @@ export function PreviewImages() {
           className={cn(previewButtonVariants({ active: active === 0 }))}
           onClick={() => setActive(0)}
         >
-          Docs
-        </button>
+          App Demo
+        </button> {/* Changed button label */}
         <button
           className={cn(previewButtonVariants({ active: active === 1 }))}
           onClick={() => setActive(1)}
         >
-          OpenAPI
-        </button>
+          API Docs
+        </button> {/* Changed button label */}
       </div>
       <Image
-        src={MainImg}
-        alt="preview"
+        src={MainImg} // **IMPORTANT: Replace this with your JKT48Connect powered app screenshot**
+        alt="JKT48Connect App Demo" // Changed alt text
         priority
         className={cn(
           'w-full select-none duration-1000 animate-in fade-in -mb-60 slide-in-from-bottom-12 lg:-mb-40',
@@ -341,8 +342,8 @@ export function PreviewImages() {
       />
       {active === 1 && (
         <Image
-          src={OpenAPIImg}
-          alt="preview"
+          src={OpenAPIImg} // **IMPORTANT: Replace this with your JKT48Connect API documentation/playground screenshot**
+          alt="JKT48Connect API Documentation" // Changed alt text
           priority
           className={cn(
             'w-full select-none duration-1000 animate-in fade-in -mb-60 slide-in-from-bottom-12 lg:-mb-40',
