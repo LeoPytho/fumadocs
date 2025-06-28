@@ -1,249 +1,158 @@
+
 ---
 title: Quick Start
-description: Getting Started with Fumadocs
+description: Getting Started with JKT48Connect API
 icon: Album
 ---
 
 ## Introduction
 
-Fumadocs <span className='text-fd-muted-foreground text-sm'>(Foo-ma docs)</span> is a **documentation framework** based on Next.js, designed to be fast, flexible,
-and composes seamlessly into Next.js App Router.
+JKT48Connect is a **REST API framework** designed to provide fast, flexible, and comprehensive data related to JKT48, powered by a robust backend.
 
-Fumadocs has different parts:
+JKT48Connect has different parts:
 
 <Cards>
 
-<Card icon={<CpuIcon className="text-purple-300" />} title='Fumadocs Core'>
+<Card icon={<CpuIcon className="text-purple-300" />} title='API Core'>
 
-Handles most of the logic, including document search, content source adapters, and Markdown extensions.
-
-</Card>
-
-<Card icon={<PanelsTopLeft className="text-blue-300" />} title='Fumadocs UI'>
-
-The default theme of Fumadocs offers a beautiful look for documentation sites and interactive components.
+Handles most of the API logic, including data retrieval, filtering, and ensuring high performance.
 
 </Card>
 
-<Card icon={<Database />} title='Content Source'>
+<Card icon={<PanelsTopLeft className="text-blue-300" />} title='API Endpoints'>
 
-The source of your content, can be a CMS or local data layers like [Fumadocs MDX](/docs/mdx) (the official content source).
+The various endpoints offered by JKT48Connect provide structured access to JKT48 data.
 
 </Card>
 
-<Card icon={<Terminal />} title='Fumadocs CLI'>
+<Card icon={<Database />} title='Data Source'>
 
-A command line tool to install UI components and automate things, useful for customizing layouts.
+The source of our JKT48 data, constantly updated to ensure accuracy and freshness.
+
+</Card>
+
+<Card icon={<Terminal />} title='Client SDKs (Coming Soon)'>
+
+Tools and libraries to easily integrate JKT48Connect API into your applications.
 
 </Card>
 
 </Cards>
 
 <Callout title="Want to learn more?">
-  Read our in-depth [What is Fumadocs](/docs/ui/what-is-fumadocs) introduction.
+  Read our in-depth [What is JKT48Connect](/docs/api-reference/what-is-jkt48connect) introduction.
 </Callout>
 
 ### Terminology
 
-**Markdown/MDX:** Markdown is a markup language for creating formatted text. Fumadocs supports Markdown and MDX (superset of Markdown) out-of-the-box.
+**REST API:** Representational State Transfer Application Programming Interface. JKT48Connect provides data through a RESTful interface.
 
-Although not required, some basic knowledge of Next.js App Router would be useful for further customisations.
+Although not required, some basic knowledge of making HTTP requests would be useful for further customisations and integration.
 
-## Automatic Installation
+## Getting Started
 
-A minimum version of Node.js 18 required, note that Node.js 23.1 might have problems with Next.js production build.
+A minimum version of Node.js 18 is recommended for interacting with the API.
 
-<Tabs groupId='package-manager' persist items={['npm', 'pnpm', 'yarn', 'bun']} label='Initialize Fumadocs'>
+<Tabs groupId='example-usage' persist items={['Fetch API', 'Axios', 'cURL']} label='Example API Call'>
 
-```bash tab="npm"
-npm create fumadocs-app
-```
+```javascript tab="Fetch API"
+// Example: Get a list of all members
+fetch('[https://v2.jkt48connect.my.id/api/jkt48/members](https://v2.jkt48connect.my.id/api/jkt48/members)')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
 
-```bash tab="pnpm"
-pnpm create fumadocs-app
-```
+// Example: Get a list of all members
+const axios = require('axios');
 
-```bash tab="yarn"
-yarn create fumadocs-app
-```
+axios.get('[https://v2.jkt48connect.my.id/api/jkt48/members](https://v2.jkt48connect.my.id/api/jkt48/members)')
+  .then(response => {
+    console.log(response.data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
 
-```bash tab="bun"
-bun create fumadocs-app
-```
+# Example: Get a list of all members
+curl [https://v2.jkt48connect.my.id/api/jkt48/members](https://v2.jkt48connect.my.id/api/jkt48/members)
 
 </Tabs>
-
-It will ask you:
-
-- the React.js framework to use (the docs is only written for Next.js).
-- the content source to use.
-
-A new fumadocs app should be initialized. Now you can start hacking!
-
-<Callout title='From Existing Codebase?'>
-
-    You can follow the [Manual Installation](/docs/ui/manual-installation) guide to get started.
+You can now start integrating JKT48Connect API into your projects!
+<Callout title='Looking for specific data?'>
+Explore our [API Endpoints Reference](/docs/openapi) to find specific data points.
 
 </Callout>
+Enjoy!
+Start by trying a simple API call in your preferred development environment.
+[https://v2.jkt48connect.my.id/api/jkt48/theater](https://v2.jkt48connect.my.id/api/jkt48/theater)
 
-### Enjoy!
-
-Create your first MDX file in the docs folder.
-
-```mdx title="content/docs/index.mdx"
----
-title: Hello World
----
-
-## Yo what's up
-```
-
-Run the app in development mode and see http://localhost:3000/docs.
-
-```package-install
-npm run dev
-```
-
-## FAQ
-
+Run your application and see the data flow!
+FAQ
 Some common questions you may encounter.
-
 <Accordions>
-    <Accordion id='change-base-url' title="How to change the base route of docs?">
+<Accordion id='base-url' title="What is the base URL for the API?">
+The base URL for all JKT48Connect API requests is https://v2.jkt48connect.my.id. All endpoint paths should be appended to this base URL.
+export const API_BASE_URL = '[https://v2.jkt48connect.my.id](https://v2.jkt48connect.my.id)'; // [!code highlight]
 
-Since Fumadocs uses Next.js App Router, you can change the base route of docs (e.g. from `/docs/page` to `/info/page`) by renaming the route:
+</Accordion>
+<Accordion id='performance' title="Is the API performant?">
 
-<Files>
-  <Folder name="app/docs" defaultOpen className="opacity-50" disabled>
-    <File name="layout.tsx" />
-  </Folder>
-  <Folder name="app/info" defaultOpen>
-    <File name="layout.tsx" />
-  </Folder>
-</Files>
+Yes, JKT48Connect API is designed for performance, utilizing efficient data retrieval methods and caching strategies to ensure quick response times.
+</Accordion>
+<Accordion id='custom-requests' title='How to make specific requests (e.g., filter by generation)?'>
 
-And update the base URL of pages in `source.ts`:
+The API supports various query parameters for filtering and customizing requests. Please refer to the API Endpoints Reference for detailed information on available parameters for each endpoint.
+For example, to get members from a specific generation:
+[https://v2.jkt48connect.my.id/members?generation=10](https://v2.jkt48connect.my.id/members?generation=10)
 
-```ts title="lib/source.ts"
-import { loader } from 'fumadocs-core/source';
+</Accordion>
 
-export const source = loader({
-  baseUrl: '/info', // [!code highlight]
-});
-```
-
-If you want to remove the entire base route (docs start at `/` instead of `/docs`), it's the same logic.
-
-Make your docs folder a route group.
-
-<Files>
-  <Folder name="app/(docs)" defaultOpen>
-    <File name="layout.tsx" />
-  </Folder>
-</Files>
-
-And update `baseUrl`:
-
-```ts title="lib/source.ts"
-import { loader } from 'fumadocs-core/source';
-
-export const source = loader({
-  baseUrl: '/', // [!code highlight]
-});
-```
-
-    </Accordion>
-    <Accordion id='dynamic-route' title="It uses Dynamic Route, will it be poor in performance?">
-
-Next.js turns dynamic route into static routes when `generateStaticParams` is configured.
-Hence, it is as fast as static pages.
-
-You can enable Static Exports on Next.js to get a static build output. (Notice that Route Handler doesn't work with static export, you have to configure static search)
-
-    </Accordion>
-    <Accordion id='custom-layout-docs-page' title='How to create a page in /docs without docs layout?'>
-
-Same as managing layouts in Next.js App Router, remove the original MDX file from content directory (`/content/docs`).
-This ensures duplicated pages will not cause errors.
-
-Now, You can add the page to another route group, which isn't a descendant of docs layout.
-
-For example, to replace `/docs/test`:
-
-<Files>
-  <File name="(home)/docs/test/page.tsx" />
-  <Folder name="docs">
-    <File name="layout.tsx" />
-    <File name="[[...slug]]/page.tsx" />
-  </Folder>
-</Files>
-
-For `/docs`, you need to change the catch-all route to be non-optional:
-
-<Files>
-  <File name="(home)/docs/page.tsx" />
-  <Folder name="docs" defaultOpen>
-    <File name="layout.tsx" />
-    <File name="[...slug]/page.tsx" />
-  </Folder>
-</Files>
-
-    </Accordion>
-
-    <Accordion id='multi-docs' title="How to implement multi-docs?">
-        We recommend to use [Sidebar Tabs](/docs/ui/navigation/sidebar#sidebar-tabs).
-    </Accordion>
+<Accordion id='multiple-data-sources' title="Can I combine data from different endpoints?">
+    Yes, you can combine data from different endpoints in your application logic to build richer features.
+</Accordion>
 
 </Accordions>
-
-## Learn More
-
-New to here? Don't worry, we are welcome for your questions.
-
-If you find anything confusing, please give your feedback on [Github Discussion](https://github.com/fuma-nama/fumadocs/discussions)!
-
-### Writing Content
-
-For authoring docs, make sure to read:
-
+Learn More
+New to JKT48Connect API? Don't worry, we are here to help with your questions.
+If you find anything confusing or have suggestions, please give your feedback on Github Discussion (mentioning JKT48Connect API)!
+Exploring the API
+For understanding and utilizing the API, make sure to read:
 <Cards>
-  <Card href="/docs/ui/markdown" title="Markdown">
-    Fumadocs has some additional features for authoring content.
-  </Card>
-  <Card href="/docs/ui/navigation" title="Navigation">
-    Learn how to customise navigation links and sidebar items.
-  </Card>
-  <Card href="/docs/ui/page-conventions" title="Routing">
-    Learn how to organise content.
-  </Card>
-  <Card
-    href="/docs/ui/components"
-    title="Components"
-    description="See all available components to enhance your docs"
-  />
+<Card href="https://www.google.com/search?q=/docs/openapi" title="API Endpoints">
+Discover all available endpoints and their functionalities.
+</Card>
+<Card href="/docs/openapi" title="Query Parameters">
+Learn how to filter and sort data using parameters.
+</Card>
+<Card href="/docs/openapi" title="Response Formats">
+Understand the structure of API responses.
+</Card>
+<Card
+href="/docs/openapi"
+title="Usage Examples"
+description="See practical examples of API calls"
+/>
 </Cards>
-
-### Special Needs
-
+Advanced Topics
 <Cards>
-  <Card
-    href="/docs/ui/static-export"
-    title="Configure Static Export"
-    description="Learn how to enable static export on your docs"
-  />
-  <Card
-    href="/docs/ui/internationalization"
-    title="Internationalization"
-    description="Learn how to enable i18n"
-  />
-  <Card
-    href="/docs/ui/theme"
-    title="Color Themes"
-    description="Add themes to Fumadocs UI"
-  />
-  <Card
-    href="/docs/ui/customisation"
-    title="Customise UI"
-    description="A detailed guide on how to customise UI"
-  />
+<Card
+href="/docs/api/rate-limiting"
+title="Rate Limiting"
+description="Understand API request limits"
+/>
+<Card
+href="/docs/api/error-handling"
+title="Error Handling"
+description="Learn how to handle API errors"
+/>
+<Card
+href="/docs/api/authentication"
+title="Authentication (Future)"
+description="Information on future authentication methods"
+/>
+<Card
+href="/docs/api/best-practices"
+title="Best Practices"
+description="Tips for efficient API usage"
+/>
 </Cards>
