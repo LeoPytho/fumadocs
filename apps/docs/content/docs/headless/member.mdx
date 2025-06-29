@@ -16,12 +16,10 @@ The Members API from @jkt48/core allows you to retrieve comprehensive informatio
 - Graduate status tracking
 - SHOWROOM integration data
 
-<Callout title="Info">
+<Callout>
+This API endpoint returns data for all active and graduated JKT48 members, providing a comprehensive overview of the entire roster.
 
-    This API endpoint returns data for all active and graduated JKT48 members, providing a comprehensive overview of the entire roster.
-
-    All features require an API key for authentication and access.
-
+All features require an API key for authentication and access.
 </Callout>
 
 ## Installation
@@ -99,18 +97,14 @@ getAllMembers();
 </Tab>
 </Tabs>
 
-<Callout title="Warning">
-
-    Make sure to keep your API key secure and never expose it in client-side code or public repositories.
-
+<Callout title="Warning" type="error">
+Make sure to keep your API key secure and never expose it in client-side code or public repositories.
 </Callout>
 
 ## API Key Required
 
 <Callout title="Important">
-
-    All features in this module require a valid API key to function properly.
-
+All features in this module require a valid API key to function properly.
 </Callout>
 
 To get your API key, you have several options:
@@ -196,24 +190,24 @@ When working with @jkt48/core for member data, here's a recommended project stru
 The @jkt48/core members endpoint returns an array of member objects with the following structure:
 
 ### Member Data Type
-<AutoTypeTable type="{ 
-  _id: string; 
-  name: string; 
-  nicknames: string[]; 
-  img: string; 
-  img_alt: string; 
-  url: string; 
-  group: string; 
-  socials: { 
-    title: string; 
-    url: string; 
-  }[]; 
-  room_id: number; 
-  sr_exists: boolean; 
-  is_graduate: boolean; 
-  generation: string; 
-  idn_username: string; 
-}" />
+
+<AutoTypeTable 
+  type={{
+    _id: 'string',
+    name: 'string',
+    nicknames: 'string[]',
+    img: 'string',
+    img_alt: 'string',
+    url: 'string',
+    group: 'string',
+    socials: 'Array<{ title: string; url: string }>',
+    room_id: 'number',
+    sr_exists: 'boolean',
+    is_graduate: 'boolean',
+    generation: 'string',
+    idn_username: 'string'
+  }}
+/>
 
 ## Sample Response
 
@@ -376,9 +370,7 @@ findMember('Aralie');
 ```
 
 <Callout title="Tip">
-
-    Always handle errors properly when making API calls and consider implementing caching for frequently accessed member data to improve performance.
-
+Always handle errors properly when making API calls and consider implementing caching for frequently accessed member data to improve performance.
 </Callout>
 
 ## Common Use Cases
@@ -464,7 +456,5 @@ Process the member data according to your application needs
 </Steps>
 
 <Callout title="Support">
-
-    Need additional help? Don't hesitate to reach out to our support team at **support@jkt48connect.my.id** or **+62 857-0147-9245**.
-
+Need additional help? Don't hesitate to reach out to our support team at **support@jkt48connect.my.id** or **+62 857-0147-9245**.
 </Callout>
