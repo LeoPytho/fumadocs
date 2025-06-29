@@ -35,7 +35,7 @@ const items = [
     value: undefined,
   },
   {
-    name: 'Framework',
+    name: 'Api',
     description: 'Only results about Fumadocs UI & guides',
     value: 'ui',
   },
