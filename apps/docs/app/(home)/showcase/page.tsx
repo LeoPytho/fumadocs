@@ -18,9 +18,9 @@ import TurboStarter from '@/public/showcases/turbostarter.png';
 
 export const metadata = createMetadata({
   title: 'Showcase',
-  description: 'Some cool websites using Fumadocs',
+  description: 'Some cool websites using jkt48connect',
   openGraph: {
-    url: 'https://fumadocs.dev/showcase',
+    url: 'https://docs.jkt48connect.my.id/showcase',
   },
 });
 
@@ -32,12 +32,12 @@ interface ShowcaseObject {
 
 const showcases: ShowcaseObject[] = [
   {
-    image: '/showcases/million.png',
+    image: '/686103cd95e8ca13853ee2a9.jpg',
     name: 'Jeketian',
     url: 'https://www.jeketian.my.id/',
   },
   {
-    image: '/showcases/million.png',
+    image: '/685ff7f8525d02566271d545.png',
     name: 'JKT48Connect',
     url: 'https://www.jkt48connect.my.id',
   },
