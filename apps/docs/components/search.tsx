@@ -25,8 +25,8 @@ import { buttonVariants } from 'fumadocs-ui/components/ui/button';
 import { cn } from '@/lib/cn';
 
 const client = new OramaClient({
-  endpoint: 'https://cloud.orama.run/v1/indexes/docs-nlyce7',
-  api_key: 'zHwQneQZvYpyRpS4qACo180L5yFbhaIM',
+  endpoint: 'https://cloud.orama.run/v1/indexes/dokumentatiob-g9y69w',
+  api_key: '3a9Ttxyjz27NZ5Gr8VebdmNPmzzJEdUX',
 });
 
 const items = [
@@ -47,7 +47,7 @@ const items = [
   {
     name: 'Blog',
     description: 'Only results about Blog',
-    value: 'mdx',
+    value: 'blog',
   },
 ];
 
