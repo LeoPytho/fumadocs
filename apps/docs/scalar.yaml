@@ -1,4 +1,4 @@
-openapi: 3.1.1
+Openapi: 3.1.1
 info:
   title: JKT48Connect API
   description: |
@@ -16,13 +16,21 @@ servers:
 security:
   - apiKeyQuery: []
 tags:
-  - name: JKT48
-    description: Endpoints related to JKT48 members, lives, news, and more.
+  - name: JKT48 Member
+    description: Endpoints related to JKT48 members and their personal information.
+  - name: JKT48 Live Stream
+    description: Endpoints for JKT48 live streams across various platforms, including chat.
+  - name: JKT48 News & Events
+    description: Endpoints for JKT48 news articles, events, and YouTube video information.
+  - name: JKT48 Theater
+    description: Endpoints for JKT48 theater schedules and details.
+  - name: Grow A Garden
+    description: Endpoints for the Grow A Garden feature, including stock, weather, and restock timers.
 paths:
   '/jkt48/members':
     get:
       tags:
-        - JKT48
+        - JKT48 Member
       summary: Get all JKT48 members
       description: Retrieve a list of all JKT48 members.
       operationId: getMembers
@@ -46,7 +54,7 @@ paths:
   '/jkt48/birthday':
     get:
       tags:
-        - JKT48
+        - JKT48 Member
       summary: Get JKT48 member birthdays
       description: Retrieve upcoming or recent JKT48 member birthdays.
       operationId: getBirthdays
@@ -68,14 +76,20 @@ paths:
                       type: string
                       format: date
                     # Add more birthday properties
-  '/jkt48/events':
+  '/jkt48/member/{name}':
     get:
       tags:
-        - JKT48
-      summary: Get JKT48 events
-      description: Retrieve a list of JKT48 events.
-      operationId: getEvents
+        - JKT48 Member
+      summary: Get JKT48 member details
+      description: Retrieve detailed information about a specific JKT48 member.
+      operationId: getMemberDetail
       parameters:
+        - name: name
+          in: path
+          required: true
+          description: The name of the member.
+          schema:
+            type: string
         - $ref: '#/components/parameters/apiKeyQuery'
       responses:
         '200':
@@ -83,22 +97,19 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    name:
-                      type: string
-                    date:
-                      type: string
-                      format: date-time
-                    # Add more event properties
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  # Add more detailed member properties
+        '404':
+          $ref: '#/components/responses/NotFound'
   '/jkt48/recent':
     get:
       tags:
-        - JKT48
+        - JKT48 Live Stream
       summary: Get recent JKT48 live streams
       description: Retrieve a list of recently finished JKT48 live streams.
       operationId: getRecentLives
@@ -122,7 +133,7 @@ paths:
   '/jkt48/replay':
     get:
       tags:
-        - JKT48
+        - JKT48 Live Stream
       summary: Get JKT48 live stream replays
       description: Retrieve a list of available JKT48 live stream replays.
       operationId: getReplays
@@ -146,7 +157,7 @@ paths:
   '/jkt48/recent/{liveId}':
     get:
       tags:
-        - JKT48
+        - JKT48 Live Stream
       summary: Get details of a recent JKT48 live stream
       description: Retrieve detailed information about a specific recent JKT48 live stream.
       operationId: getRecentDetail
@@ -176,7 +187,7 @@ paths:
   '/jkt48/live':
     get:
       tags:
-        - JKT48
+        - JKT48 Live Stream
       summary: Get current JKT48 live streams
       description: Retrieve a list of currently active JKT48 live streams across all platforms.
       operationId: getCurrentLives
@@ -203,7 +214,7 @@ paths:
   '/jkt48/live/youtube':
     get:
       tags:
-        - JKT48
+        - JKT48 Live Stream
       summary: Get current JKT48 YouTube live streams
       description: Retrieve a list of currently active JKT48 YouTube live streams.
       operationId: getYouTubeLives
@@ -224,34 +235,10 @@ paths:
                     title:
                       type: string
                     # Add more YouTube live properties
-  '/jkt48/youtube':
-    get:
-      tags:
-        - JKT48
-      summary: Get JKT48 YouTube video information
-      description: Retrieve information about JKT48 YouTube videos.
-      operationId: getYouTubeVideos
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    videoId:
-                      type: string
-                    title:
-                      type: string
-                    # Add more YouTube video properties
   '/jkt48/live/idn':
     get:
       tags:
-        - JKT48
+        - JKT48 Live Stream
       summary: Get current JKT48 IDN live streams
       description: Retrieve a list of currently active JKT48 IDN live streams.
       operationId: getIDNLives
@@ -275,7 +262,7 @@ paths:
   '/jkt48/live/showroom':
     get:
       tags:
-        - JKT48
+        - JKT48 Live Stream
       summary: Get current JKT48 Showroom live streams
       description: Retrieve a list of currently active JKT48 Showroom live streams.
       operationId: getShowroomLives
@@ -296,155 +283,10 @@ paths:
                     title:
                       type: string
                     # Add more Showroom live properties
-  '/jkt48/member/{name}':
-    get:
-      tags:
-        - JKT48
-      summary: Get JKT48 member details
-      description: Retrieve detailed information about a specific JKT48 member.
-      operationId: getMemberDetail
-      parameters:
-        - name: name
-          in: path
-          required: true
-          description: The name of the member.
-          schema:
-            type: string
-        - $ref: '#/components/parameters/apiKeyQuery'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  name:
-                    type: string
-                  # Add more detailed member properties
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/jkt48/news':
-    get:
-      tags:
-        - JKT48
-      summary: Get JKT48 news
-      description: Retrieve a list of JKT48 news articles.
-      operationId: getNews
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    title:
-                      type: string
-                    # Add more news properties
-  '/jkt48/news/{id}':
-    get:
-      tags:
-        - JKT48
-      summary: Get JKT48 news detail
-      description: Retrieve detailed information about a specific JKT48 news article.
-      operationId: getNewsDetail
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the news article.
-          schema:
-            type: integer
-        - $ref: '#/components/parameters/apiKeyQuery'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  title:
-                    type: string
-                  content:
-                    type: string
-                  # Add more detailed news properties
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/jkt48/theater':
-    get:
-      tags:
-        - JKT48
-      summary: Get JKT48 theater schedules
-      description: Retrieve upcoming JKT48 theater schedules.
-      operationId: getTheater
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    title:
-                      type: string
-                    date:
-                      type: string
-                      format: date
-                    # Add more theater properties
-  '/jkt48/theater/{id}':
-    get:
-      tags:
-        - JKT48
-      summary: Get JKT48 theater schedule detail
-      description: Retrieve detailed information about a specific JKT48 theater schedule.
-      operationId: getTheaterDetail
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the theater schedule.
-          schema:
-            type: integer
-        - $ref: '#/components/parameters/apiKeyQuery'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  title:
-                    type: string
-                  description:
-                    type: string
-                  # Add more detailed theater properties
-        '404':
-          $ref: '#/components/responses/NotFound'
   '/jkt48/chat-stream':
     get:
       tags:
-        - JKT48
+        - JKT48 Live Stream
       summary: Get chat stream for a specific live
       description: Retrieve chat messages for a specific JKT48 live stream.
       operationId: getChatStream
@@ -482,7 +324,7 @@ paths:
   '/jkt48/chat-stream-sr':
     get:
       tags:
-        - JKT48
+        - JKT48 Live Stream
       summary: Get Showroom chat stream
       description: Retrieve chat messages for a specific Showroom live stream.
       operationId: getChatStreamSR
@@ -511,6 +353,262 @@ paths:
                     # Add more chat message properties
         '400':
           $ref: '#/components/responses/BadRequest'
+  '/jkt48/events':
+    get:
+      tags:
+        - JKT48 News & Events
+      summary: Get JKT48 events
+      description: Retrieve a list of JKT48 events.
+      operationId: getEvents
+      parameters:
+        - $ref: '#/components/parameters/apiKeyQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    date:
+                      type: string
+                      format: date-time
+                    # Add more event properties
+  '/jkt48/news':
+    get:
+      tags:
+        - JKT48 News & Events
+      summary: Get JKT48 news
+      description: Retrieve a list of JKT48 news articles.
+      operationId: getNews
+      parameters:
+        - $ref: '#/components/parameters/apiKeyQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    title:
+                      type: string
+                    # Add more news properties
+  '/jkt48/news/{id}':
+    get:
+      tags:
+        - JKT48 News & Events
+      summary: Get JKT48 news detail
+      description: Retrieve detailed information about a specific JKT48 news article.
+      operationId: getNewsDetail
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the news article.
+          schema:
+            type: integer
+        - $ref: '#/components/parameters/apiKeyQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  title:
+                    type: string
+                  content:
+                    type: string
+                  # Add more detailed news properties
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/jkt48/youtube':
+    get:
+      tags:
+        - JKT48 News & Events
+      summary: Get JKT48 YouTube video information
+      description: Retrieve information about JKT48 YouTube videos.
+      operationId: getYouTubeVideos
+      parameters:
+        - $ref: '#/components/parameters/apiKeyQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    videoId:
+                      type: string
+                    title:
+                      type: string
+                    # Add more YouTube video properties
+  '/jkt48/theater':
+    get:
+      tags:
+        - JKT48 Theater
+      summary: Get JKT48 theater schedules
+      description: Retrieve upcoming JKT48 theater schedules.
+      operationId: getTheater
+      parameters:
+        - $ref: '#/components/parameters/apiKeyQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    title:
+                      type: string
+                    date:
+                      type: string
+                      format: date
+                    # Add more theater properties
+  '/jkt48/theater/{id}':
+    get:
+      tags:
+        - JKT48 Theater
+      summary: Get JKT48 theater schedule detail
+      description: Retrieve detailed information about a specific JKT48 theater schedule.
+      operationId: getTheaterDetail
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the theater schedule.
+          schema:
+            type: integer
+        - $ref: '#/components/parameters/apiKeyQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  # Add more detailed theater properties
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/growagarden/stock':
+    get:
+      tags:
+        - Grow A Garden
+      summary: Get Grow A Garden stock information
+      description: Retrieve current stock levels for Grow A Garden items.
+      operationId: getGrowAGardenStock
+      parameters:
+        - $ref: '#/components/parameters/apiKeyQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item:
+                    type: string
+                  quantity:
+                    type: integer
+                  # Add more stock properties
+  '/growagarden/weather':
+    get:
+      tags:
+        - Grow A Garden
+      summary: Get Grow A Garden weather information
+      description: Retrieve current weather conditions for Grow A Garden.
+      operationId: getGrowAGardenWeather
+      parameters:
+        - $ref: '#/components/parameters/apiKeyQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  condition:
+                    type: string
+                  temperature:
+                    type: number
+                    format: float
+                  # Add more weather properties
+  '/growagarden/restock-timer':
+    get:
+      tags:
+        - Grow A Garden
+      summary: Get Grow A Garden restock timer
+      description: Retrieve the timer until the next Grow A Garden restock.
+      operationId: getGrowAGardenRestockTimer
+      parameters:
+        - $ref: '#/components/parameters/apiKeyQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nextRestock:
+                    type: string
+                    format: date-time
+                  # Add more restock timer properties
+  '/growagarden/all':
+    get:
+      tags:
+        - Grow A Garden
+      summary: Get all Grow A Garden data
+      description: Retrieve all available data for Grow A Garden (stock, weather, restock timer).
+      operationId: getGrowAGardenAll
+      parameters:
+        - $ref: '#/components/parameters/apiKeyQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stock:
+                    type: object
+                  weather:
+                    type: object
+                  restockTimer:
+                    type: object
+                  # Combine all Grow A Garden properties here
 components:
   securitySchemes:
     apiKeyQuery:
