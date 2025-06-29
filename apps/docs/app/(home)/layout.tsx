@@ -33,8 +33,8 @@ export default function Layout({ children }: { children: ReactNode }) {
               icon: <Book />,
             },
             {
-              text: 'Components',
-              url: '/docs/ui/components',
+              text: 'PlayGround',
+              url: '/docs/openapi',
               icon: <ComponentIcon />,
             },
           ],
