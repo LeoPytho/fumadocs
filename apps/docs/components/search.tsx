@@ -25,8 +25,8 @@ import { buttonVariants } from 'fumadocs-ui/components/ui/button';
 import { cn } from '@/lib/cn';
 
 const client = new OramaClient({
-  endpoint: 'https://cloud.orama.run/v1/indexes/docs-fk97oe',
-  api_key: 'oPZjdlFbq5BpR54bV5Vj57RYt83Xosk7',
+  endpoint: 'https://cloud.orama.run/v1/indexes/docs-nlyce7',
+  api_key: 'zHwQneQZvYpyRpS4qACo180L5yFbhaIM',
 });
 
 const items = [
