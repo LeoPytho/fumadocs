@@ -33,133 +33,24 @@ interface ShowcaseObject {
 const showcases: ShowcaseObject[] = [
   {
     image: '/showcases/million.png',
-    name: 'Million',
-    url: 'https://million.dev',
+    name: 'Jeketian',
+    url: 'https://www.jeketian.my.id/',
   },
   {
-    image: BetterAuth,
-    name: 'Better Auth',
-    url: 'https://better-auth.com',
-  },
-  {
-    name: 'Zod',
-    url: 'https://v4.zod.dev',
-  },
-  { image: '/showcases/nuqs.jpg', name: 'nuqs', url: 'https://nuqs.47ng.com' },
-  {
-    image: '/showcases/dokploy.png',
-    name: 'Dokploy',
-    url: 'https://dokploy.com',
-  },
-  {
-    image: '/showcases/next-faq.png',
-    name: 'Next.js Discord Common Questions',
-    url: 'https://nextjs-faq.com',
-  },
-  {
-    image: ArkType,
-    name: 'Arktype',
-    url: 'https://arktype.io',
-  },
-  {
-    image: '/showcases/zen-browser.png',
-    name: 'Zen Browser',
-    url: 'https://docs.zen-browser.app',
-  },
-  {
-    image: '/showcases/hiro.png',
-    name: 'Hiro',
-    url: 'https://docs.hiro.so/stacks',
-  },
-  {
-    image: OpenPanel,
-    name: 'OpenPanel',
-    url: 'https://openpanel.dev',
-  },
-  {
-    image: '/showcases/hexta-ui.png',
-    name: 'HextaUI',
-    url: 'https://hextaui.com',
-  },
-  {
-    image: Sunar,
-    name: 'Sunar',
-    url: 'https://sunar.js.org',
-  },
-  {
-    image: VisionUI,
-    name: 'Vision UI',
-    url: 'https://vision.uing.dev',
-  },
-  {
-    image: MixSpace,
-    name: 'MixSpace',
-    url: 'https://mx-space.js.org',
-  },
-  {
-    image: '/showcases/codehike.png',
-    name: 'CodeHike',
-    url: 'https://codehike.org',
-  },
-  {
-    image: AssistantUI,
-    name: 'assistant-ui',
-    url: 'https://assistant-ui.com',
-  },
-  {
-    image: Supastarter,
-    name: 'SupaStarter',
-    url: 'https://supastarter.dev',
-  },
-  {
-    image: Expostarter,
-    name: 'ExpoStarter',
-    url: 'https://expostarter.com/docs',
-  },
-  {
-    image: TurboStarter,
-    name: 'TurboStarter',
-    url: 'https://turbostarter.dev',
-  },
-  {
-    image: '/showcases/fashnai.png',
-    name: 'FasnAI',
-    url: 'https://fashn.ai',
-  },
-  {
-    name: 'Dirstarter',
-    url: 'https://dirstarter.com',
-  },
-  {
-    name: 'Rehooks',
-    url: 'https://rehooks.pyr33x.ir',
-  },
-  {
-    name: 'Swellchain',
-    url: 'https://build.swellnetwork.io',
-  },
-  {
-    name: 'ESLint React',
-    url: 'https://eslint-react.xyz',
-  },
-  {
-    name: 'nextjs i18n docs',
-    url: 'https://nextjs.im',
+    image: '/showcases/million.png',
+    name: 'JKT48Connect',
+    url: 'https://www.jkt48connect.my.id',
   },
 ];
 
 const blogs: ShowcaseObject[] = [
   {
-    name: "RUNFUNRUN's Blog",
-    url: 'https://runfunrun.dev',
+    name: "ZENOVA WhatsApp Bot",
+    url: 'https://wa.me/6285189020193',
   },
   {
-    name: 'xlog.systems',
-    url: 'https://www.xlog.systems',
-  },
-  {
-    name: 'stutuer',
-    url: 'https://www.stutuer.tech',
+    name: 'JKT48Connect Discord Bot',
+    url: 'https://discord.com/oauth2/authorize?client_id=1305141693477027891',
   },
 ];
 
@@ -183,15 +74,15 @@ export default function Showcase() {
     <main className="px-4 py-12 z-[2] w-full max-w-[1400px] mx-auto [--color-fd-border:color-mix(in_oklab,var(--color-fd-primary)_30%,transparent)]">
       <div className="relative overflow-hidden border border-dashed p-6">
         <h1 className="mb-4 text-xl font-medium">
-          The docs framework designed with care.
+          The restapi created for everyone.
         </h1>
         <p className="text-fd-muted-foreground">
-          A list of beautiful open-source projects with their docs powered by
-          Fumadocs.
+          A list of beautiful projects with their powered by
+          JKT48Connect.
         </p>
         <div className="mt-6">
           <a
-            href="https://github.com/fuma-nama/fumadocs/discussions/30"
+            href="https://wa.me/6285701479245"
             target="_blank"
             rel="noreferrer noopener"
             className={cn(
@@ -230,7 +121,7 @@ export default function Showcase() {
         </svg>
         <div>
           <h2 className="text-sm font-medium mb-2">
-            Fumadocs powers the docs of Vercel open source SDKs.
+            JKT48Connect using the host of Vercel open source SDKs.
           </h2>
           <div className="flex items-center gap-2 -mx-1.5">
             {vercel.map((item) => (
@@ -257,7 +148,7 @@ export default function Showcase() {
         ))}
         <div className="absolute text-center bottom-0 inset-x-0 pt-4 bg-gradient-to-t from-fd-background">
           <Link
-            href="https://github.com/fuma-nama/fumadocs/discussions/30"
+            href="https://www.jkt48connect.my.id"
             className={cn(
               buttonVariants({
                 size: 'sm',
@@ -265,12 +156,12 @@ export default function Showcase() {
               }),
             )}
           >
-            See all of our showcases.
+            See jkt48connect website
           </Link>
         </div>
       </div>
       <h2 className="text-xl font-medium mt-12 px-4">
-        Fumadocs can power your blog, too.
+        JKT48Connect can power your bot, too.
       </h2>
       <div className="mt-6 grid gap-2.5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {blogs.map((showcase) => (
