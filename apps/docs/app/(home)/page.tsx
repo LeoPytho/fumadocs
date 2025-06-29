@@ -661,7 +661,7 @@ function Features() {
         description="Integrate with custom search for member data, songs, or news."
       >
         <Link
-          href="/docs/api-reference#search" // Replace with your API search documentation link
+          href="/docs/ui#search" // Replace with your API search documentation link
           className={cn(
             buttonVariants({ variant: 'outline', className: 'mt-4' }),
           )}
@@ -705,7 +705,7 @@ function Features() {
       >
         <div className="mt-8 flex flex-col gap-4">
           <Link
-            href="/docs/api-reference/members" // Replace with member module documentation link
+            href="/docs/ui/member" // Replace with member module documentation link
             className="rounded-xl bg-gradient-to-br from-transparent via-fd-primary p-px shadow-lg shadow-fd-primary/20"
           >
             <div className="rounded-[inherit] bg-fd-background bg-gradient-to-br from-transparent via-fd-primary/10 p-4 transition-colors hover:bg-fd-muted">
@@ -717,13 +717,13 @@ function Features() {
             </div>
           </Link>
           <Link
-            href="/docs/api-reference/schedules" // Replace with schedule module documentation link
+            href="/docs/ui/theater" // Replace with schedule module documentation link
             className="rounded-xl border bg-fd-background p-4 shadow-lg transition-colors hover:bg-fd-muted"
           >
             <LibraryIcon />
-            <h3 className="font-semibold">Schedules Module</h3>
+            <h3 className="font-semibold">Theater Module</h3>
             <p className="text-sm text-fd-muted-foreground">
-              Access theater schedules, events, and other live schedules.
+              Access theater schedules and get the information about theater.
             </p>
           </Link>
         </div>
