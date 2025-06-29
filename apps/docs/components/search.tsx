@@ -36,23 +36,18 @@ const items = [
   },
   {
     name: 'Api',
-    description: 'Only results about Fumadocs UI & guides',
+    description: 'Only results about api documentation & guides',
     value: 'ui',
   },
   {
     name: 'Core',
-    description: 'Only results about headless features',
+    description: 'Only results about core features',
     value: 'headless',
   },
   {
-    name: 'MDX',
-    description: 'Only results about Fumadocs MDX',
+    name: 'Blog',
+    description: 'Only results about Blog',
     value: 'mdx',
-  },
-  {
-    name: 'CLI',
-    description: 'Only results about Fumadocs CLI',
-    value: 'cli',
   },
 ];
 
