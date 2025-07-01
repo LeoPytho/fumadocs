@@ -274,50 +274,50 @@ function extractDocumentationLinks(content: string): Array<{
       let title = linkTitle || 'Dokumentasi';
       let description = 'Panduan JKT48Connect';
       
-      // Enhanced URL-based title and description mapping
+      // Enhanced URL-based title and description mapping with proper typing
       const urlMappings = [
         {
-          check: url => url.includes('/what-is-jkt48connect'),
+          check: (url: string) => url.includes('/what-is-jkt48connect'),
           title: 'Apa itu JKT48Connect',
           description: 'Pengenalan dan overview JKT48Connect API'
         },
         {
-          check: url => url.includes('/all-live'),
+          check: (url: string) => url.includes('/all-live'),
           title: 'All Live Streams',
           description: 'Panduan lengkap semua platform live streaming'
         },
         {
-          check: url => url.includes('/idn'),
+          check: (url: string) => url.includes('/idn'),
           title: 'IDN Live',
           description: 'Implementasi IDN Live streaming API'
         },
         {
-          check: url => url.includes('/showroom'),
+          check: (url: string) => url.includes('/showroom'),
           title: 'Showroom',
           description: 'Integrasi dengan platform Showroom'
         },
         {
-          check: url => url.includes('/youtube'),
+          check: (url: string) => url.includes('/youtube'),
           title: 'YouTube Integration',
           description: 'Cara menggunakan YouTube API endpoints'
         },
         {
-          check: url => url.includes('/recent-detail'),
+          check: (url: string) => url.includes('/recent-detail'),
           title: 'Recent Detail',
           description: 'Detail data streaming terbaru'
         },
         {
-          check: url => url.includes('/recent'),
+          check: (url: string) => url.includes('/recent'),
           title: 'Recent Updates',
           description: 'Data update dan activity terbaru'
         },
         {
-          check: url => url.includes('/member'),
+          check: (url: string) => url.includes('/member'),
           title: 'Member Data',
           description: 'Data lengkap member JKT48'
         },
         {
-          check: url => url.endsWith('/docs/ui'),
+          check: (url: string) => url.endsWith('/docs/ui'),
           title: 'Quick Start Guide',
           description: 'Panduan cepat memulai dengan JKT48Connect'
         }
@@ -339,7 +339,7 @@ function extractDocumentationLinks(content: string): Array<{
   return links;
 }
 
-// Enhanced link component with different styling for different types
+// Enhanced link component with auto-redirect functionality
 function DocumentationLink({ link, index }: { 
   link: { title: string, url: string, description?: string, type: 'documentation' | 'redirect' | 'api' }, 
   index: number 
@@ -366,20 +366,35 @@ function DocumentationLink({ link, index }: {
     }
   };
 
+  const handleClick = (e: React.MouseEvent) => {
+    // Auto-redirect functionality - only for redirect type links
+    if (link.type === 'redirect') {
+      e.preventDefault();
+      // Open in new tab
+      window.open(link.url, '_blank', 'noopener,noreferrer');
+    }
+    // For other types, let the default link behavior happen (target="_blank")
+  };
+
   return (
     <a
       key={index}
       href={link.url}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={handleClick}
       className={cn(
-        'inline-flex items-center gap-2 px-3 py-2 text-xs rounded-lg border transition-colors min-w-0',
-        getVariant()
+        'inline-flex items-center gap-2 px-3 py-2 text-xs rounded-lg border transition-colors min-w-0 cursor-pointer',
+        getVariant(),
+        link.type === 'redirect' && 'animate-pulse' // Visual indicator for auto-redirect
       )}
     >
       {getIcon()}
       <div className="flex flex-col min-w-0">
-        <span className="font-medium truncate">{link.title}</span>
+        <span className="font-medium truncate">
+          {link.title}
+          {link.type === 'redirect' && ' (Auto-redirect)'}
+        </span>
         {link.description && (
           <span className="text-xs opacity-80 truncate">{link.description}</span>
         )}
@@ -390,6 +405,22 @@ function DocumentationLink({ link, index }: {
 
 function Message({ message }: { message: Message }) {
   const documentationLinks = extractDocumentationLinks(message.content);
+  
+  // Auto-redirect functionality - automatically open redirect links
+  useEffect(() => {
+    const redirectLinks = documentationLinks.filter(link => link.type === 'redirect');
+    
+    if (redirectLinks.length > 0 && message.role === 'assistant') {
+      // Small delay to let the user see the message first
+      const timer = setTimeout(() => {
+        redirectLinks.forEach(link => {
+          window.open(link.url, '_blank', 'noopener,noreferrer');
+        });
+      }, 1500); // 1.5 second delay
+
+      return () => clearTimeout(timer);
+    }
+  }, [documentationLinks, message.role]);
   
   return (
     <div className="group">
@@ -416,8 +447,13 @@ function Message({ message }: { message: Message }) {
           <div className="flex items-center gap-2 mb-2">
             <FileText className="size-4 text-fd-primary" />
             <p className="text-sm font-medium text-fd-foreground">
-              {documentationLinks.some(l => l.type === 'redirect') ? 'Quick Access' : 'Dokumentasi Terkait'}
+              {documentationLinks.some(l => l.type === 'redirect') ? 'Opening Documentation...' : 'Dokumentasi Terkait'}
             </p>
+            {documentationLinks.some(l => l.type === 'redirect') && (
+              <span className="text-xs text-fd-muted-foreground">
+                (akan terbuka otomatis)
+              </span>
+            )}
           </div>
           <div className="flex flex-wrap gap-2">
             {documentationLinks.map((link, index) => (
