@@ -1,3 +1,4 @@
+
 import { PlusIcon } from 'lucide-react';
 import Image, { type StaticImageData } from 'next/image';
 import { cn } from '@/lib/cn';
@@ -32,6 +33,15 @@ interface ShowcaseObject {
   url: string;
 }
 
+interface ProjectObject {
+  name: string;
+  description: string;
+  category: string;
+  url?: string;
+  status: 'Active' | 'Maintenance' | 'Beta' | 'Deprecated';
+  tech?: string[];
+}
+
 const showcases: ShowcaseObject[] = [
   {
     image: Jeketian,
@@ -56,6 +66,69 @@ const blogs: ShowcaseObject[] = [
   },
 ];
 
+const projects: ProjectObject[] = [
+  {
+    name: 'JKT48Connect API',
+    description: 'RESTful API untuk mengakses data JKT48 termasuk member, jadwal, berita, dan konten multimedia',
+    category: 'API & Backend',
+    url: 'https://api.jkt48connect.my.id',
+    status: 'Active',
+    tech: ['Node.js', 'Express', 'MongoDB']
+  },
+  {
+    name: 'JKT48Connect Web Dashboard',
+    description: 'Dashboard web untuk mengelola dan memonitor API usage, analytics, dan administrasi',
+    category: 'Web Application',
+    url: 'https://dashboard.jkt48connect.my.id',
+    status: 'Active',
+    tech: ['Next.js', 'React', 'TypeScript']
+  },
+  {
+    name: 'ZENOVA WhatsApp Bot',
+    description: 'Bot WhatsApp otomatis untuk mendapatkan informasi JKT48 secara real-time',
+    category: 'Chatbot',
+    url: 'https://wa.me/6285189020193',
+    status: 'Active',
+    tech: ['Node.js', 'WhatsApp Web.js']
+  },
+  {
+    name: 'JKT48Connect Discord Bot',
+    description: 'Bot Discord dengan fitur notifikasi otomatis, games, dan integrasi API JKT48',
+    category: 'Chatbot',
+    url: 'https://discord.com/oauth2/authorize?client_id=1305141693477027891',
+    status: 'Active',
+    tech: ['Discord.js', 'Node.js']
+  },
+  {
+    name: 'JKT48 Mobile App',
+    description: 'Aplikasi mobile untuk fans JKT48 dengan fitur push notification dan offline reading',
+    category: 'Mobile Application',
+    status: 'Beta',
+    tech: ['React Native', 'Expo']
+  },
+  {
+    name: 'JKT48Connect CLI Tool',
+    description: 'Command line interface untuk mengakses API JKT48Connect dari terminal',
+    category: 'Developer Tools',
+    status: 'Active',
+    tech: ['Node.js', 'Commander.js']
+  },
+  {
+    name: 'JKT48 Data Scraper',
+    description: 'Tool untuk scraping dan sinkronisasi data JKT48 dari berbagai sumber',
+    category: 'Data Processing',
+    status: 'Maintenance',
+    tech: ['Python', 'Scrapy', 'Selenium']
+  },
+  {
+    name: 'JKT48Connect SDKs',
+    description: 'Software Development Kits untuk berbagai bahasa pemrograman (JavaScript, Python, PHP)',
+    category: 'Developer Tools',
+    status: 'Active',
+    tech: ['JavaScript', 'Python', 'PHP']
+  }
+];
+
 const vercel = [
   {
     name: 'Turbo',
@@ -70,6 +143,23 @@ const vercel = [
     url: 'https://chat-sdk.dev',
   },
 ];
+
+const categories = Array.from(new Set(projects.map(project => project.category)));
+
+const getStatusColor = (status: ProjectObject['status']) => {
+  switch (status) {
+    case 'Active':
+      return 'bg-green-100 text-green-800 border-green-200';
+    case 'Beta':
+      return 'bg-blue-100 text-blue-800 border-blue-200';
+    case 'Maintenance':
+      return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    case 'Deprecated':
+      return 'bg-red-100 text-red-800 border-red-200';
+    default:
+      return 'bg-gray-100 text-gray-800 border-gray-200';
+  }
+};
 
 export default function Showcase() {
   return (
@@ -144,6 +234,7 @@ export default function Showcase() {
           </div>
         </div>
       </div>
+
       <div className="relative mt-6 grid gap-2.5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {showcases.map((showcase) => (
           <ShowcaseItem key={showcase.url} {...showcase} />
@@ -162,6 +253,7 @@ export default function Showcase() {
           </Link>
         </div>
       </div>
+
       <h2 className="text-xl font-medium mt-12 px-4">
         JKT48Connect can power your bot, too.
       </h2>
@@ -169,6 +261,70 @@ export default function Showcase() {
         {blogs.map((showcase) => (
           <ShowcaseItem key={showcase.url} {...showcase} />
         ))}
+      </div>
+
+      {/* New Projects Section */}
+      <h2 className="text-xl font-medium mt-16 mb-6">
+        Our Projects & Services
+      </h2>
+      <p className="text-fd-muted-foreground mb-8">
+        Explore the complete ecosystem of tools and services built by JKT48Connect team.
+      </p>
+
+      {/* Category Filter */}
+      <div className="flex flex-wrap gap-2 mb-8">
+        <span className="text-sm font-medium text-fd-muted-foreground">Categories:</span>
+        {categories.map((category) => (
+          <span
+            key={category}
+            className="px-3 py-1 text-xs font-medium bg-fd-accent rounded-full border"
+          >
+            {category}
+          </span>
+        ))}
+      </div>
+
+      {/* Projects Grid */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {projects.map((project, index) => (
+          <ProjectCard key={index} {...project} />
+        ))}
+      </div>
+
+      {/* Call to Action */}
+      <div className="mt-16 text-center border border-dashed p-8 rounded-lg">
+        <h3 className="text-lg font-medium mb-2">Want to contribute or suggest a project?</h3>
+        <p className="text-fd-muted-foreground mb-4">
+          We're always looking for new ideas and contributions to expand the JKT48Connect ecosystem.
+        </p>
+        <div className="flex justify-center gap-4">
+          <a
+            href="https://github.com/jkt48connect"
+            target="_blank"
+            rel="noreferrer noopener"
+            className={cn(
+              buttonVariants({
+                variant: 'default',
+                size: 'sm',
+              }),
+            )}
+          >
+            View on GitHub
+          </a>
+          <a
+            href="https://wa.me/6285701479245"
+            target="_blank"
+            rel="noreferrer noopener"
+            className={cn(
+              buttonVariants({
+                variant: 'outline',
+                size: 'sm',
+              }),
+            )}
+          >
+            Contact Us
+          </a>
+        </div>
       </div>
     </main>
   );
@@ -209,5 +365,63 @@ function ShowcaseItem({ name, url, image }: ShowcaseObject) {
       </p>
       <p className="text-xl font-medium">{name}</p>
     </a>
+  );
+}
+
+function ProjectCard({ name, description, category, url, status, tech }: ProjectObject) {
+  return (
+    <div className="group border border-dashed p-6 transition-all hover:bg-fd-accent rounded-lg">
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <h3 className="font-medium text-lg">{name}</h3>
+          {url && (
+            <a
+              href={url}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+          )}
+        </div>
+        <span className={cn(
+          "px-2 py-1 text-xs font-medium rounded-full border",
+          getStatusColor(status)
+        )}>
+          {status}
+        </span>
+      </div>
+      
+      <p className="text-sm text-fd-muted-foreground mb-3">
+        {description}
+      </p>
+      
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-medium text-fd-primary bg-fd-primary/10 px-2 py-1 rounded">
+          {category}
+        </span>
+        
+        {tech && tech.length > 0 && (
+          <div className="flex gap-1">
+            {tech.slice(0, 3).map((technology, index) => (
+              <span
+                key={index}
+                className="text-xs px-2 py-1 bg-fd-muted/10 rounded border"
+              >
+                {technology}
+              </span>
+            ))}
+            {tech.length > 3 && (
+              <span className="text-xs px-2 py-1 bg-fd-muted/10 rounded border">
+                +{tech.length - 3}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
