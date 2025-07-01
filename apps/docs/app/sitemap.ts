@@ -23,11 +23,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
-    {
-      url: url('/project'),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
     ...(await Promise.all(
       source.getPages().map(async (page) => {
         const { lastModified } = await page.data.load();
