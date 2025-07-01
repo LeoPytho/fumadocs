@@ -160,7 +160,7 @@ function SearchAIInput(props: FormHTMLAttributes<HTMLFormElement>) {
 }
 
 function List(props: Omit<HTMLAttributes<HTMLDivElement>, 'dir'>) {
-  const containerRef = useRef<HTMLDivElement>(NULL);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
