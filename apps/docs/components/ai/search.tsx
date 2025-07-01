@@ -14,7 +14,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Loader2, RefreshCw, Send, X, ExternalLink } from 'lucide-react';
+import { Loader2, RefreshCw, Send, X, ExternalLink, FileText, Code, Book } from 'lucide-react';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import { cn } from '@/lib/cn';
 import { buttonVariants } from '../../../../packages/ui/src/components/ui/button';
@@ -40,6 +40,7 @@ interface Message {
     title: string;
     url: string;
     description?: string;
+    type?: 'documentation' | 'redirect' | 'api';
   }>;
 }
 
@@ -77,7 +78,7 @@ function SearchAIActions() {
           onClick={() => reload()}
         >
           <RefreshCw className="size-4" />
-          Retry
+          Regenerate
         </button>
       )}
       <button
@@ -120,7 +121,7 @@ function SearchAIInput(props: FormHTMLAttributes<HTMLFormElement>) {
     >
       <Input
         value={input}
-        placeholder={isLoading ? 'JKT48Connect AI is thinking...' : 'Ask about JKT48Connect API...'}
+        placeholder={isLoading ? 'JKT48Connect AI sedang berpikir...' : 'Tanya tentang JKT48Connect API atau minta dokumentasi...'}
         disabled={isLoading}
         onChange={(e) => {
           setInput(e.target.value);
@@ -236,57 +237,162 @@ const roleName: Record<string, string> = {
   assistant: 'JKT48Connect AI',
 };
 
-// Function to extract and parse documentation links
-function extractDocumentationLinks(content: string): Array<{title: string, url: string, description?: string}> {
-  const links: Array<{title: string, url: string, description?: string}> = [];
+// Enhanced function to extract and parse documentation links with better detection
+function extractDocumentationLinks(content: string): Array<{
+  title: string, 
+  url: string, 
+  description?: string,
+  type: 'documentation' | 'redirect' | 'api'
+}> {
+  const links: Array<{title: string, url: string, description?: string, type: 'documentation' | 'redirect' | 'api'}> = [];
   
-  // Pattern untuk mendeteksi link dokumentasi
-  const linkPattern = /📚 \*\*Dokumentasi Lengkap:\*\* (https:\/\/docs\.jkt48connect\.my\.id[^\s]+)/g;
-  let match;
-  
-  while ((match = linkPattern.exec(content)) !== null) {
-    const url = match[1];
-    let title = 'Dokumentasi';
-    let description = 'Panduan lengkap JKT48Connect';
-    
-    // Tentukan title berdasarkan URL
-    if (url.includes('/what-is-jkt48connect')) {
-      title = 'Apa itu JKT48Connect';
-      description = 'Pengenalan JKT48Connect API';
-    } else if (url.includes('/all-live')) {
-      title = 'All Live';
-      description = 'Panduan semua live streaming';
-    } else if (url.includes('/idn')) {
-      title = 'IDN Live';
-      description = 'Panduan IDN Live streaming';
-    } else if (url.includes('/showroom')) {
-      title = 'Showroom';
-      description = 'Panduan Showroom streaming';
-    } else if (url.includes('/youtube')) {
-      title = 'YouTube';
-      description = 'Panduan YouTube integration';
-    } else if (url.includes('/recent')) {
-      title = 'Recent Updates';
-      description = 'Data update terbaru';
-    } else if (url.includes('/member')) {
-      title = 'Member Data';
-      description = 'Data member JKT48';
-    } else if (url.includes('/docs/ui')) {
-      title = 'Quick Start';
-      description = 'Panduan memulai dengan JKT48Connect';
+  // Enhanced patterns for different link types
+  const patterns = [
+    // Documentation links
+    { 
+      pattern: /📚 \*\*Dokumentasi (?:Lengkap|Terkait):\*\* (https:\/\/docs\.jkt48connect\.my\.id[^\s\)]+)/g,
+      type: 'documentation' as const
+    },
+    // Redirect links
+    { 
+      pattern: /🔗 \*\*Redirect ke Dokumentasi:\*\* (https:\/\/docs\.jkt48connect\.my\.id[^\s\)]+)/g,
+      type: 'redirect' as const
+    },
+    // General links in markdown format
+    { 
+      pattern: /\[([^\]]+)\]\((https:\/\/docs\.jkt48connect\.my\.id[^\)]+)\)/g,
+      type: 'documentation' as const
     }
-    
-    links.push({ title, url, description });
-  }
+  ];
+
+  patterns.forEach(({ pattern, type }) => {
+    let match;
+    while ((match = pattern.exec(content)) !== null) {
+      const url = type === 'documentation' && match[2] ? match[2] : match[1];
+      const linkTitle = type === 'documentation' && match[2] ? match[1] : undefined;
+      
+      let title = linkTitle || 'Dokumentasi';
+      let description = 'Panduan JKT48Connect';
+      
+      // Enhanced URL-based title and description mapping
+      const urlMappings = [
+        {
+          check: url => url.includes('/what-is-jkt48connect'),
+          title: 'Apa itu JKT48Connect',
+          description: 'Pengenalan dan overview JKT48Connect API'
+        },
+        {
+          check: url => url.includes('/all-live'),
+          title: 'All Live Streams',
+          description: 'Panduan lengkap semua platform live streaming'
+        },
+        {
+          check: url => url.includes('/idn'),
+          title: 'IDN Live',
+          description: 'Implementasi IDN Live streaming API'
+        },
+        {
+          check: url => url.includes('/showroom'),
+          title: 'Showroom',
+          description: 'Integrasi dengan platform Showroom'
+        },
+        {
+          check: url => url.includes('/youtube'),
+          title: 'YouTube Integration',
+          description: 'Cara menggunakan YouTube API endpoints'
+        },
+        {
+          check: url => url.includes('/recent-detail'),
+          title: 'Recent Detail',
+          description: 'Detail data streaming terbaru'
+        },
+        {
+          check: url => url.includes('/recent'),
+          title: 'Recent Updates',
+          description: 'Data update dan activity terbaru'
+        },
+        {
+          check: url => url.includes('/member'),
+          title: 'Member Data',
+          description: 'Data lengkap member JKT48'
+        },
+        {
+          check: url => url.endsWith('/docs/ui'),
+          title: 'Quick Start Guide',
+          description: 'Panduan cepat memulai dengan JKT48Connect'
+        }
+      ];
+
+      const mapping = urlMappings.find(m => m.check(url));
+      if (mapping && !linkTitle) {
+        title = mapping.title;
+        description = mapping.description;
+      }
+      
+      // Avoid duplicates
+      if (!links.some(link => link.url === url)) {
+        links.push({ title, url, description, type });
+      }
+    }
+  });
   
   return links;
+}
+
+// Enhanced link component with different styling for different types
+function DocumentationLink({ link, index }: { 
+  link: { title: string, url: string, description?: string, type: 'documentation' | 'redirect' | 'api' }, 
+  index: number 
+}) {
+  const getIcon = () => {
+    switch (link.type) {
+      case 'redirect':
+        return <ExternalLink className="size-3" />;
+      case 'api':
+        return <Code className="size-3" />;
+      default:
+        return <Book className="size-3" />;
+    }
+  };
+
+  const getVariant = () => {
+    switch (link.type) {
+      case 'redirect':
+        return 'bg-fd-primary text-fd-primary-foreground hover:bg-fd-primary/90';
+      case 'api':
+        return 'bg-fd-accent text-fd-accent-foreground hover:bg-fd-accent/90';
+      default:
+        return 'bg-fd-card hover:bg-fd-accent hover:text-fd-accent-foreground';
+    }
+  };
+
+  return (
+    <a
+      key={index}
+      href={link.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn(
+        'inline-flex items-center gap-2 px-3 py-2 text-xs rounded-lg border transition-colors min-w-0',
+        getVariant()
+      )}
+    >
+      {getIcon()}
+      <div className="flex flex-col min-w-0">
+        <span className="font-medium truncate">{link.title}</span>
+        {link.description && (
+          <span className="text-xs opacity-80 truncate">{link.description}</span>
+        )}
+      </div>
+    </a>
+  );
 }
 
 function Message({ message }: { message: Message }) {
   const documentationLinks = extractDocumentationLinks(message.content);
   
   return (
-    <div>
+    <div className="group">
       <p
         className={cn(
           'mb-1 text-xs font-medium text-fd-muted-foreground',
@@ -294,32 +400,28 @@ function Message({ message }: { message: Message }) {
         )}
       >
         {roleName[message.role] ?? 'unknown'}
+        {message.timestamp && (
+          <span className="ml-2 text-xs opacity-50">
+            {new Date(message.timestamp).toLocaleTimeString()}
+          </span>
+        )}
       </p>
-      <div className="prose text-sm">
+      <div className="prose prose-sm max-w-none">
         <Markdown text={message.content} />
       </div>
       
-      {/* Render documentation links as cards */}
+      {/* Enhanced documentation links rendering */}
       {documentationLinks.length > 0 && (
-        <div className="mt-3 flex flex-col gap-2">
-          <p className="text-xs font-medium text-fd-muted-foreground">📚 Dokumentasi Terkait:</p>
+        <div className="mt-4 p-3 bg-fd-muted/30 rounded-lg border">
+          <div className="flex items-center gap-2 mb-2">
+            <FileText className="size-4 text-fd-primary" />
+            <p className="text-sm font-medium text-fd-foreground">
+              {documentationLinks.some(l => l.type === 'redirect') ? 'Quick Access' : 'Dokumentasi Terkait'}
+            </p>
+          </div>
           <div className="flex flex-wrap gap-2">
             {documentationLinks.map((link, index) => (
-              <a
-                key={index}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs rounded-lg border bg-fd-card hover:bg-fd-accent hover:text-fd-accent-foreground transition-colors"
-              >
-                <ExternalLink className="size-3" />
-                <div className="flex flex-col">
-                  <span className="font-medium">{link.title}</span>
-                  {link.description && (
-                    <span className="text-fd-muted-foreground">{link.description}</span>
-                  )}
-                </div>
-              </a>
+              <DocumentationLink key={index} link={link} index={index} />
             ))}
           </div>
         </div>
@@ -360,7 +462,7 @@ function Markdown({ text }: { text: string }) {
             ...defaultMdxComponents,
             pre: Pre,
             img: undefined,
-            // Custom link component untuk menangani link dokumentasi
+            // Enhanced link component for handling documentation links
             a: ({ href, children, ...props }) => {
               if (href?.startsWith('https://docs.jkt48connect.my.id')) {
                 return (
@@ -368,11 +470,25 @@ function Markdown({ text }: { text: string }) {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-fd-primary underline hover:no-underline inline-flex items-center gap-1"
+                    className="text-fd-primary underline hover:no-underline inline-flex items-center gap-1 font-medium"
                     {...props}
                   >
                     {children}
                     <ExternalLink className="size-3" />
+                  </a>
+                );
+              }
+              if (href?.startsWith('https://v2.jkt48connect.my.id')) {
+                return (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-fd-accent-foreground bg-fd-accent px-1.5 py-0.5 rounded text-xs font-mono inline-flex items-center gap-1"
+                    {...props}
+                  >
+                    {children}
+                    <Code className="size-3" />
                   </a>
                 );
               }
@@ -395,7 +511,7 @@ function Markdown({ text }: { text: string }) {
   return rendered ?? text;
 }
 
-// Custom hook untuk menggantikan useChat
+// Enhanced custom hook dengan better error handling dan loading states
 function useCustomChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -432,6 +548,10 @@ function useCustomChat() {
         signal: controller.signal,
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
 
       if (data.success) {
@@ -448,10 +568,13 @@ function useCustomChat() {
       }
     } catch (error: any) {
       if (error.name !== 'AbortError') {
+        console.error('Chat error:', error);
         const errorMessage: Message = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: 'Maaf, terjadi kesalahan saat memproses permintaan Anda. Silakan coba lagi atau hubungi tim support JKT48Connect.',
+          content: `Maaf, terjadi kesalahan: ${error.message}. Silakan coba lagi atau hubungi tim support JKT48Connect.
+
+🔗 **Support:** https://docs.jkt48connect.my.id/docs/ui`,
           timestamp: Date.now(),
         };
         setMessages(prev => [...prev, errorMessage]);
@@ -467,7 +590,7 @@ function useCustomChat() {
       const lastUserMessage = [...messages].reverse().find(m => m.role === 'user');
       if (lastUserMessage) {
         setInput(lastUserMessage.content);
-        setMessages(prev => prev.slice(0, -1)); // Remove last message
+        setMessages(prev => prev.slice(0, -1)); // Remove last assistant message
       }
     }
   };
@@ -521,7 +644,7 @@ function Content() {
     <ChatContext value={chat}>
       {messages.length > 0 && (
         <List className="bg-fd-popover rounded-xl border shadow-lg animate-fd-dialog-in duration-600">
-          <div className="flex flex-col gap-4 p-3 pb-0">
+          <div className="flex flex-col gap-6 p-4 pb-0">
             {messages.map((item) => (
               <Message key={item.id} message={item} />
             ))}
