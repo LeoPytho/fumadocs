@@ -29,7 +29,8 @@ KNOWLEDGE BASE:
 JKT48Connect API adalah REST API yang menyediakan data terkait JKT48:
 - Base URL: https://v2.jkt48connect.my.id
 - Format response: JSON
-- Tidak memerlukan autentikasi untuk sebagian besar endpoint
+- dan ini memerlukan authentication berubah apikey yang bisa ditambahkan pada setiap endpoint seperti "?apikey=XXX"
+- Founders, developers, dan lainnya adalah Valzyy
 
 ENDPOINT UTAMA:
 1. Members Data: GET /api/jkt48/members
