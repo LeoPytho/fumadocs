@@ -70,21 +70,29 @@ const projects: ProjectObject[] = [
   {
     name: 'JKT48Connect API',
     description: 'RESTful API untuk mengakses data JKT48 termasuk member, jadwal, berita, dan konten multimedia',
-    category: 'API & Backend',
-    url: 'https://api.jkt48connect.my.id',
+    category: 'API',
+    url: 'https://v2.jkt48connect.my.id',
     status: 'Active',
     tech: ['Node.js', 'Express', 'MongoDB']
   },
   {
-    name: 'JKT48Connect Web Dashboard',
-    description: 'Dashboard web untuk mengelola dan memonitor API usage, analytics, dan administrasi',
-    category: 'Web Application',
-    url: 'https://dashboard.jkt48connect.my.id',
+    name: 'JKT48Connect WEB',
+    description: ' web official sebagai contoh sekaligus application yang bisa digunakan untuk melihat atau bahkan menonton livestreaming member secara langsung.',
+    category: 'Web App',
+    url: 'https://www.jkt48connect.my.id',
     status: 'Active',
     tech: ['Next.js', 'React', 'TypeScript']
   },
   {
-    name: 'ZENOVA WhatsApp Bot',
+    name: 'JKT48Connect Docs',
+    description: ' web dokumentasi official, untuk membantu developer dalam menggunakan JKT48Connect.',
+    category: 'Web App',
+    url: 'https://docs.jkt48connect.my.id',
+    status: 'Active',
+    tech: ['Next.js', 'React', 'TypeScript']
+  },
+  {
+    name: 'ZENOVA',
     description: 'Bot WhatsApp otomatis untuk mendapatkan informasi JKT48 secara real-time',
     category: 'Chatbot',
     url: 'https://wa.me/6285189020193',
@@ -100,31 +108,24 @@ const projects: ProjectObject[] = [
     tech: ['Discord.js', 'Node.js']
   },
   {
-    name: 'JKT48 Mobile App',
-    description: 'Aplikasi mobile untuk fans JKT48 dengan fitur push notification dan offline reading',
-    category: 'Mobile Application',
-    status: 'Beta',
-    tech: ['React Native', 'Expo']
-  },
-  {
-    name: 'JKT48Connect CLI Tool',
-    description: 'Command line interface untuk mengakses API JKT48Connect dari terminal',
-    category: 'Developer Tools',
+    name: '@jkt48/core',
+    description: 'Software Development Kits untukmemudahkan dalam menggunakan jkt48connect',
+    category: 'Package',
     status: 'Active',
-    tech: ['Node.js', 'Commander.js']
+    tech: ['Javascript', 'Express']
   },
-  {
-    name: 'JKT48 Data Scraper',
-    description: 'Tool untuk scraping dan sinkronisasi data JKT48 dari berbagai sumber',
-    category: 'Data Processing',
-    status: 'Maintenance',
-    tech: ['Python', 'Scrapy', 'Selenium']
+ {
+    name: '@jkt48connect-corp/baileys',
+    description: 'Baileys untuk WhatsApp yang dibekali dengan fitur button dan lainnya.',
+    category: 'Package',
+    status: 'Active',
+    tech: ['Javascript', 'Express']
   },
-  {
+ {
     name: 'JKT48Connect SDKs',
     description: 'Software Development Kits untuk berbagai bahasa pemrograman (JavaScript, Python, PHP)',
     category: 'Developer Tools',
-    status: 'Active',
+    status: 'Deprecated',
     tech: ['JavaScript', 'Python', 'PHP']
   }
 ];
