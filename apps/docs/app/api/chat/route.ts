@@ -1,32 +1,54 @@
-import { ProvideLinksToolSchema } from '@/lib/chat/inkeep-qa-schema';
-import { createOpenAI } from '@ai-sdk/openai';
-import { streamText } from 'ai';
-
 export const runtime = 'edge';
 
-const openai = createOpenAI({
-  apiKey: process.env.INKEEP_API_KEY,
-  baseURL: 'https://api.inkeep.com/v1',
-});
-
 export async function POST(req: Request) {
-  const reqJson = await req.json();
+  try {
+    const reqJson = await req.json();
+    
+    // Ambil pesan terakhir dari user
+    const lastUserMessage = reqJson.messages
+      .filter((msg: any) => msg.role === 'user')
+      .pop();
+    
+    if (!lastUserMessage) {
+      return new Response(
+        JSON.stringify({ error: 'No user message found' }), 
+        { status: 400 }
+      );
+    }
 
-  const result = streamText({
-    model: openai('inkeep-qa-sonnet-3-5'),
-    tools: {
-      provideLinks: {
-        parameters: ProvideLinksToolSchema,
-      },
-    },
-    messages: reqJson.messages.map((message: Record<string, unknown>) => ({
-      role: message.role,
-      content: message.content,
-      name: 'inkeep-qa-user-message',
-      id: message.id,
-    })),
-    toolChoice: 'auto',
-  });
+    // Panggil API JKT48Connect
+    const apiUrl = `https://api.jkt48connect.my.id/api/ai/microsoft?text=${encodeURIComponent(lastUserMessage.content)}&api_key=JKTCONNECT`;
+    
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    
+    if (!data.success) {
+      return new Response(
+        JSON.stringify({ error: 'API call failed' }), 
+        { status: 500 }
+      );
+    }
 
-  return result.toDataStreamResponse();
+    // Return response dalam format yang sesuai
+    return new Response(
+      JSON.stringify({
+        success: true,
+        result: data.result
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: 'Internal server error' 
+      }), 
+      { status: 500 }
+    );
+  }
 }
