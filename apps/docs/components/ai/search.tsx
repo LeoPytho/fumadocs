@@ -1,3 +1,4 @@
+
 'use client';
 import {
   Children,
@@ -28,19 +29,33 @@ import {
   type DialogProps,
   DialogTitle,
 } from '@radix-ui/react-dialog';
-import { type Message, useChat, type UseChatHelpers } from '@ai-sdk/react';
-import type { ProvideLinksToolSchema } from '@/lib/chat/inkeep-qa-schema';
-import type { z } from 'zod';
 import { DynamicCodeBlock } from 'fumadocs-ui/components/dynamic-codeblock';
 
-const ChatContext = createContext<UseChatHelpers | null>(null);
+interface Message {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp?: number;
+}
+
+interface ChatHelpers {
+  messages: Message[];
+  input: string;
+  setInput: (input: string) => void;
+  handleSubmit: (e?: React.FormEvent) => void;
+  isLoading: boolean;
+  reload: () => void;
+  stop: () => void;
+  setMessages: (messages: Message[]) => void;
+}
+
+const ChatContext = createContext<ChatHelpers | null>(null);
 function useChatContext() {
   return use(ChatContext)!;
 }
 
 function SearchAIActions() {
-  const { messages, status, setMessages, reload } = useChatContext();
-  const isLoading = status === 'streaming';
+  const { messages, isLoading, setMessages, reload } = useChatContext();
 
   if (messages.length === 0) return null;
   return (
@@ -77,8 +92,8 @@ function SearchAIActions() {
 }
 
 function SearchAIInput(props: FormHTMLAttributes<HTMLFormElement>) {
-  const { status, input, setInput, handleSubmit, stop } = useChatContext();
-  const isLoading = status === 'streaming' || status === 'submitted';
+  const { isLoading, input, setInput, handleSubmit, stop } = useChatContext();
+  
   const onStart = (e?: React.FormEvent) => {
     e?.preventDefault();
     handleSubmit(e);
@@ -101,7 +116,7 @@ function SearchAIInput(props: FormHTMLAttributes<HTMLFormElement>) {
       <Input
         value={input}
         placeholder={isLoading ? 'AI is answering...' : 'Ask AI something'}
-        disabled={status === 'streaming' || status === 'submitted'}
+        disabled={isLoading}
         onChange={(e) => {
           setInput(e.target.value);
         }}
@@ -145,7 +160,7 @@ function SearchAIInput(props: FormHTMLAttributes<HTMLFormElement>) {
 }
 
 function List(props: Omit<HTMLAttributes<HTMLDivElement>, 'dir'>) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(NULL);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -155,7 +170,7 @@ function List(props: Omit<HTMLAttributes<HTMLDivElement>, 'dir'>) {
 
       container.scrollTo({
         top: container.scrollHeight,
-        behavior: 'instant',
+        behavior: 'smooth',
       });
     }
 
@@ -213,21 +228,10 @@ const map = new Map<string, ReactNode>();
 
 const roleName: Record<string, string> = {
   user: 'you',
-  assistant: 'fumadocs',
+  assistant: 'JKT48Connect AI',
 };
 
 function Message({ message }: { message: Message }) {
-  const { parts } = message;
-  let links: z.infer<typeof ProvideLinksToolSchema>['links'] = [];
-
-  for (const part of parts ?? []) {
-    if (part.type !== 'tool-invocation') continue;
-
-    if (part.toolInvocation.toolName === 'provideLinks') {
-      links = part.toolInvocation.args.links;
-    }
-  }
-
   return (
     <div>
       <p
@@ -241,20 +245,6 @@ function Message({ message }: { message: Message }) {
       <div className="prose text-sm">
         <Markdown text={message.content} />
       </div>
-      {links && links.length > 0 ? (
-        <div className="mt-2 flex flex-row flex-wrap items-center gap-1">
-          {links.map((item, i) => (
-            <Link
-              key={i}
-              href={item.url}
-              className="block text-xs rounded-lg border p-3 hover:bg-fd-accent hover:text-fd-accent-foreground"
-            >
-              <p className="font-medium">{item.title}</p>
-              <p className="text-fd-muted-foreground">Reference {item.label}</p>
-            </Link>
-          ))}
-        </div>
-      ) : null}
     </div>
   );
 }
@@ -290,7 +280,7 @@ function Markdown({ text }: { text: string }) {
           .process(text, {
             ...defaultMdxComponents,
             pre: Pre,
-            img: undefined, // use JSX
+            img: undefined,
           })
           .catch(() => text);
       }
@@ -306,6 +296,103 @@ function Markdown({ text }: { text: string }) {
   }, [text]);
 
   return rendered ?? text;
+}
+
+// Custom hook untuk menggantikan useChat
+function useCustomChat() {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [abortController, setAbortController] = useState<AbortController | null>(null);
+
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!input.trim() || isLoading) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: input.trim(),
+      timestamp: Date.now(),
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setIsLoading(true);
+
+    const controller = new AbortController();
+    setAbortController(controller);
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: [...messages, userMessage],
+        }),
+        signal: controller.signal,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: data.result,
+          timestamp: Date.now(),
+        };
+
+        setMessages(prev => [...prev, assistantMessage]);
+      } else {
+        throw new Error(data.error || 'Failed to get response');
+      }
+    } catch (error: any) {
+      if (error.name !== 'AbortError') {
+        const errorMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: 'Sorry, I encountered an error. Please try again.',
+          timestamp: Date.now(),
+        };
+        setMessages(prev => [...prev, errorMessage]);
+      }
+    } finally {
+      setIsLoading(false);
+      setAbortController(null);
+    }
+  };
+
+  const reload = () => {
+    if (messages.length >= 2) {
+      const lastUserMessage = [...messages].reverse().find(m => m.role === 'user');
+      if (lastUserMessage) {
+        setInput(lastUserMessage.content);
+        setMessages(prev => prev.slice(0, -1)); // Remove last message
+      }
+    }
+  };
+
+  const stop = () => {
+    if (abortController) {
+      abortController.abort();
+      setIsLoading(false);
+      setAbortController(null);
+    }
+  };
+
+  return {
+    messages,
+    input,
+    setInput,
+    handleSubmit,
+    isLoading,
+    reload,
+    stop,
+    setMessages,
+  };
 }
 
 export default function AISearch(props: DialogProps) {
@@ -330,18 +417,8 @@ export default function AISearch(props: DialogProps) {
 }
 
 function Content() {
-  const chat = useChat({
-    id: 'search',
-    streamProtocol: 'data',
-    sendExtraMessageFields: true,
-    onResponse(response) {
-      if (response.status === 401) {
-        console.error(response.statusText);
-      }
-    },
-  });
-
-  const messages = chat.messages.filter((msg) => msg.role !== 'system');
+  const chat = useCustomChat();
+  const { messages } = chat;
 
   return (
     <ChatContext value={chat}>
@@ -362,12 +439,12 @@ function Content() {
             <DialogTitle className="text-xs flex-1">
               Powered by{' '}
               <a
-                href="https://inkeep.com"
+                href="https://jkt48connect.my.id"
                 target="_blank"
                 className="font-medium text-fd-popover-foreground"
                 rel="noreferrer noopener"
               >
-                Inkeep AI
+                JKT48Connect AI
               </a>
               . AI can be inaccurate, please verify the information.
             </DialogTitle>
