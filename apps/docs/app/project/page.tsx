@@ -1,37 +1,18 @@
 import { PlusIcon } from 'lucide-react';
-import Image, { type StaticImageData } from 'next/image';
+import Image from 'next/image';
 import { cn } from '@/lib/cn';
 import { buttonVariants } from '@/components/ui/button';
 import { createMetadata } from '@/lib/metadata';
-import Expostarter from '@/public/showcases/expostarter.png';
-import Sunar from '@/public/showcases/sunar.png';
-import OpenPanel from '@/public/showcases/openpanel.png';
-import Supastarter from '@/public/showcases/supastarter.png';
-import BetterAuth from '@/public/showcases/better-auth.png';
-import ArkType from '@/public/showcases/arktype.png';
-import AssistantUI from '@/public/showcases/assistant-ui.png';
-import VisionUI from '@/public/showcases/vision-ui.png';
-import Design from './design.png';
-import Jeketian from './686103cd95e8ca13853ee2a9.jpg';
-import Jkt48connect from './685ff7f8525d02566271d545.png';
-import Link from 'fumadocs-core/link'; // Keep this import
-import MixSpace from '@/public/showcases/mix-space.png';
-import TurboStarter from '@/public/showcases/turbostarter.png';
-import { Card } from 'fumadocs-ui/components/card'; // Import Card component
+import Link from 'fumadocs-core/link';
+import Design from './design.png'; // Assuming 'Design' image is still relevant for the header
 
 export const metadata = createMetadata({
-  title: 'Showcase',
-  description: 'Some cool websites using jkt48connect',
+  title: 'Projects', // Changed title to reflect focus on projects
+  description: 'Explore projects and services built by JKT48Connect', // Updated description
   openGraph: {
-    url: 'https://docs.jkt48connect.my.id/showcase',
+    url: 'https://docs.jkt48connect.my.id/projects', // Updated URL for projects
   },
 });
-
-interface ShowcaseObject {
-  image?: StaticImageData | string;
-  name: string;
-  url: string;
-}
 
 interface ProjectObject {
   name: string;
@@ -41,30 +22,6 @@ interface ProjectObject {
   status: 'Active' | 'Maintenance' | 'Beta' | 'Deprecated';
   tech?: string[];
 }
-
-const showcases: ShowcaseObject[] = [
-  {
-    image: Jeketian,
-    name: 'Jeketian',
-    url: 'https://www.jeketian.web.id/',
-  },
-  {
-    image: Jkt48connect,
-    name: 'JKT48Connect',
-    url: 'https://www.jkt48connect.my.id',
-  },
-];
-
-const blogs: ShowcaseObject[] = [
-  {
-    name: "ZENOVA WhatsApp Bot",
-    url: 'https://wa.me/6285189020193',
-  },
-  {
-    name: 'JKT48Connect Discord Bot',
-    url: 'https://discord.com/oauth2/authorize?client_id=1305141693477027891',
-  },
-];
 
 const projects: ProjectObject[] = [
   {
@@ -77,7 +34,7 @@ const projects: ProjectObject[] = [
   },
   {
     name: 'JKT48Connect WEB',
-    description: ' web official sebagai contoh sekaligus application yang bisa digunakan untuk melihat atau bahkan menonton livestreaming member secara langsung.',
+    description: 'Web official sebagai contoh sekaligus application yang bisa digunakan untuk melihat atau bahkan menonton livestreaming member secara langsung.',
     category: 'Web App',
     url: 'https://www.jkt48connect.my.id',
     status: 'Active',
@@ -85,7 +42,7 @@ const projects: ProjectObject[] = [
   },
   {
     name: 'JKT48Connect Docs',
-    description: ' web dokumentasi official, untuk membantu developer dalam menggunakan JKT48Connect.',
+    description: 'Web dokumentasi official, untuk membantu developer dalam menggunakan JKT48Connect.',
     category: 'Web App',
     url: 'https://docs.jkt48connect.my.id',
     status: 'Active',
@@ -109,19 +66,19 @@ const projects: ProjectObject[] = [
   },
   {
     name: '@jkt48/core',
-    description: 'Software Development Kits untukmemudahkan dalam menggunakan jkt48connect',
+    description: 'Software Development Kits untuk memudahkan dalam menggunakan jkt48connect',
     category: 'Package',
     status: 'Active',
     tech: ['Javascript', 'Express']
   },
- {
+  {
     name: '@jkt48connect-corp/baileys',
     description: 'Baileys untuk WhatsApp yang dibekali dengan fitur button dan lainnya.',
     category: 'Package',
     status: 'Active',
     tech: ['Javascript', 'Express']
   },
- {
+  {
     name: 'JKT48Connect SDKs',
     description: 'Software Development Kits untuk berbagai bahasa pemrograman (JavaScript, Python, PHP)',
     category: 'Developer Tools',
@@ -130,21 +87,7 @@ const projects: ProjectObject[] = [
   }
 ];
 
-const vercel = [
-  {
-    name: 'Turbo',
-    url: 'https://turbo.build',
-  },
-  {
-    name: 'Flags SDK',
-    url: 'https://flags-sdk.dev',
-  },
-  {
-    name: 'Chat SDK',
-    url: 'https://chat-sdk.dev',
-  },
-];
-
+// Extract unique categories from the projects array
 const categories = Array.from(new Set(projects.map(project => project.category)));
 
 const getStatusColor = (status: ProjectObject['status']) => {
@@ -162,124 +105,57 @@ const getStatusColor = (status: ProjectObject['status']) => {
   }
 };
 
-export default function Showcase() {
+export default function ProjectsPage() { // Renamed component to ProjectsPage for clarity
   return (
     <main className="px-4 py-12 z-[2] w-full max-w-[1400px] mx-auto [--color-fd-border:color-mix(in_oklab,var(--color-fd-primary)_30%,transparent)]">
-      {/* Main Header Section */}
-      <Card className="relative overflow-hidden p-6">
-        <h1 className="mb-4 text-xl font-medium">
-          The restapi created for everyone.
+      {/* Hero Section */}
+      <div className="relative overflow-hidden border border-dashed p-6 rounded-lg bg-fd-background/50">
+        <h1 className="mb-4 text-3xl font-bold text-center sm:text-left">
+          Explore Our Ecosystem of Projects
         </h1>
-        <p className="text-fd-muted-foreground">
-          A list of beautiful projects with their powered by
-          JKT48Connect.
+        <p className="text-lg text-fd-muted-foreground text-center sm:text-left max-w-2xl mx-auto sm:mx-0">
+          Discover the tools and services built by JKT48Connect to empower your development.
         </p>
-        <div className="mt-6">
-          <Link
+        <div className="mt-8 flex justify-center sm:justify-start">
+          <a
             href="https://wa.me/6285701479245"
             target="_blank"
             rel="noreferrer noopener"
             className={cn(
               buttonVariants({
-                variant: 'outline',
+                variant: 'default', // Changed to default for more prominence
+                size: 'lg', // Larger button
               }),
             )}
           >
-            <PlusIcon className="me-2 size-4" />
-            Suggest Yours
-          </Link>
+            <PlusIcon className="me-2 size-5" />
+            Suggest a Project
+          </a>
         </div>
-        <span className="absolute text-xs left-6 bottom-6 text-fd-muted-foreground font-mono">
-          Showcases
-        </span>
+        {/* Optional: Keep or remove the image based on desired design */}
         <Image
           src={Design}
-          alt="preview"
+          alt="Abstract design preview"
           priority
-          className="ml-auto w-[600px] min-w-[600px] -mt-12 -mb-18 pointer-events-none select-none"
+          className="absolute right-0 bottom-0 w-[400px] min-w-[400px] opacity-20 hidden lg:block pointer-events-none select-none"
         />
-      </Card>
-
-      {/* Vercel Integration Section */}
-      <Card className="flex gap-4 p-6 mt-6">
-        <svg
-          aria-label="Vercel logomark"
-          height="64"
-          role="img"
-          viewBox="0 0 74 64"
-          className="size-6 mt-1"
-        >
-          <path
-            d="M37.5896 0.25L74.5396 64.25H0.639648L37.5896 0.25Z"
-            fill="currentColor"
-          />
-        </svg>
-        <div>
-          <h2 className="text-sm font-medium mb-2">
-            JKT48Connect using the host of Vercel open source SDKs.
-          </h2>
-          <div className="flex items-center gap-2 -mx-1.5">
-            {vercel.map((item) => (
-              <Link
-                key={item.url}
-                href={item.url}
-                className={cn(
-                  buttonVariants({
-                    variant: 'link',
-                    size: 'xs',
-                  }),
-                  'text-fd-muted-foreground',
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </Card>
-
-      <div className="relative mt-6 grid gap-2.5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {showcases.map((showcase) => (
-          <ShowcaseItem key={showcase.url} {...showcase} />
-        ))}
-        <div className="absolute text-center bottom-0 inset-x-0 pt-4 bg-gradient-to-t from-fd-background">
-          <Link
-            href="https://www.jkt48connect.my.id"
-            className={cn(
-              buttonVariants({
-                size: 'sm',
-                variant: 'link',
-              }),
-            )}
-          >
-            See jkt48connect website
-          </Link>
-        </div>
       </div>
 
-      <h2 className="text-xl font-medium mt-12 px-4">
-        JKT48Connect can power your bot, too.
-      </h2>
-      <div className="mt-6 grid gap-2.5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {blogs.map((showcase) => (
-          <ShowcaseItem key={showcase.url} {...showcase} />
-        ))}
-      </div>
-
-      <h2 className="text-xl font-medium mt-16 mb-6">
+      {/* Projects Section */}
+      <h2 className="text-3xl font-bold mt-16 mb-8 text-center">
         Our Projects & Services
       </h2>
-      <p className="text-fd-muted-foreground mb-8">
-        Explore the complete ecosystem of tools and services built by JKT48Connect team.
+      <p className="text-xl text-fd-muted-foreground mb-10 text-center max-w-3xl mx-auto">
+        From powerful APIs to interactive chatbots and development packages, we're building for the future.
       </p>
 
       {/* Category Filter */}
-      <div className="flex flex-wrap gap-2 mb-8">
-        <span className="text-sm font-medium text-fd-muted-foreground">Categories:</span>
+      <div className="flex flex-wrap gap-3 justify-center mb-12">
+        <span className="text-base font-medium text-fd-muted-foreground self-center">Categories:</span>
         {categories.map((category) => (
           <span
             key={category}
-            className="px-3 py-1 text-xs font-medium bg-fd-accent rounded-full border"
+            className="px-4 py-2 text-sm font-medium bg-fd-accent rounded-full border border-fd-border cursor-default hover:bg-fd-accent/80 transition-colors"
           >
             {category}
           </span>
@@ -287,147 +163,108 @@ export default function Showcase() {
       </div>
 
       {/* Projects Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {projects.map((project, index) => (
           <ProjectCard key={index} {...project} />
         ))}
       </div>
 
       {/* Call to Action */}
-      <Card className="mt-16 text-center p-8">
-        <h3 className="text-lg font-medium mb-2">Want to contribute or suggest a project?</h3>
-        <p className="text-fd-muted-foreground mb-4">
-          We're always looking for new ideas and contributions to expand the JKT48Connect ecosystem.
+      <div className="mt-20 text-center border border-dashed p-10 rounded-lg bg-fd-background/50">
+        <h3 className="text-2xl font-bold mb-4">Want to contribute or suggest a project?</h3>
+        <p className="text-lg text-fd-muted-foreground mb-6 max-w-2xl mx-auto">
+          We're always looking for new ideas and contributions to expand the JKT48Connect ecosystem. Join us!
         </p>
-        <div className="flex justify-center gap-4">
-          <Link
+        <div className="flex justify-center gap-6">
+          <a
             href="https://github.com/jkt48connect"
             target="_blank"
             rel="noreferrer noopener"
             className={cn(
               buttonVariants({
                 variant: 'default',
-                size: 'sm',
+                size: 'lg',
               }),
             )}
           >
             View on GitHub
-          </Link>
-          <Link
+          </a>
+          <a
             href="https://wa.me/6285701479245"
             target="_blank"
             rel="noreferrer noopener"
             className={cn(
               buttonVariants({
                 variant: 'outline',
-                size: 'sm',
+                size: 'lg',
               }),
             )}
           >
             Contact Us
-          </Link>
+          </a>
         </div>
-      </Card>
+      </div>
     </main>
-  );
-}
-
-function ShowcaseItem({ name, url, image }: ShowcaseObject) {
-  if (image) {
-    return (
-      <Card asChild>
-        <Link
-          href={url}
-          target="_blank"
-          rel="noreferrer noopener"
-          className="group relative aspect-[1.91/1] overflow-hidden"
-        >
-          <Image
-            alt="Preview"
-            src={image}
-            fill
-            sizes="100vw, (min-width: 750px) 500px"
-            className="object-cover transition-all group-hover:brightness-150"
-          />
-          <p className="absolute bottom-0 inset-x-0 z-[2] bg-fd-background px-4 py-2 text-sm font-medium">
-            {name}
-          </p>
-        </Link>
-      </Card>
-    );
-  }
-
-  return (
-    <Card asChild>
-      <Link
-        href={url}
-        target="_blank"
-        rel="noreferrer noopener"
-        className="flex aspect-[1.91/1] flex-col p-4 transition-all hover:bg-fd-accent"
-      >
-        <p className="font-mono text-xs mb-2 text-fd-muted-foreground">
-          {new URL(url).hostname}
-        </p>
-        <p className="text-xl font-medium">{name}</p>
-      </Link>
-    </Card>
   );
 }
 
 function ProjectCard({ name, description, category, url, status, tech }: ProjectObject) {
   return (
-    <Card className="group p-6">
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <h3 className="font-medium text-lg">{name}</h3>
-          {url && (
-            <Link
-              href={url}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="opacity-0 group-hover:opacity-100 transition-opacity"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </Link>
-          )}
+    <div className="group border border-dashed p-7 transition-all hover:bg-fd-accent rounded-lg flex flex-col justify-between h-full">
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <h3 className="font-bold text-xl">{name}</h3>
+            {url && (
+              <a
+                href={url}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="opacity-0 group-hover:opacity-100 transition-opacity text-fd-muted-foreground hover:text-fd-primary"
+                aria-label={`Visit ${name} website`}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            )}
+          </div>
+          <span className={cn(
+            "px-3 py-1 text-xs font-medium rounded-full border",
+            getStatusColor(status)
+          )}>
+            {status}
+          </span>
         </div>
-        <span className={cn(
-          "px-2 py-1 text-xs font-medium rounded-full border",
-          getStatusColor(status)
-        )}>
-          {status}
-        </span>
+        
+        <p className="text-base text-fd-muted-foreground mb-5">
+          {description}
+        </p>
       </div>
       
-      <p className="text-sm text-fd-muted-foreground mb-3">
-        {description}
-      </p>
-      
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-fd-primary bg-fd-primary/10 px-2 py-1 rounded">
+      <div className="flex flex-wrap items-center justify-between gap-3 mt-auto">
+        <span className="text-sm font-medium text-fd-primary bg-fd-primary/10 px-3 py-1.5 rounded-md border border-fd-primary/20">
           {category}
         </span>
         
         {tech && tech.length > 0 && (
-          <div className="flex gap-1">
+          <div className="flex flex-wrap gap-2">
             {tech.slice(0, 3).map((technology, index) => (
               <span
                 key={index}
-                className="text-xs px-2 py-1 bg-fd-muted/10 rounded border"
+                className="text-xs px-3 py-1.5 bg-fd-muted/10 rounded-md border border-fd-border"
               >
                 {technology}
               </span>
             ))}
             {tech.length > 3 && (
-              <span className="text-xs px-2 py-1 bg-fd-muted/10 rounded border">
+              <span className="text-xs px-3 py-1.5 bg-fd-muted/10 rounded-md border border-fd-border">
                 +{tech.length - 3}
               </span>
             )}
           </div>
         )}
       </div>
-    </Card>
+    </div>
   );
 }
