@@ -1,22 +1,23 @@
+import { PlusIcon } from 'lucide-react';
 import Image, { type StaticImageData } from 'next/image';
-import Link from 'next/link'; // Changed from fumadocs-core/link to next/link for broader compatibility with MUI examples
-import {
-  Box,
-  Typography,
-  Button,
-  Card,
-  CardContent,
-  Chip,
-  Grid,
-  SvgIcon,
-} from '@mui/material';
-import { styled } from '@mui/system';
-import AddIcon from '@mui/icons-material/Add'; // MUI equivalent of PlusIcon
-
+import { cn } from '@/lib/cn';
+import { buttonVariants } from '@/components/ui/button';
 import { createMetadata } from '@/lib/metadata';
+import Expostarter from '@/public/showcases/expostarter.png';
+import Sunar from '@/public/showcases/sunar.png';
+import OpenPanel from '@/public/showcases/openpanel.png';
+import Supastarter from '@/public/showcases/supastarter.png';
+import BetterAuth from '@/public/showcases/better-auth.png';
+import ArkType from '@/public/showcases/arktype.png';
+import AssistantUI from '@/public/showcases/assistant-ui.png';
+import VisionUI from '@/public/showcases/vision-ui.png';
+import Design from './design.png';
 import Jeketian from './686103cd95e8ca13853ee2a9.jpg';
 import Jkt48connect from './685ff7f8525d02566271d545.png';
-import Design from './design.png';
+import Link from 'fumadocs-core/link'; // Keep this import
+import MixSpace from '@/public/showcases/mix-space.png';
+import TurboStarter from '@/public/showcases/turbostarter.png';
+import { Card } from 'fumadocs-ui/components/card'; // Import Card component
 
 export const metadata = createMetadata({
   title: 'Showcase',
@@ -56,7 +57,7 @@ const showcases: ShowcaseObject[] = [
 
 const blogs: ShowcaseObject[] = [
   {
-    name: 'ZENOVA WhatsApp Bot',
+    name: "ZENOVA WhatsApp Bot",
     url: 'https://wa.me/6285189020193',
   },
   {
@@ -68,30 +69,27 @@ const blogs: ShowcaseObject[] = [
 const projects: ProjectObject[] = [
   {
     name: 'JKT48Connect API',
-    description:
-      'RESTful API untuk mengakses data JKT48 termasuk member, jadwal, berita, dan konten multimedia',
+    description: 'RESTful API untuk mengakses data JKT48 termasuk member, jadwal, berita, dan konten multimedia',
     category: 'API',
     url: 'https://v2.jkt48connect.my.id',
     status: 'Active',
-    tech: ['Node.js', 'Express', 'MongoDB'],
+    tech: ['Node.js', 'Express', 'MongoDB']
   },
   {
     name: 'JKT48Connect WEB',
-    description:
-      'web official sebagai contoh sekaligus application yang bisa digunakan untuk melihat atau bahkan menonton livestreaming member secara langsung.',
+    description: ' web official sebagai contoh sekaligus application yang bisa digunakan untuk melihat atau bahkan menonton livestreaming member secara langsung.',
     category: 'Web App',
     url: 'https://www.jkt48connect.my.id',
     status: 'Active',
-    tech: ['Next.js', 'React', 'TypeScript'],
+    tech: ['Next.js', 'React', 'TypeScript']
   },
   {
     name: 'JKT48Connect Docs',
-    description:
-      'web dokumentasi official, untuk membantu developer dalam menggunakan JKT48Connect.',
+    description: ' web dokumentasi official, untuk membantu developer dalam menggunakan JKT48Connect.',
     category: 'Web App',
     url: 'https://docs.jkt48connect.my.id',
     status: 'Active',
-    tech: ['Next.js', 'React', 'TypeScript'],
+    tech: ['Next.js', 'React', 'TypeScript']
   },
   {
     name: 'ZENOVA',
@@ -99,7 +97,7 @@ const projects: ProjectObject[] = [
     category: 'Chatbot',
     url: 'https://wa.me/6285189020193',
     status: 'Active',
-    tech: ['Node.js', 'WhatsApp Web.js'],
+    tech: ['Node.js', 'WhatsApp Web.js']
   },
   {
     name: 'JKT48Connect Discord Bot',
@@ -107,30 +105,29 @@ const projects: ProjectObject[] = [
     category: 'Chatbot',
     url: 'https://discord.com/oauth2/authorize?client_id=1305141693477027891',
     status: 'Active',
-    tech: ['Discord.js', 'Node.js'],
+    tech: ['Discord.js', 'Node.js']
   },
   {
     name: '@jkt48/core',
     description: 'Software Development Kits untukmemudahkan dalam menggunakan jkt48connect',
     category: 'Package',
     status: 'Active',
-    tech: ['Javascript', 'Express'],
+    tech: ['Javascript', 'Express']
   },
-  {
+ {
     name: '@jkt48connect-corp/baileys',
     description: 'Baileys untuk WhatsApp yang dibekali dengan fitur button dan lainnya.',
     category: 'Package',
     status: 'Active',
-    tech: ['Javascript', 'Express'],
+    tech: ['Javascript', 'Express']
   },
-  {
+ {
     name: 'JKT48Connect SDKs',
-    description:
-      'Software Development Kits untuk berbagai bahasa pemrograman (JavaScript, Python, PHP)',
+    description: 'Software Development Kits untuk berbagai bahasa pemrograman (JavaScript, Python, PHP)',
     category: 'Developer Tools',
     status: 'Deprecated',
-    tech: ['JavaScript', 'Python', 'PHP'],
-  },
+    tech: ['JavaScript', 'Python', 'PHP']
+  }
 ];
 
 const vercel = [
@@ -148,445 +145,289 @@ const vercel = [
   },
 ];
 
-const categories = Array.from(new Set(projects.map((project) => project.category)));
+const categories = Array.from(new Set(projects.map(project => project.category)));
 
 const getStatusColor = (status: ProjectObject['status']) => {
   switch (status) {
     case 'Active':
-      return { bgcolor: 'success.light', color: 'success.contrastText' };
+      return 'bg-green-100 text-green-800 border-green-200';
     case 'Beta':
-      return { bgcolor: 'info.light', color: 'info.contrastText' };
+      return 'bg-blue-100 text-blue-800 border-blue-200';
     case 'Maintenance':
-      return { bgcolor: 'warning.light', color: 'warning.contrastText' };
+      return 'bg-yellow-100 text-yellow-800 border-yellow-200';
     case 'Deprecated':
-      return { bgcolor: 'error.light', color: 'error.contrastText' };
+      return 'bg-red-100 text-red-800 border-red-200';
     default:
-      return { bgcolor: 'grey.300', color: 'text.primary' };
+      return 'bg-gray-100 text-gray-800 border-gray-200';
   }
 };
 
-// Styled components for custom elements that replicate original styling
-const StyledShowcaseContainer = styled(Box)(({ theme }) => ({
-  position: 'relative',
-  overflow: 'hidden',
-  border: '1px dashed',
-  borderColor: theme.palette.divider,
-  padding: theme.spacing(3),
-  display: 'flex',
-  flexDirection: 'column',
-}));
-
-const StyledVercelSection = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  gap: theme.spacing(2),
-  border: '1px dashed',
-  borderColor: theme.palette.divider,
-  padding: theme.spacing(3),
-  marginTop: theme.spacing(3),
-  alignItems: 'flex-start',
-}));
-
-const StyledShowcaseGrid = styled(Grid)(({ theme }) => ({
-  position: 'relative',
-  marginTop: theme.spacing(3),
-  marginBottom: theme.spacing(3), // Added to make space for "See website" link
-  '&::after': {
-    content: '""',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: theme.spacing(10), // Adjust height of gradient overlay
-    background: `linear-gradient(to top, ${theme.palette.background.default}, transparent)`,
-    zIndex: 1,
-  },
-}));
-
-const StyledProjectCard = styled(Card)(({ theme }) => ({
-  border: '1px dashed',
-  borderColor: theme.palette.divider,
-  transition: 'background-color 0.3s ease',
-  '&:hover': {
-    backgroundColor: theme.palette.action.hover,
-  },
-}));
-
 export default function Showcase() {
   return (
-    <Box
-      sx={{
-        px: { xs: 2, sm: 4 },
-        py: { xs: 6, md: 12 },
-        zIndex: 2,
-        width: '100%',
-        maxWidth: 1400,
-        mx: 'auto',
-      }}
-    >
-      <StyledShowcaseContainer>
-        <Typography variant="h4" component="h1" sx={{ mb: 2, fontWeight: 'medium' }}>
+    <main className="px-4 py-12 z-[2] w-full max-w-[1400px] mx-auto [--color-fd-border:color-mix(in_oklab,var(--color-fd-primary)_30%,transparent)]">
+      {/* Main Header Section */}
+      <Card className="relative overflow-hidden p-6">
+        <h1 className="mb-4 text-xl font-medium">
           The restapi created for everyone.
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-          A list of beautiful projects with their powered by JKT48Connect.
-        </Typography>
-        <Box sx={{ mt: 3 }}>
-          <Button
-            variant="outlined"
+        </h1>
+        <p className="text-fd-muted-foreground">
+          A list of beautiful projects with their powered by
+          JKT48Connect.
+        </p>
+        <div className="mt-6">
+          <Link
             href="https://wa.me/6285701479245"
             target="_blank"
             rel="noreferrer noopener"
-            startIcon={<AddIcon />}
+            className={cn(
+              buttonVariants({
+                variant: 'outline',
+              }),
+            )}
           >
+            <PlusIcon className="me-2 size-4" />
             Suggest Yours
-          </Button>
-        </Box>
-        <Typography
-          variant="caption"
-          sx={{
-            position: 'absolute',
-            left: 24,
-            bottom: 24,
-            color: 'text.secondary',
-            fontFamily: 'monospace',
-          }}
-        >
+          </Link>
+        </div>
+        <span className="absolute text-xs left-6 bottom-6 text-fd-muted-foreground font-mono">
           Showcases
-        </Typography>
-        <Box
-          sx={{
-            ml: 'auto',
-            width: { xs: '100%', sm: 600 },
-            minWidth: { sm: 600 },
-            mt: { xs: 4, sm: -6 },
-            mb: { xs: 4, sm: -8 },
-            pointerEvents: 'none',
-            userSelect: 'none',
-            display: 'flex',
-            justifyContent: 'flex-end',
-          }}
-        >
-          <Image src={Design} alt="preview" priority width={600} height={300} style={{ objectFit: 'contain' }} />
-        </Box>
-      </StyledShowcaseContainer>
+        </span>
+        <Image
+          src={Design}
+          alt="preview"
+          priority
+          className="ml-auto w-[600px] min-w-[600px] -mt-12 -mb-18 pointer-events-none select-none"
+        />
+      </Card>
 
-      <StyledVercelSection>
-        <SvgIcon sx={{ fontSize: 24, mt: 0.5 }}>
-          <path d="M37.5896 0.25L74.5396 64.25H0.639648L37.5896 0.25Z" />
-        </SvgIcon>
-        <Box>
-          <Typography variant="subtitle1" sx={{ fontWeight: 'medium', mb: 1 }}>
+      {/* Vercel Integration Section */}
+      <Card className="flex gap-4 p-6 mt-6">
+        <svg
+          aria-label="Vercel logomark"
+          height="64"
+          role="img"
+          viewBox="0 0 74 64"
+          className="size-6 mt-1"
+        >
+          <path
+            d="M37.5896 0.25L74.5396 64.25H0.639648L37.5896 0.25Z"
+            fill="currentColor"
+          />
+        </svg>
+        <div>
+          <h2 className="text-sm font-medium mb-2">
             JKT48Connect using the host of Vercel open source SDKs.
-          </Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          </h2>
+          <div className="flex items-center gap-2 -mx-1.5">
             {vercel.map((item) => (
-              <Button
+              <Link
                 key={item.url}
-                component={Link}
                 href={item.url}
-                sx={{
-                  color: 'text.secondary',
-                  textTransform: 'none',
-                  minWidth: 0,
-                  px: 1,
-                }}
+                className={cn(
+                  buttonVariants({
+                    variant: 'link',
+                    size: 'xs',
+                  }),
+                  'text-fd-muted-foreground',
+                )}
               >
                 {item.name}
-              </Button>
+              </Link>
             ))}
-          </Box>
-        </Box>
-      </StyledVercelSection>
+          </div>
+        </div>
+      </Card>
 
-      <StyledShowcaseGrid container spacing={2}>
+      <div className="relative mt-6 grid gap-2.5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {showcases.map((showcase) => (
-          <Grid item xs={12} sm={6} lg={4} xl={3} key={showcase.url}>
-            <ShowcaseItem {...showcase} />
-          </Grid>
+          <ShowcaseItem key={showcase.url} {...showcase} />
         ))}
-        <Box
-          sx={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            pt: 4,
-            textAlign: 'center',
-            zIndex: 2,
-          }}
-        >
-          <Button
-            component={Link}
+        <div className="absolute text-center bottom-0 inset-x-0 pt-4 bg-gradient-to-t from-fd-background">
+          <Link
             href="https://www.jkt48connect.my.id"
-            variant="text"
-            sx={{ textTransform: 'none' }}
+            className={cn(
+              buttonVariants({
+                size: 'sm',
+                variant: 'link',
+              }),
+            )}
           >
             See jkt48connect website
-          </Button>
-        </Box>
-      </StyledShowcaseGrid>
+          </Link>
+        </div>
+      </div>
 
-      <Typography variant="h5" component="h2" sx={{ mt: 8, px: { xs: 2, sm: 4 }, fontWeight: 'medium' }}>
+      <h2 className="text-xl font-medium mt-12 px-4">
         JKT48Connect can power your bot, too.
-      </Typography>
-      <Grid container spacing={2} sx={{ mt: 3 }}>
+      </h2>
+      <div className="mt-6 grid gap-2.5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {blogs.map((showcase) => (
-          <Grid item xs={12} sm={6} lg={4} xl={3} key={showcase.url}>
-            <ShowcaseItem {...showcase} />
-          </Grid>
+          <ShowcaseItem key={showcase.url} {...showcase} />
         ))}
-      </Grid>
+      </div>
 
-      {/* New Projects Section */}
-      <Typography variant="h5" component="h2" sx={{ mt: 12, mb: 3, fontWeight: 'medium' }}>
+      <h2 className="text-xl font-medium mt-16 mb-6">
         Our Projects & Services
-      </Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+      </h2>
+      <p className="text-fd-muted-foreground mb-8">
         Explore the complete ecosystem of tools and services built by JKT48Connect team.
-      </Typography>
+      </p>
 
       {/* Category Filter */}
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 4, alignItems: 'center' }}>
-        <Typography variant="subtitle2" sx={{ fontWeight: 'medium', color: 'text.secondary' }}>
-          Categories:
-        </Typography>
+      <div className="flex flex-wrap gap-2 mb-8">
+        <span className="text-sm font-medium text-fd-muted-foreground">Categories:</span>
         {categories.map((category) => (
-          <Chip
+          <span
             key={category}
-            label={category}
-            variant="outlined"
-            size="small"
-            sx={{
-              borderColor: 'divider',
-              bgcolor: 'action.hover',
-            }}
-          />
+            className="px-3 py-1 text-xs font-medium bg-fd-accent rounded-full border"
+          >
+            {category}
+          </span>
         ))}
-      </Box>
+      </div>
 
       {/* Projects Grid */}
-      <Grid container spacing={3}>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, index) => (
-          <Grid item xs={12} md={6} lg={4} key={index}>
-            <ProjectCard {...project} />
-          </Grid>
+          <ProjectCard key={index} {...project} />
         ))}
-      </Grid>
+      </div>
 
       {/* Call to Action */}
-      <Box
-        sx={{
-          mt: 12,
-          textAlign: 'center',
-          border: '1px dashed',
-          borderColor: 'divider',
-          p: 8,
-          borderRadius: 2,
-        }}
-      >
-        <Typography variant="h6" component="h3" sx={{ mb: 1, fontWeight: 'medium' }}>
-          Want to contribute or suggest a project?
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-          We&apos;re always looking for new ideas and contributions to expand the JKT48Connect
-          ecosystem.
-        </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-          <Button
-            variant="contained"
+      <Card className="mt-16 text-center p-8">
+        <h3 className="text-lg font-medium mb-2">Want to contribute or suggest a project?</h3>
+        <p className="text-fd-muted-foreground mb-4">
+          We're always looking for new ideas and contributions to expand the JKT48Connect ecosystem.
+        </p>
+        <div className="flex justify-center gap-4">
+          <Link
             href="https://github.com/jkt48connect"
             target="_blank"
             rel="noreferrer noopener"
-            size="medium"
+            className={cn(
+              buttonVariants({
+                variant: 'default',
+                size: 'sm',
+              }),
+            )}
           >
             View on GitHub
-          </Button>
-          <Button
-            variant="outlined"
+          </Link>
+          <Link
             href="https://wa.me/6285701479245"
             target="_blank"
             rel="noreferrer noopener"
-            size="medium"
+            className={cn(
+              buttonVariants({
+                variant: 'outline',
+                size: 'sm',
+              }),
+            )}
           >
             Contact Us
-          </Button>
-        </Box>
-      </Box>
-    </Box>
+          </Link>
+        </div>
+      </Card>
+    </main>
   );
 }
 
 function ShowcaseItem({ name, url, image }: ShowcaseObject) {
   if (image) {
     return (
-      <Link
-        href={url}
-        target="_blank"
-        rel="noreferrer noopener"
-        style={{ textDecoration: 'none', display: 'block' }}
-      >
-        <Card
-          sx={{
-            position: 'relative',
-            aspectRatio: '1.91 / 1',
-            border: '1px dashed',
-            borderColor: 'divider',
-            overflow: 'hidden',
-            '&:hover img': {
-              filter: 'brightness(1.5)',
-              transition: 'filter 0.3s ease',
-            },
-          }}
+      <Card asChild>
+        <Link
+          href={url}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="group relative aspect-[1.91/1] overflow-hidden"
         >
           <Image
             alt="Preview"
             src={image}
             fill
-            sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            style={{ objectFit: 'cover' }}
+            sizes="100vw, (min-width: 750px) 500px"
+            className="object-cover transition-all group-hover:brightness-150"
           />
-          <Box
-            sx={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              zIndex: 2,
-              bgcolor: 'background.default',
-              px: 2,
-              py: 1,
-            }}
-          >
-            <Typography variant="subtitle1" sx={{ fontWeight: 'medium' }}>
-              {name}
-            </Typography>
-          </Box>
-        </Card>
-      </Link>
+          <p className="absolute bottom-0 inset-x-0 z-[2] bg-fd-background px-4 py-2 text-sm font-medium">
+            {name}
+          </p>
+        </Link>
+      </Card>
     );
   }
 
   return (
-    <Link
-      href={url}
-      target="_blank"
-      rel="noreferrer noopener"
-      style={{ textDecoration: 'none', display: 'block' }}
-    >
-      <Card
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          aspectRatio: '1.91 / 1',
-          border: '1px dashed',
-          borderColor: 'divider',
-          p: 2,
-          transition: 'background-color 0.3s ease',
-          '&:hover': {
-            bgcolor: 'action.hover',
-          },
-        }}
+    <Card asChild>
+      <Link
+        href={url}
+        target="_blank"
+        rel="noreferrer noopener"
+        className="flex aspect-[1.91/1] flex-col p-4 transition-all hover:bg-fd-accent"
       >
-        <Typography variant="caption" color="text.secondary" sx={{ fontFamily: 'monospace', mb: 1 }}>
+        <p className="font-mono text-xs mb-2 text-fd-muted-foreground">
           {new URL(url).hostname}
-        </Typography>
-        <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
-          {name}
-        </Typography>
-      </Card>
-    </Link>
+        </p>
+        <p className="text-xl font-medium">{name}</p>
+      </Link>
+    </Card>
   );
 }
 
 function ProjectCard({ name, description, category, url, status, tech }: ProjectObject) {
   return (
-    <StyledProjectCard>
-      <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 1.5 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography variant="h6" component="h3" sx={{ fontWeight: 'medium' }}>
-              {name}
-            </Typography>
-            {url && (
-              <Link
-                href={url}
-                target="_blank"
-                rel="noreferrer noopener"
-                sx={{
-                  opacity: 0,
-                  transition: 'opacity 0.3s ease',
-                  '.MuiCard-root:hover &': {
-                    opacity: 1,
-                  },
-                  display: 'flex',
-                }}
-              >
-                <SvgIcon sx={{ width: 16, height: 16 }}>
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </SvgIcon>
-              </Link>
-            )}
-          </Box>
-          <Chip
-            label={status}
-            size="small"
-            sx={{
-              ...getStatusColor(status),
-              border: '1px solid', // Add border for consistency
-              borderColor: 'currentColor', // Use color from status for border
-            }}
-          />
-        </Box>
-
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          {description}
-        </Typography>
-
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Chip
-            label={category}
-            size="small"
-            sx={{
-              bgcolor: 'primary.light',
-              color: 'primary.contrastText',
-              fontWeight: 'medium',
-            }}
-          />
-
-          {tech && tech.length > 0 && (
-            <Box sx={{ display: 'flex', gap: 0.5 }}>
-              {tech.slice(0, 3).map((technology, index) => (
-                <Chip
-                  key={index}
-                  label={technology}
-                  size="small"
-                  variant="outlined"
-                  sx={{
-                    bgcolor: 'action.selected',
-                    borderColor: 'divider',
-                  }}
-                />
-              ))}
-              {tech.length > 3 && (
-                <Chip
-                  label={`+${tech.length - 3}`}
-                  size="small"
-                  variant="outlined"
-                  sx={{
-                    bgcolor: 'action.selected',
-                    borderColor: 'divider',
-                  }}
-                />
-              )}
-            </Box>
+    <Card className="group p-6">
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <h3 className="font-medium text-lg">{name}</h3>
+          {url && (
+            <Link
+              href={url}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </Link>
           )}
-        </Box>
-      </CardContent>
-    </StyledProjectCard>
+        </div>
+        <span className={cn(
+          "px-2 py-1 text-xs font-medium rounded-full border",
+          getStatusColor(status)
+        )}>
+          {status}
+        </span>
+      </div>
+      
+      <p className="text-sm text-fd-muted-foreground mb-3">
+        {description}
+      </p>
+      
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-medium text-fd-primary bg-fd-primary/10 px-2 py-1 rounded">
+          {category}
+        </span>
+        
+        {tech && tech.length > 0 && (
+          <div className="flex gap-1">
+            {tech.slice(0, 3).map((technology, index) => (
+              <span
+                key={index}
+                className="text-xs px-2 py-1 bg-fd-muted/10 rounded border"
+              >
+                {technology}
+              </span>
+            ))}
+            {tech.length > 3 && (
+              <span className="text-xs px-2 py-1 bg-fd-muted/10 rounded border">
+                +{tech.length - 3}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+    </Card>
   );
 }
