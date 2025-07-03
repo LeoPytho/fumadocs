@@ -46,7 +46,7 @@ const showcases: ShowcaseObject[] = [
   {
     image: Jeketian,
     name: 'Jeketian',
-    url: 'https://www.jeketian.my.id/',
+    url: 'https://www.jeketian.web.id/',
   },
   {
     image: Jkt48connect,
