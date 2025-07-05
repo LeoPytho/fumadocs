@@ -1,6 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { PlusIcon, UserIcon, MailIcon, PhoneIcon, LockIcon, EyeIcon, EyeOffIcon } from 'lucide-react';
+import Image from 'next/image';
+import { cn } from '@/lib/cn';
+import { buttonVariants } from '@/components/ui/button';
+import { createMetadata } from '@/lib/metadata';
+import Link from 'fumadocs-core/link';
+import Design from './design.png';
 
 interface FormData {
   username: string;
