@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { PlusIcon, UserIcon, MailIcon, PhoneIcon, LockIcon, EyeIcon, EyeOffIcon } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/cn';
@@ -50,9 +51,51 @@ interface ApiResponse {
   error?: string;
 }
 
+interface TokenData {
+  token: string;
+  expiresAt: number;
+}
+
 const API_BASE_URL = 'https://backend-dashboard-lac.vercel.app';
 
+// Token management functions
+const saveToken = (token: string): void => {
+  const expiresAt = Date.now() + (7 * 24 * 60 * 60 * 1000); // 7 days from now
+  const tokenData: TokenData = {
+    token,
+    expiresAt
+  };
+  localStorage.setItem('jkt48_token', JSON.stringify(tokenData));
+};
+
+const getToken = (): string | null => {
+  try {
+    const tokenDataStr = localStorage.getItem('jkt48_token');
+    if (!tokenDataStr) return null;
+    
+    const tokenData: TokenData = JSON.parse(tokenDataStr);
+    
+    // Check if token has expired
+    if (Date.now() > tokenData.expiresAt) {
+      localStorage.removeItem('jkt48_token');
+      return null;
+    }
+    
+    return tokenData.token;
+  } catch (error) {
+    console.error('Error getting token:', error);
+    localStorage.removeItem('jkt48_token');
+    return null;
+  }
+};
+
+const removeToken = (): void => {
+  localStorage.removeItem('jkt48_token');
+};
+
 export default function RegisterPage() {
+  const router = useRouter();
+  const [isCheckingToken, setIsCheckingToken] = useState(true);
   const [formData, setFormData] = useState<FormData>({
     username: '',
     email: '',
@@ -65,6 +108,35 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState<ApiResponse | null>(null);
+  const [redirectCountdown, setRedirectCountdown] = useState(5);
+
+  // Check for existing token on component mount
+  useEffect(() => {
+    const checkExistingToken = () => {
+      const existingToken = getToken();
+      if (existingToken) {
+        // Token exists and is valid, redirect to dashboard
+        router.push('/dashboard');
+        return;
+      }
+      setIsCheckingToken(false);
+    };
+
+    checkExistingToken();
+  }, [router]);
+
+  // Handle redirect countdown after successful registration
+  useEffect(() => {
+    if (success && redirectCountdown > 0) {
+      const timer = setTimeout(() => {
+        setRedirectCountdown(prev => prev - 1);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    } else if (success && redirectCountdown === 0) {
+      router.push('/dashboard');
+    }
+  }, [success, redirectCountdown, router]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -138,7 +210,10 @@ export default function RegisterPage() {
         throw new Error(data.message || 'Registrasi gagal');
       }
 
-      if (data.success) {
+      if (data.success && data.data?.token) {
+        // Save token to localStorage
+        saveToken(data.data.token);
+        
         setSuccess(data);
         // Reset form
         setFormData({
@@ -148,6 +223,9 @@ export default function RegisterPage() {
           password: '',
           confirmPassword: ''
         });
+        
+        // Start countdown for redirect
+        setRedirectCountdown(5);
       } else {
         setError(data.message || 'Registrasi gagal');
       }
@@ -157,6 +235,32 @@ export default function RegisterPage() {
       setIsLoading(false);
     }
   };
+
+  const handleManualRedirect = () => {
+    router.push('/dashboard');
+  };
+
+  // Show loading while checking token
+  if (isCheckingToken) {
+    return (
+      <main className="px-4 py-12 z-[2] w-full max-w-[1400px] mx-auto">
+        <div className="max-w-2xl mx-auto">
+          <div className="border border-dashed p-8 rounded-lg bg-fd-background/50 text-center">
+            <div className="mb-6">
+              <div className="w-16 h-16 bg-fd-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-fd-primary animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              </div>
+              <h1 className="text-2xl font-bold mb-2">Memeriksa Status Login...</h1>
+              <p className="text-fd-muted-foreground">Mohon tunggu sebentar</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   if (success) {
     return (
@@ -201,18 +305,30 @@ export default function RegisterPage() {
               </div>
             </div>
 
+            {/* Redirect notification */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <div className="flex items-center justify-center">
+                <svg className="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-blue-800">
+                  Mengarahkan ke dashboard dalam {redirectCountdown} detik...
+                </span>
+              </div>
+            </div>
+
             <div className="flex justify-center gap-4">
-              <Link
-                href="https://docs.jkt48connect.my.id"
+              <button
+                onClick={handleManualRedirect}
                 className={cn(buttonVariants({ variant: 'default', size: 'lg' }))}
               >
-                Lihat Dokumentasi
-              </Link>
+                Ke Dashboard Sekarang
+              </button>
               <Link
-                href="https://www.jkt48connect.my.id"
+                href="https://docs.jkt48connect.my.id"
                 className={cn(buttonVariants({ variant: 'outline', size: 'lg' }))}
               >
-                Ke Dashboard
+                Lihat Dokumentasi
               </Link>
             </div>
           </div>
