@@ -51,37 +51,17 @@ interface ApiResponse {
   error?: string;
 }
 
-interface TokenData {
-  token: string;
-  expiresAt: number;
-}
-
 const API_BASE_URL = 'https://backend-dashboard-lac.vercel.app';
 
 // Token management functions
 const saveToken = (token: string): void => {
-  const expiresAt = Date.now() + (7 * 24 * 60 * 60 * 1000); // 7 days from now
-  const tokenData: TokenData = {
-    token,
-    expiresAt
-  };
-  localStorage.setItem('jkt48_token', JSON.stringify(tokenData));
+  localStorage.setItem('jkt48_token', token);
 };
 
 const getToken = (): string | null => {
   try {
-    const tokenDataStr = localStorage.getItem('jkt48_token');
-    if (!tokenDataStr) return null;
-    
-    const tokenData: TokenData = JSON.parse(tokenDataStr);
-    
-    // Check if token has expired
-    if (Date.now() > tokenData.expiresAt) {
-      localStorage.removeItem('jkt48_token');
-      return null;
-    }
-    
-    return tokenData.token;
+    const token = localStorage.getItem('jkt48_token');
+    return token || null;
   } catch (error) {
     console.error('Error getting token:', error);
     localStorage.removeItem('jkt48_token');
