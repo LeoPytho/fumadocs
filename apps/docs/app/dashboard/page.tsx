@@ -169,7 +169,7 @@ export default function Dashboard() {
             onClick={handleLogout}
             className={cn(buttonVariants({ variant: 'outline' }), 'text-red-600 hover:text-red-700')}
           >
-            <LogOutIcon className="w-4 h-4 mr-2" />
+            <LogOut className="w-4 h-4 mr-2" />
             Logout
           </button>
         </div>
@@ -195,7 +195,7 @@ export default function Dashboard() {
 
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
-                  <UserIcon className="w-5 h-5 text-gray-500" />
+                  <User className="w-5 h-5 text-gray-500" />
                   <div>
                     <p className="text-sm text-gray-500">Username</p>
                     <p className="font-medium">{user?.username}</p>
@@ -223,7 +223,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  <KeyIcon className="w-5 h-5 text-gray-500" />
+                  <Key className="w-5 h-5 text-gray-500" />
                   <div className="flex-1">
                     <p className="text-sm text-gray-500">API Key</p>
                     <div className="flex items-center space-x-2">
@@ -234,14 +234,14 @@ export default function Dashboard() {
                         onClick={() => setShowApiKey(!showApiKey)}
                         className="text-gray-500 hover:text-gray-700"
                       >
-                        {showApiKey ? <EyeOffIcon className="w-4 h-4" /> : <EyeIcon className="w-4 h-4" />}
+                        {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  <CreditCardIcon className="w-5 h-5 text-gray-500" />
+                  <CreditCard className="w-5 h-5 text-gray-500" />
                   <div>
                     <p className="text-sm text-gray-500">Balance</p>
                     <p className="font-medium">Rp {user?.balance?.toLocaleString('id-ID')}</p>
@@ -258,7 +258,7 @@ export default function Dashboard() {
                   onClick={() => setShowBarcode(!showBarcode)}
                   className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
                 >
-                  <QrCodeIcon className="w-4 h-4 mr-2" />
+                  <QrCode className="w-4 h-4 mr-2" />
                   {showBarcode ? 'Hide' : 'Show'} Barcode
                 </button>
               </div>
@@ -285,7 +285,7 @@ export default function Dashboard() {
                   onClick={() => setEditingOshi(!editingOshi)}
                   className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
                 >
-                  <EditIcon className="w-4 h-4 mr-2" />
+                  <Edit className="w-4 h-4 mr-2" />
                   Edit
                 </button>
               </div>
@@ -310,7 +310,7 @@ export default function Dashboard() {
                       onClick={updateOshi}
                       className={cn(buttonVariants({ variant: 'default', size: 'sm' }), 'flex-1')}
                     >
-                      <CheckIcon className="w-4 h-4 mr-2" />
+                      <Check className="w-4 h-4 mr-2" />
                       Save
                     </button>
                     <button
@@ -320,7 +320,7 @@ export default function Dashboard() {
                       }}
                       className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'flex-1')}
                     >
-                      <XIcon className="w-4 h-4 mr-2" />
+                      <X className="w-4 h-4 mr-2" />
                       Cancel
                     </button>
                   </div>
@@ -341,7 +341,7 @@ export default function Dashboard() {
                   ) : (
                     <div className="text-gray-500">
                       <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-                        <UserIcon className="w-8 h-8" />
+                        <User className="w-8 h-8" />
                       </div>
                       <p>{user?.oshi || 'No oshi selected'}</p>
                     </div>
