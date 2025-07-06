@@ -29,7 +29,7 @@ const dummySponsors = [
     login: 'company-a',
     name: 'Company A',
     websiteUrl: 'https://company-a.com',
-    logo: null,
+    logo: undefined,
     __typename: 'Organization',
     tier: {
       monthlyPriceInDollars: 1500,
@@ -40,7 +40,7 @@ const dummySponsors = [
     login: 'company-b',
     name: 'Company B',
     websiteUrl: 'https://company-b.com',
-    logo: null,
+    logo: undefined,
     __typename: 'Organization',
     tier: {
       monthlyPriceInDollars: 300,
@@ -51,7 +51,7 @@ const dummySponsors = [
     login: 'company-c',
     name: 'Company C',
     websiteUrl: 'https://company-c.com',
-    logo: null,
+    logo: undefined,
     __typename: 'Organization',
     tier: {
       monthlyPriceInDollars: 150,
@@ -62,8 +62,8 @@ const dummySponsors = [
   {
     login: 'user1',
     name: 'John Doe',
-    websiteUrl: null,
-    logo: null,
+    websiteUrl: undefined,
+    logo: undefined,
     __typename: 'User',
     tier: {
       monthlyPriceInDollars: 50,
@@ -74,7 +74,7 @@ const dummySponsors = [
     login: 'user2',
     name: 'Jane Smith',
     websiteUrl: 'https://janesmith.dev',
-    logo: null,
+    logo: undefined,
     __typename: 'User',
     tier: {
       monthlyPriceInDollars: 25,
@@ -84,8 +84,8 @@ const dummySponsors = [
   {
     login: 'user3',
     name: 'Bob Johnson',
-    websiteUrl: null,
-    logo: null,
+    websiteUrl: undefined,
+    logo: undefined,
     __typename: 'User',
     tier: {
       monthlyPriceInDollars: 10,
@@ -96,7 +96,7 @@ const dummySponsors = [
     login: 'user4',
     name: 'Alice Brown',
     websiteUrl: 'https://alicebrown.com',
-    logo: null,
+    logo: undefined,
     __typename: 'User',
     tier: {
       monthlyPriceInDollars: 5,
@@ -311,7 +311,7 @@ export default function Page() {
             >
               <Image
                 alt="avatar"
-                src={sponsor.avatarUrl!}
+                src={sponsor.avatarUrl}
                 unoptimized
                 width="30"
                 height="30"
