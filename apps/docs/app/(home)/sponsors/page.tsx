@@ -1,3 +1,4 @@
+
 import { Fragment } from 'react';
 import Image from 'next/image';
 import { buttonVariants } from '@/components/ui/button';
@@ -18,7 +19,7 @@ const tiers = [
     color: 'text-yellow-600 dark:text-yellow-400',
   },
   {
-    name: 'Sliver Sponsor',
+    name: 'Silver Sponsor',
     min: 128,
     color: 'text-fd-muted-foreground',
   },
@@ -188,41 +189,42 @@ export default async function Page() {
       <h2 className="mt-12 font-mono text-xs mb-7">Organization Sponsors</h2>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {sponsors
-  .filter((sponsor) => sponsor.__typename === 'Organization')
-  .map((sponsor) => {
-    const tier = tiers.find(
-  (tier) => sponsor.tier?.monthlyPriceInDollars >= tier.min,
-);
+          .filter((sponsor) => sponsor.__typename === 'Organization')
+          .map((sponsor) => {
+            // Fixed tier calculation with proper null checking
+            const tier = tiers.find(
+              (tierItem) => (sponsor.tier?.monthlyPriceInDollars || 0) >= tierItem.min,
+            );
 
-    return (
-      <a
-        key={sponsor.name}
-        href={getSponsorHref(sponsor.login, sponsor.websiteUrl)}
-        rel="noreferrer noopener"
-        target="_blank"
-        className="flex flex-col items-center"
-      >
-        <div className="inline-flex h-14 items-center gap-2.5 font-medium text-xl">
-          {sponsor.logo ?? (
-            <>
-              <Image
-                alt="avatar"
-                src={sponsor.avatarUrl}
-                unoptimized
-                width="38"
-                height="38"
-                className="rounded-lg"
-              />
-              <p>{sponsor.name}</p>
-            </>
-          )}
-        </div>
-        {tier && (
-          <p className={cn('text-xs', tier.color)}>{tier.name}</p>
-        )}
-      </a>
-    );
-  })}
+            return (
+              <a
+                key={sponsor.name}
+                href={getSponsorHref(sponsor.login, sponsor.websiteUrl)}
+                rel="noreferrer noopener"
+                target="_blank"
+                className="flex flex-col items-center"
+              >
+                <div className="inline-flex h-14 items-center gap-2.5 font-medium text-xl">
+                  {sponsor.logo ?? (
+                    <>
+                      <Image
+                        alt="avatar"
+                        src={sponsor.avatarUrl}
+                        unoptimized
+                        width="38"
+                        height="38"
+                        className="rounded-lg"
+                      />
+                      <p>{sponsor.name}</p>
+                    </>
+                  )}
+                </div>
+                {tier && (
+                  <p className={cn('text-xs', tier.color)}>{tier.name}</p>
+                )}
+              </a>
+            );
+          })}
       </div>
       <h2 className="mt-12 font-mono text-xs mb-7">Hosting Sponsor</h2>
       <a href="https://vercel.com" rel="noreferrer noopener">
