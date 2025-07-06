@@ -3,9 +3,6 @@ import { Fragment } from 'react';
 import Image from 'next/image';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/cn';
-import { getSponsors } from '@/lib/get-sponsors';
-import { owner } from '@/lib/github';
-import { organizationAsUserSponsors } from '@/app/(home)/sponsors/data';
 
 const tiers = [
   {
@@ -25,30 +22,91 @@ const tiers = [
   },
 ];
 
-export default async function Page() {
-  const result = await getSponsors(owner);
+// Data dummy sponsors yang diinput langsung dalam code
+const dummySponsors = [
+  // Organization Sponsors
+  {
+    login: 'company-a',
+    name: 'Company A',
+    websiteUrl: 'https://company-a.com',
+    logo: null,
+    __typename: 'Organization',
+    tier: {
+      monthlyPriceInDollars: 1500,
+    },
+    avatarUrl: 'https://github.com/github.png',
+  },
+  {
+    login: 'company-b',
+    name: 'Company B',
+    websiteUrl: 'https://company-b.com',
+    logo: null,
+    __typename: 'Organization',
+    tier: {
+      monthlyPriceInDollars: 300,
+    },
+    avatarUrl: 'https://github.com/github.png',
+  },
+  {
+    login: 'company-c',
+    name: 'Company C',
+    websiteUrl: 'https://company-c.com',
+    logo: null,
+    __typename: 'Organization',
+    tier: {
+      monthlyPriceInDollars: 150,
+    },
+    avatarUrl: 'https://github.com/github.png',
+  },
+  // Individual Sponsors
+  {
+    login: 'user1',
+    name: 'John Doe',
+    websiteUrl: null,
+    logo: null,
+    __typename: 'User',
+    tier: {
+      monthlyPriceInDollars: 50,
+    },
+    avatarUrl: 'https://github.com/github.png',
+  },
+  {
+    login: 'user2',
+    name: 'Jane Smith',
+    websiteUrl: 'https://janesmith.dev',
+    logo: null,
+    __typename: 'User',
+    tier: {
+      monthlyPriceInDollars: 25,
+    },
+    avatarUrl: 'https://github.com/github.png',
+  },
+  {
+    login: 'user3',
+    name: 'Bob Johnson',
+    websiteUrl: null,
+    logo: null,
+    __typename: 'User',
+    tier: {
+      monthlyPriceInDollars: 10,
+    },
+    avatarUrl: 'https://github.com/github.png',
+  },
+  {
+    login: 'user4',
+    name: 'Alice Brown',
+    websiteUrl: 'https://alicebrown.com',
+    logo: null,
+    __typename: 'User',
+    tier: {
+      monthlyPriceInDollars: 5,
+    },
+    avatarUrl: 'https://github.com/github.png',
+  },
+];
 
-  const sponsors = result.map((v) => {
-    const entity = organizationAsUserSponsors.find(
-      (entity) => entity.asUser === v.login,
-    );
-    if (entity) {
-      return {
-        login: entity.github,
-        name: entity.label,
-        websiteUrl: entity.url,
-        logo: entity.logo,
-        __typename: 'Organization',
-        tier: v.tier,
-        avatarUrl: undefined,
-      };
-    }
-
-    return {
-      logo: undefined,
-      ...v,
-    };
-  });
+export default function Page() {
+  const sponsors = dummySponsors;
 
   return (
     <main className="container flex flex-col items-center py-16 text-center z-2">
@@ -191,7 +249,6 @@ export default async function Page() {
         {sponsors
           .filter((sponsor) => sponsor.__typename === 'Organization')
           .map((sponsor) => {
-            // Fixed tier calculation with proper null checking
             const tier = tiers.find(
               (tierItem) => (sponsor.tier?.monthlyPriceInDollars || 0) >= tierItem.min,
             );
