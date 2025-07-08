@@ -8,13 +8,6 @@ import { createMetadata } from '@/lib/metadata';
 
 const API_BASE_URL = 'https://backend-dashboard-lac.vercel.app';
 
-export const metadata = createMetadata({
-  title: 'Token Validation System',
-  description: 'Validate and use tokens with JKT48Connect API',
-  openGraph: {
-    url: 'https://docs.jkt48connect.my.id/token-validation',
-  },
-});
 
 interface TokenData {
   id: string;
