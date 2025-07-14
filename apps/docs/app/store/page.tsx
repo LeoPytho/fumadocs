@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { CreditCardIcon, BanknotesIcon, CheckCircleIcon, XCircleIcon } from 'lucide-react';
+import { CreditCardIcon, BanknoteIcon, CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
 interface PaymentFormData {
