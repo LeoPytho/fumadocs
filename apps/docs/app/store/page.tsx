@@ -473,7 +473,7 @@ export default function CheckoutPage() {
               </div>
               <div className="flex items-center">
                 <div className="w-8 h-8 bg-green-100 rounded flex items-center justify-center mr-2">
-                  <BanknotesIcon className="w-4 h-4 text-green-600" />
+                  <BanknoteIcon className="w-4 h-4 text-green-600" />
                 </div>
                 <span>Transfer Bank</span>
               </div>
