@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ShoppingCartIcon, CreditCardIcon, BanknotesIcon, PhoneIcon, MailIcon, UserIcon } from 'lucide-react';
+import { ShoppingCartIcon, CreditCardIcon, BanknoteIcon, PhoneIcon, MailIcon, UserIcon } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/cn';
 import { buttonVariants } from '@/components/ui/button';
