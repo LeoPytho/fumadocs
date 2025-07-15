@@ -14,7 +14,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Loader2, RefreshCw, Send, X, ExternalLink, FileText, Code, Book } from 'lucide-react';
+import { Loader2, RefreshCw, Send, X, ExternalLink, FileText, Code, Book, Zap } from 'lucide-react';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import { cn } from '@/lib/cn';
 import { buttonVariants } from '../../../../packages/ui/src/components/ui/button';
@@ -36,12 +36,11 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp?: number;
-  links?: Array<{
-    title: string;
-    url: string;
-    description?: string;
-    type?: 'documentation' | 'redirect' | 'api';
-  }>;
+  processing_info?: {
+    models_used: string[];
+    conversation_length: number;
+    user_id: string;
+  };
 }
 
 interface ChatHelpers {
@@ -53,6 +52,11 @@ interface ChatHelpers {
   reload: () => void;
   stop: () => void;
   setMessages: (messages: Message[]) => void;
+  processingInfo?: {
+    models_used: string[];
+    conversation_length: number;
+    user_id: string;
+  };
 }
 
 const ChatContext = createContext<ChatHelpers | null>(null);
@@ -60,39 +64,77 @@ function useChatContext() {
   return use(ChatContext)!;
 }
 
+// Processing indicator component
+function ProcessingIndicator({ models }: { models: string[] }) {
+  const [currentModel, setCurrentModel] = useState(0);
+  
+  useEffect(() => {
+    if (models.length === 0) return;
+    
+    const interval = setInterval(() => {
+      setCurrentModel((prev) => (prev + 1) % models.length);
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, [models]);
+  
+  return (
+    <div className="flex items-center gap-2 text-xs text-fd-muted-foreground">
+      <Zap className="size-3 animate-pulse" />
+      <span>Processing with {models[currentModel] || 'Multi-Model AI'}...</span>
+    </div>
+  );
+}
+
 function SearchAIActions() {
-  const { messages, isLoading, setMessages, reload } = useChatContext();
+  const { messages, isLoading, setMessages, reload, processingInfo } = useChatContext();
 
   if (messages.length === 0) return null;
+  
   return (
-    <div className="sticky bottom-0 bg-gradient-to-t from-fd-popover px-3 py-1.5 flex flex-row items-center justify-end gap-2 empty:hidden">
-      {!isLoading && messages.at(-1)?.role === 'assistant' && (
+    <div className="sticky bottom-0 bg-gradient-to-t from-fd-popover px-3 py-1.5 flex flex-col gap-2">
+      {/* Processing info display */}
+      {processingInfo && (
+        <div className="text-xs text-fd-muted-foreground bg-fd-muted/30 px-2 py-1 rounded">
+          <div className="flex items-center gap-1">
+            <Zap className="size-3" />
+            <span>Processed by: {processingInfo.models_used.join(' → ')}</span>
+          </div>
+          <div className="text-xs opacity-75">
+            Conversation: {processingInfo.conversation_length} messages
+          </div>
+        </div>
+      )}
+      
+      <div className="flex flex-row items-center justify-end gap-2">
+        {!isLoading && messages.at(-1)?.role === 'assistant' && (
+          <button
+            type="button"
+            className={cn(
+              buttonVariants({
+                color: 'secondary',
+              }),
+              'text-fd-muted-foreground rounded-full gap-1.5',
+            )}
+            onClick={() => reload()}
+          >
+            <RefreshCw className="size-4" />
+            Regenerate
+          </button>
+        )}
         <button
           type="button"
           className={cn(
             buttonVariants({
               color: 'secondary',
             }),
-            'text-fd-muted-foreground rounded-full gap-1.5',
+            'text-fd-muted-foreground rounded-full',
           )}
-          onClick={() => reload()}
+          onClick={() => setMessages([])}
         >
-          <RefreshCw className="size-4" />
-          Regenerate
+          Clear Chat
         </button>
-      )}
-      <button
-        type="button"
-        className={cn(
-          buttonVariants({
-            color: 'secondary',
-          }),
-          'text-fd-muted-foreground rounded-full',
-        )}
-        onClick={() => setMessages([])}
-      >
-        Clear Chat
-      </button>
+      </div>
     </div>
   );
 }
@@ -121,7 +163,11 @@ function SearchAIInput(props: FormHTMLAttributes<HTMLFormElement>) {
     >
       <Input
         value={input}
-        placeholder={isLoading ? 'JKT48Connect AI sedang berpikir...' : 'Tanya tentang JKT48Connect API atau minta dokumentasi...'}
+        placeholder={
+          isLoading 
+            ? 'JKT48Connect AI sedang memproses dengan Multi-Model Pipeline...' 
+            : 'Tanya tentang JKT48Connect API atau minta dokumentasi...'
+        }
         disabled={isLoading}
         onChange={(e) => {
           setInput(e.target.value);
@@ -134,19 +180,22 @@ function SearchAIInput(props: FormHTMLAttributes<HTMLFormElement>) {
         }}
       />
       {isLoading ? (
-        <button
-          type="button"
-          className={cn(
-            buttonVariants({
-              color: 'secondary',
-              className: 'rounded-full mt-2 gap-2',
-            }),
-          )}
-          onClick={stop}
-        >
-          <Loader2 className="size-4 animate-spin text-fd-muted-foreground" />
-          Stop
-        </button>
+        <div className="flex flex-col items-center gap-1 mt-2">
+          <button
+            type="button"
+            className={cn(
+              buttonVariants({
+                color: 'secondary',
+                className: 'rounded-full gap-2',
+              }),
+            )}
+            onClick={stop}
+          >
+            <Loader2 className="size-4 animate-spin text-fd-muted-foreground" />
+            Stop
+          </button>
+          <ProcessingIndicator models={['DeepSeek V3', 'Kimi K2', 'Qwen2', 'MiniMax M1']} />
+        </div>
       ) : (
         <button
           type="submit"
@@ -199,7 +248,7 @@ function List(props: Omit<HTMLAttributes<HTMLDivElement>, 'dir'>) {
       ref={containerRef}
       {...props}
       className={cn(
-        'fd-scroll-container overflow-y-auto max-h-[calc(100dvh-240px)] min-w-0 flex flex-col',
+        'fd-scroll-container overflow-y-auto max-h-[calc(100dvh-280px)] min-w-0 flex flex-col',
         props.className,
       )}
     >
@@ -237,7 +286,7 @@ const roleName: Record<string, string> = {
   assistant: 'JKT48Connect AI',
 };
 
-// Enhanced function to extract and parse documentation links with better detection
+// Enhanced function to extract and parse documentation links
 function extractDocumentationLinks(content: string): Array<{
   title: string, 
   url: string, 
@@ -274,7 +323,7 @@ function extractDocumentationLinks(content: string): Array<{
       let title = linkTitle || 'Dokumentasi';
       let description = 'Panduan JKT48Connect';
       
-      // Enhanced URL-based title and description mapping with proper typing
+      // Enhanced URL-based title and description mapping
       const urlMappings = [
         {
           check: (url: string) => url.includes('/what-is-jkt48connect'),
@@ -373,7 +422,6 @@ function DocumentationLink({ link, index }: {
       // Open in new tab
       window.open(link.url, '_blank', 'noopener,noreferrer');
     }
-    // For other types, let the default link behavior happen (target="_blank")
   };
 
   return (
@@ -386,7 +434,7 @@ function DocumentationLink({ link, index }: {
       className={cn(
         'inline-flex items-center gap-2 px-3 py-2 text-xs rounded-lg border transition-colors min-w-0 cursor-pointer',
         getVariant(),
-        link.type === 'redirect' && 'animate-pulse' // Visual indicator for auto-redirect
+        link.type === 'redirect' && 'animate-pulse'
       )}
     >
       {getIcon()}
@@ -406,17 +454,16 @@ function DocumentationLink({ link, index }: {
 function Message({ message }: { message: Message }) {
   const documentationLinks = extractDocumentationLinks(message.content);
   
-  // Auto-redirect functionality - automatically open redirect links
+  // Auto-redirect functionality
   useEffect(() => {
     const redirectLinks = documentationLinks.filter(link => link.type === 'redirect');
     
     if (redirectLinks.length > 0 && message.role === 'assistant') {
-      // Small delay to let the user see the message first
       const timer = setTimeout(() => {
         redirectLinks.forEach(link => {
           window.open(link.url, '_blank', 'noopener,noreferrer');
         });
-      }, 1500); // 1.5 second delay
+      }, 1500);
 
       return () => clearTimeout(timer);
     }
@@ -424,19 +471,32 @@ function Message({ message }: { message: Message }) {
   
   return (
     <div className="group">
-      <p
-        className={cn(
-          'mb-1 text-xs font-medium text-fd-muted-foreground',
-          message.role === 'assistant' && 'text-fd-primary',
+      <div className="flex items-center justify-between mb-1">
+        <p
+          className={cn(
+            'text-xs font-medium text-fd-muted-foreground',
+            message.role === 'assistant' && 'text-fd-primary',
+          )}
+        >
+          {roleName[message.role] ?? 'unknown'}
+          {message.timestamp && (
+            <span className="ml-2 text-xs opacity-50">
+              {new Date(message.timestamp).toLocaleTimeString()}
+            </span>
+          )}
+        </p>
+        
+        {/* Processing info indicator */}
+        {message.processing_info && message.role === 'assistant' && (
+          <div className="flex items-center gap-1 text-xs text-fd-muted-foreground">
+            <Zap className="size-3" />
+            <span className="hidden sm:inline">
+              {message.processing_info.models_used.length} Models
+            </span>
+          </div>
         )}
-      >
-        {roleName[message.role] ?? 'unknown'}
-        {message.timestamp && (
-          <span className="ml-2 text-xs opacity-50">
-            {new Date(message.timestamp).toLocaleTimeString()}
-          </span>
-        )}
-      </p>
+      </div>
+      
       <div className="prose prose-sm max-w-none">
         <Markdown text={message.content} />
       </div>
@@ -547,12 +607,17 @@ function Markdown({ text }: { text: string }) {
   return rendered ?? text;
 }
 
-// Enhanced custom hook dengan better error handling dan loading states
+// Enhanced custom hook with better error handling and processing info
 function useCustomChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [abortController, setAbortController] = useState<AbortController | null>(null);
+  const [processingInfo, setProcessingInfo] = useState<{
+    models_used: string[];
+    conversation_length: number;
+    user_id: string;
+  }>();
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -596,9 +661,11 @@ function useCustomChat() {
           role: 'assistant',
           content: data.result,
           timestamp: Date.now(),
+          processing_info: data.processing_info,
         };
 
         setMessages(prev => [...prev, assistantMessage]);
+        setProcessingInfo(data.processing_info);
       } else {
         throw new Error(data.error || 'Failed to get response');
       }
@@ -648,6 +715,7 @@ function useCustomChat() {
     reload,
     stop,
     setMessages,
+    processingInfo,
   };
 }
 
@@ -692,7 +760,8 @@ function Content() {
         <div className="rounded-xl overflow-hidden border shadow-lg bg-fd-popover text-fd-popover-foreground">
           <SearchAIInput />
           <div className="flex gap-2 items-center text-fd-muted-foreground px-3 py-1.5">
-            <DialogTitle className="text-xs flex-1">
+            <DialogTitle className="text-xs flex-1 flex items-center gap-1">
+              <Zap className="size-3" />
               Powered by{' '}
               <a
                 href="https://jkt48connect.my.id"
@@ -702,7 +771,7 @@ function Content() {
               >
                 JKT48Connect AI
               </a>
-              {' '}• Asisten untuk JKT48Connect API & Dokumentasi
+              {' '}• Multi-Model Pipeline (DeepSeek V3 → Kimi K2 → Qwen2 → MiniMax M1)
             </DialogTitle>
             <DialogClose
               aria-label="Close"
