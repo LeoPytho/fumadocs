@@ -81,7 +81,7 @@ function ProcessingIndicator({ models }: { models: string[] }) {
   return (
     <div className="flex items-center gap-2 text-xs text-fd-muted-foreground">
       <Zap className="size-3 animate-pulse" />
-      <span>Processing with {models[currentModel] || 'Multi-Model AI'}...</span>
+      <span>Processing with Multi-Model AI</span>
     </div>
   );
 }
@@ -98,7 +98,7 @@ function SearchAIActions() {
         <div className="text-xs text-fd-muted-foreground bg-fd-muted/30 px-2 py-1 rounded">
           <div className="flex items-center gap-1">
             <Zap className="size-3" />
-            <span>Processed by: {processingInfo.models_used.join(' → ')}</span>
+            <span>Processed by: JKT48Connect-AI</span>
           </div>
           <div className="text-xs opacity-75">
             Conversation: {processingInfo.conversation_length} messages
@@ -194,7 +194,7 @@ function SearchAIInput(props: FormHTMLAttributes<HTMLFormElement>) {
             <Loader2 className="size-4 animate-spin text-fd-muted-foreground" />
             Stop
           </button>
-          <ProcessingIndicator models={['DeepSeek V3', 'Kimi K2', 'Qwen2', 'MiniMax M1']} />
+          <ProcessingIndicator models={['JKT48Connect4.1', 'JKT48Connect2.1', 'JKT48Connect8.5', 'JKT48ConnectZ4']} />
         </div>
       ) : (
         <button
