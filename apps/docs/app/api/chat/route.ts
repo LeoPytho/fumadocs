@@ -1,11 +1,211 @@
 
 export const runtime = 'edge';
 
+interface Message {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+}
+
+interface APIResponse {
+  choices: Array<{
+    message: {
+      content: string;
+    };
+  }>;
+}
+
+interface ConversationMemory {
+  userId: string;
+  history: Message[];
+  lastAccess: number;
+}
+
+// In-memory storage untuk conversation history
+const conversationMemory = new Map<string, ConversationMemory>();
+
+// Clean up old conversations (older than 1 hour)
+const cleanupMemory = () => {
+  const now = Date.now();
+  const oneHour = 60 * 60 * 1000;
+  
+  for (const [userId, memory] of conversationMemory.entries()) {
+    if (now - memory.lastAccess > oneHour) {
+      conversationMemory.delete(userId);
+    }
+  }
+};
+
+// Generate user ID from IP or use session
+const getUserId = (req: Request): string => {
+  const forwarded = req.headers.get('x-forwarded-for');
+  const ip = forwarded ? forwarded.split(',')[0] : req.headers.get('x-real-ip') || 'unknown';
+  return `user_${ip}`;
+};
+
+// Get conversation history
+const getConversationHistory = (userId: string): Message[] => {
+  const memory = conversationMemory.get(userId);
+  return memory?.history || [];
+};
+
+// Save conversation history
+const saveConversationHistory = (userId: string, history: Message[]) => {
+  const memory: ConversationMemory = {
+    userId,
+    history,
+    lastAccess: Date.now()
+  };
+  conversationMemory.set(userId, memory);
+};
+
+// API configurations
+const apiConfigs = [
+  {
+    name: "DeepSeek V3",
+    url: "https://router.huggingface.co/fireworks-ai/inference/v1/chat/completions",
+    model: "accounts/fireworks/models/deepseek-v3",
+    role: "Analyzer & Initial Responder",
+    systemPrompt: "Kamu adalah DeepSeek V3, AI pertama dalam rantai pemrosesan. Tugasmu adalah menganalisis pertanyaan user dengan mendalam dan memberikan respons awal yang komprehensif. Fokus pada pemahaman konteks dan memberikan jawaban yang informatif dan terstruktur."
+  },
+  {
+    name: "Kimi K2",
+    url: "https://router.huggingface.co/novita/v3/openai/chat/completions",
+    model: "moonshotai/kimi-k2-instruct",
+    role: "Refiner & Enhancer",
+    systemPrompt: "Kamu adalah Kimi K2, AI kedua yang bertugas memperbaiki dan meningkatkan kualitas respons dari AI sebelumnya. Analisis respons yang diberikan, perbaiki kesalahan, tambahkan detail yang kurang, dan pastikan jawaban lebih jelas dan mudah dipahami."
+  },
+  {
+    name: "Qwen2",
+    url: "https://router.huggingface.co/featherless-ai/v1/chat/completions",
+    model: "Qwen/Qwen2-7B-Instruct",
+    role: "Validator & Optimizer",
+    systemPrompt: "Kamu adalah Qwen2, AI ketiga yang bertugas memvalidasi dan mengoptimalkan respons. Periksa akurasi informasi, pastikan struktur jawaban logis, dan optimalkan agar lebih engaging dan user-friendly. Hilangkan redundansi dan tambahkan contoh jika perlu."
+  },
+  {
+    name: "MiniMax M1",
+    url: "https://router.huggingface.co/novita/v3/openai/chat/completions",
+    model: "minimaxai/minimax-m1-80k",
+    role: "Final Polisher",
+    systemPrompt: "Kamu adalah MiniMax M1, AI terakhir yang bertugas memberikan sentuhan akhir pada respons. Pastikan jawaban sempurna, ramah, dan siap dikirim ke user. Perbaiki tone, grammar, dan pastikan jawaban benar-benar membantu user. Ini adalah tahap final sebelum dikirim ke pengguna."
+  }
+];
+
+// Call single AI model
+const callAIModel = async (config: any, messages: Message[]): Promise<string> => {
+  try {
+    const response = await fetch(config.url, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer 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',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        messages: [
+          {
+            role: "system",
+            content: config.systemPrompt
+          },
+          ...messages
+        ],
+        model: config.model,
+        stream: false,
+        max_tokens: 2000,
+        temperature: 0.7
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`${config.name} API error: ${response.status}`);
+    }
+
+    const data: APIResponse = await response.json();
+    
+    if (!data.choices || !data.choices[0]) {
+      throw new Error(`Invalid response from ${config.name}`);
+    }
+
+    return data.choices[0].message.content;
+  } catch (error) {
+    console.error(`Error calling ${config.name}:`, error);
+    throw error;
+  }
+};
+
+// Multi-model processing pipeline
+const processWithMultipleModels = async (userMessage: string, conversationHistory: Message[]): Promise<string> => {
+  let currentResponse = userMessage;
+  let processingHistory = [...conversationHistory];
+
+  // Add user message to processing history
+  processingHistory.push({
+    role: 'user',
+    content: userMessage
+  });
+
+  for (let i = 0; i < apiConfigs.length; i++) {
+    const config = apiConfigs[i];
+    console.log(`Processing with ${config.name} (${config.role})...`);
+
+    try {
+      let messages: Message[];
+
+      if (i === 0) {
+        // First model: Process original user message with full conversation history
+        messages = processingHistory;
+      } else {
+        // Subsequent models: Process previous AI response
+        messages = [
+          {
+            role: 'user',
+            content: `Berikut adalah pertanyaan asli user dan respons dari AI sebelumnya. Tugasmu sebagai ${config.role} adalah memperbaiki dan meningkatkan kualitas respons tersebut.
+
+PERTANYAAN ASLI USER: "${userMessage}"
+
+RESPONS AI SEBELUMNYA: "${currentResponse}"
+
+Perbaiki, tingkatkan, dan berikan respons yang lebih baik sesuai dengan peranmu sebagai ${config.role}.`
+          }
+        ];
+      }
+
+      const aiResponse = await callAIModel(config, messages);
+      currentResponse = aiResponse;
+
+      // Add some delay between calls to prevent rate limiting
+      if (i < apiConfigs.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+
+    } catch (error) {
+      console.error(`Error with ${config.name}:`, error);
+      
+      // If there's an error, try to continue with current response
+      if (i === 0) {
+        // If first model fails, return error
+        throw new Error(`Primary AI model failed: ${error}`);
+      }
+      // If subsequent models fail, continue with previous response
+      console.log(`Continuing with previous response due to ${config.name} failure`);
+    }
+  }
+
+  return currentResponse;
+};
+
 export async function POST(req: Request) {
   try {
+    // Clean up old memories periodically
+    if (Math.random() < 0.1) { // 10% chance to clean up
+      cleanupMemory();
+    }
+
     const reqJson = await req.json();
+    const userId = getUserId(req);
     
-    // Ambil pesan terakhir dari user
+    // Get conversation history
+    let conversationHistory = getConversationHistory(userId);
+    
+    // Get the last user message
     const lastUserMessage = reqJson.messages
       .filter((msg: any) => msg.role === 'user')
       .pop();
@@ -17,8 +217,10 @@ export async function POST(req: Request) {
       );
     }
 
-    // System prompt untuk JKT48Connect AI dengan endpoint yang benar
-    const systemPrompt = `Kamu adalah JKT48Connect AI, asisten virtual yang ditugaskan untuk membantu pengguna dalam menggunakan REST API dan module JKT48Connect. 
+    // System prompt for JKT48Connect AI
+    const jkt48SystemPrompt: Message = {
+      role: "system",
+      content: `Kamu adalah JKT48Connect AI, asisten virtual yang ditugaskan untuk membantu pengguna dalam menggunakan REST API dan module JKT48Connect. 
 
 IDENTITAS:
 - Nama: JKT48Connect AI
@@ -91,40 +293,32 @@ const memberData = await memberResponse.json();
 console.log(memberData);
 \`\`\`
 
-Selalu siap membantu dengan pertanyaan seputar JKT48Connect API!`;
+Selalu siap membantu dengan pertanyaan seputar JKT48Connect API!`
+    };
 
-    // Gabungkan system prompt dengan user message
-    const fullPrompt = `${systemPrompt}\n\nUser: ${lastUserMessage.content}`;
-
-    // Panggil API JKT48Connect
-    const apiUrl = `https://api.jkt48connect.my.id/api/ai/microsoft?text=${encodeURIComponent(fullPrompt)}&api_key=JKTCONNECT`;
-    
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    
-    if (!data.success) {
-      return new Response(
-        JSON.stringify({ error: 'API call failed' }), 
-        { status: 500 }
-      );
+    // Initialize conversation history if empty
+    if (conversationHistory.length === 0) {
+      conversationHistory = [jkt48SystemPrompt];
     }
 
+    // Process user message through multiple AI models
+    console.log('Starting multi-model processing pipeline...');
+    const finalResponse = await processWithMultipleModels(
+      lastUserMessage.content,
+      conversationHistory
+    );
+
     // Post-process response untuk menambahkan link otomatis
-    let processedResult = data.result;
+    let processedResult = finalResponse;
     
     // Enhanced keyword detection untuk redirect ke dokumentasi
     const docLinks = {
-      // Dokumentasi umum
       'dokumentasi': 'https://docs.jkt48connect.my.id/docs/ui',
       'panduan': 'https://docs.jkt48connect.my.id/docs/ui',
       'docs': 'https://docs.jkt48connect.my.id/docs/ui',
-      
-      // Spesifik pages
       'what is jkt48connect': 'https://docs.jkt48connect.my.id/docs/ui/what-is-jkt48connect',
       'apa itu jkt48connect': 'https://docs.jkt48connect.my.id/docs/ui/what-is-jkt48connect',
       'pengenalan': 'https://docs.jkt48connect.my.id/docs/ui/what-is-jkt48connect',
-      
-      // API endpoints
       'all live': 'https://docs.jkt48connect.my.id/docs/ui/all-live',
       'live': 'https://docs.jkt48connect.my.id/docs/ui/all-live',
       'idn live': 'https://docs.jkt48connect.my.id/docs/ui/idn',
@@ -135,8 +329,6 @@ Selalu siap membantu dengan pertanyaan seputar JKT48Connect API!`;
       'recent detail': 'https://docs.jkt48connect.my.id/docs/ui/recent-detail',
       'member': 'https://docs.jkt48connect.my.id/docs/ui/member',
       'members': 'https://docs.jkt48connect.my.id/docs/ui/member',
-      
-      // Additional endpoints
       'news': 'https://docs.jkt48connect.my.id/docs/ui',
       'theater': 'https://docs.jkt48connect.my.id/docs/ui',
       'birthday': 'https://docs.jkt48connect.my.id/docs/ui',
@@ -144,7 +336,7 @@ Selalu siap membantu dengan pertanyaan seputar JKT48Connect API!`;
       'chat stream': 'https://docs.jkt48connect.my.id/docs/ui'
     };
 
-    // Cek apakah user meminta redirect langsung ke dokumentasi
+    // Check for redirect requests
     const userMessageLower = lastUserMessage.content.toLowerCase();
     const redirectKeywords = [
       'buka dokumentasi', 'ke dokumentasi', 'lihat dokumentasi',
@@ -157,8 +349,7 @@ Selalu siap membantu dengan pertanyaan seputar JKT48Connect API!`;
     );
 
     if (isDirectRedirectRequest) {
-      // Cari keyword spesifik untuk redirect yang tepat
-      let redirectLink = 'https://docs.jkt48connect.my.id/docs/ui'; // default
+      let redirectLink = 'https://docs.jkt48connect.my.id/docs/ui';
       
       for (const [keyword, link] of Object.entries(docLinks)) {
         if (userMessageLower.includes(keyword)) {
@@ -169,7 +360,6 @@ Selalu siap membantu dengan pertanyaan seputar JKT48Connect API!`;
       
       processedResult += `\n\n🔗 **Redirect ke Dokumentasi:** ${redirectLink}`;
     } else {
-      // Tambahkan link yang relevan berdasarkan konteks
       for (const [keyword, link] of Object.entries(docLinks)) {
         if (userMessageLower.includes(keyword)) {
           processedResult += `\n\n📚 **Dokumentasi Terkait:** ${link}`;
@@ -178,21 +368,50 @@ Selalu siap membantu dengan pertanyaan seputar JKT48Connect API!`;
       }
     }
 
-    // Tambahkan footer dengan link dokumentasi umum jika belum ada link spesifik
+    // Add general documentation link if no specific link added
     if (!processedResult.includes('📚 **Dokumentasi') && !processedResult.includes('🔗 **Redirect')) {
       processedResult += `\n\n📚 **Dokumentasi Lengkap:** https://docs.jkt48connect.my.id/docs/ui`;
     }
 
-    // Tambahkan informasi tambahan untuk penggunaan API
+    // Add API key reminder
     if (userMessageLower.includes('api key') || userMessageLower.includes('apikey') || userMessageLower.includes('authentication')) {
       processedResult += `\n\n🔑 **Catatan:** Jangan lupa menambahkan API key Anda pada setiap request: \`?apikey=YOUR_API_KEY\``;
     }
 
-    // Return response dalam format yang sesuai
+    // Update conversation history
+    conversationHistory.push({
+      role: 'user',
+      content: lastUserMessage.content
+    });
+    
+    conversationHistory.push({
+      role: 'assistant',
+      content: processedResult
+    });
+
+    // Keep only last 10 messages to prevent memory bloat
+    if (conversationHistory.length > 21) { // system + 10 pairs
+      conversationHistory = [
+        conversationHistory[0], // Keep system prompt
+        ...conversationHistory.slice(-20) // Keep last 20 messages (10 pairs)
+      ];
+    }
+
+    // Save updated conversation history
+    saveConversationHistory(userId, conversationHistory);
+
+    // Add processing info
+    processedResult += `\n\n---\n*Processed by Multi-Model AI Pipeline: ${apiConfigs.map(c => c.name).join(' → ')}*`;
+
     return new Response(
       JSON.stringify({
         success: true,
-        result: processedResult
+        result: processedResult,
+        processing_info: {
+          models_used: apiConfigs.map(c => c.name),
+          conversation_length: conversationHistory.length,
+          user_id: userId
+        }
       }),
       {
         headers: {
@@ -206,7 +425,7 @@ Selalu siap membantu dengan pertanyaan seputar JKT48Connect API!`;
     return new Response(
       JSON.stringify({ 
         success: false, 
-        error: 'Internal server error' 
+        error: error instanceof Error ? error.message : 'Internal server error'
       }), 
       { status: 500 }
     );
