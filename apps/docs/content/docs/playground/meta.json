@@ -1,6 +1,6 @@
 {
   "title": "Grow A Garden API",
-  "description": "The Grow A Garden API provides access to game data for the Grow A Garden mobile game. This includes stock information, weather conditions, restock timers, and comprehensive game data. All endpoints require an API key for authentication by JKT48Connect",
+  "description": "The Grow A Garden API by JKT48Connect",
   "root": true,
   "icon": "Shapes",
   "pages": ["index", "...(generated)"]
