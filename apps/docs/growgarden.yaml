@@ -1,0 +1,422 @@
+openapi: 3.1.1
+info:
+  title: Grow A Garden API
+  description: |
+    The Grow A Garden API provides access to game data for the Grow A Garden mobile game. 
+    This includes stock information, weather conditions, restock timers, and comprehensive game data.
+    All endpoints require an API key for authentication.
+
+    ## Resources
+
+    * https://v2.jkt48connect.my.id/api
+  version: 1.1.1
+  contact:
+    name: JKT48Connect
+    url: https://v2.jkt48connect.my.id/api
+servers:
+  - url: https://v2.jkt48connect.my.id/api
+security:
+  - apiKeyQuery: []
+tags:
+  - name: Inventory
+    description: Stock and item management
+  - name: Environment
+    description: Weather and environmental conditions
+  - name: Game System
+    description: Game mechanics and timers
+  - name: Comprehensive
+    description: All-in-one data endpoints
+paths:
+  '/growagarden/stock':
+    get:
+      tags:
+        - Inventory
+      summary: Get current stock
+      description: |
+        Retrieve information about all available items and their current stock levels in the Grow A Garden game.
+        This includes seeds, tools, decorations, and other purchasable items.
+      operationId: getStock
+      parameters:
+        - $ref: '#/components/parameters/apiKeyQuery'
+        - name: category
+          in: query
+          required: false
+          description: Filter stock by item category
+          schema:
+            type: string
+            enum: [seeds, tools, decorations, consumables]
+        - name: available_only
+          in: query
+          required: false
+          description: Only return items that are currently in stock
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Successfully retrieved stock information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StockItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  '/growagarden/weather':
+    get:
+      tags:
+        - Environment
+      summary: Get current weather
+      description: |
+        Retrieve the current weather conditions in the Grow A Garden game.
+        Weather affects plant growth rates, special events, and available activities.
+      operationId: getWeather
+      parameters:
+        - $ref: '#/components/parameters/apiKeyQuery'
+      responses:
+        '200':
+          description: Successfully retrieved weather information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Weather'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  '/growagarden/restock-timer':
+    get:
+      tags:
+        - Game System
+      summary: Get restock timer
+      description: |
+        Retrieve the countdown timer until the next shop restock occurs.
+        The shop restocks items at regular intervals, making previously sold-out items available again.
+      operationId: getRestockTimer
+      parameters:
+        - $ref: '#/components/parameters/apiKeyQuery'
+      responses:
+        '200':
+          description: Successfully retrieved restock timer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestockTimer'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  '/growagarden/all':
+    get:
+      tags:
+        - Comprehensive
+      summary: Get all game data
+      description: |
+        Retrieve all available Grow A Garden data in a single request.
+        This is a convenience endpoint that combines stock, weather, and restock timer information.
+        Ideal for dashboard applications or when you need comprehensive game state information.
+      operationId: getAllData
+      parameters:
+        - $ref: '#/components/parameters/apiKeyQuery'
+        - name: include_detailed_stock
+          in: query
+          required: false
+          description: Include detailed stock information with descriptions and images
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: Successfully retrieved all game data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllGameData'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+components:
+  securitySchemes:
+    apiKeyQuery:
+      type: apiKey
+      in: query
+      name: apikey
+      description: API key required for authentication
+
+  parameters:
+    apiKeyQuery:
+      name: apikey
+      in: query
+      required: true
+      description: Your unique API key for authentication.
+      schema:
+        type: string
+
+  responses:
+    BadRequest:
+      description: Bad Request - The request was invalid or missing required parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    StockItem:
+      type: object
+      required:
+        - id
+        - name
+        - quantity
+        - price
+        - category
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the item
+          example: 1001
+        name:
+          type: string
+          description: Display name of the item
+          example: "Tomato Seeds"
+        quantity:
+          type: integer
+          description: Current stock quantity available
+          minimum: 0
+          example: 25
+        price:
+          type: integer
+          description: Price of the item in game currency
+          minimum: 0
+          example: 50
+        category:
+          type: string
+          enum: [seeds, tools, decorations, consumables]
+          description: Item category
+          example: "seeds"
+        description:
+          type: string
+          description: Item description
+          example: "High-quality tomato seeds that grow into delicious tomatoes"
+        rarity:
+          type: string
+          enum: [common, uncommon, rare, epic, legendary]
+          description: Item rarity level
+          example: "common"
+        image_url:
+          type: string
+          format: uri
+          description: URL to the item's image
+          example: "https://example.com/images/tomato_seeds.png"
+        max_stock:
+          type: integer
+          description: Maximum stock quantity for this item
+          example: 50
+        growth_time:
+          type: integer
+          description: Time in minutes for seeds to grow (only applicable to seeds)
+          example: 120
+        is_seasonal:
+          type: boolean
+          description: Whether this item is only available during certain seasons
+          example: false
+
+    Weather:
+      type: object
+      required:
+        - condition
+        - temperature
+      properties:
+        condition:
+          type: string
+          enum: [sunny, cloudy, rainy, stormy, snowy]
+          description: Current weather condition
+          example: "sunny"
+        temperature:
+          type: number
+          format: float
+          description: Current temperature in Celsius
+          minimum: -50
+          maximum: 50
+          example: 22.5
+        humidity:
+          type: integer
+          description: Humidity percentage
+          minimum: 0
+          maximum: 100
+          example: 65
+        wind_speed:
+          type: number
+          format: float
+          description: Wind speed in km/h
+          minimum: 0
+          example: 12.3
+        description:
+          type: string
+          description: Human-readable weather description
+          example: "A beautiful sunny day perfect for gardening"
+        effects:
+          type: array
+          items:
+            type: string
+          description: Current weather effects on gameplay
+          example: ["Increased growth rate for all plants", "Higher chance of rare seed drops"]
+        forecast:
+          type: array
+          items:
+            $ref: '#/components/schemas/WeatherForecast'
+          description: Weather forecast for the next few periods
+        last_updated:
+          type: string
+          format: date-time
+          description: When the weather data was last updated
+          example: "2025-07-21T10:30:00Z"
+
+    WeatherForecast:
+      type: object
+      properties:
+        period:
+          type: integer
+          description: Hours from now
+          example: 6
+        condition:
+          type: string
+          enum: [sunny, cloudy, rainy, stormy, snowy]
+          example: "cloudy"
+        temperature:
+          type: number
+          format: float
+          example: 20.0
+
+    RestockTimer:
+      type: object
+      required:
+        - nextRestockInSeconds
+      properties:
+        nextRestockInSeconds:
+          type: integer
+          description: Seconds until the next shop restock
+          minimum: 0
+          example: 3600
+        nextRestockTime:
+          type: string
+          format: date-time
+          description: Exact timestamp when the next restock will occur
+          example: "2025-07-21T15:00:00Z"
+        restockFrequency:
+          type: integer
+          description: How often restocks occur (in seconds)
+          example: 14400
+        lastRestockTime:
+          type: string
+          format: date-time
+          description: When the last restock occurred
+          example: "2025-07-21T11:00:00Z"
+        restockType:
+          type: string
+          enum: [full, partial, seasonal]
+          description: Type of the next restock
+          example: "full"
+        estimatedNewItems:
+          type: integer
+          description: Estimated number of new items that will be restocked
+          example: 15
+
+    AllGameData:
+      type: object
+      required:
+        - stock
+        - weather
+        - restockTimer
+      properties:
+        stock:
+          type: array
+          items:
+            $ref: '#/components/schemas/StockItem'
+          description: Current stock information
+        weather:
+          $ref: '#/components/schemas/Weather'
+          description: Current weather conditions
+        restockTimer:
+          $ref: '#/components/schemas/RestockTimer'
+          description: Restock timing information
+        gameInfo:
+          $ref: '#/components/schemas/GameInfo'
+          description: Additional game information
+        timestamp:
+          type: string
+          format: date-time
+          description: When this data snapshot was created
+          example: "2025-07-21T12:00:00Z"
+
+    GameInfo:
+      type: object
+      properties:
+        serverTime:
+          type: string
+          format: date-time
+          description: Current server time
+          example: "2025-07-21T12:00:00Z"
+        season:
+          type: string
+          enum: [spring, summer, autumn, winter]
+          description: Current game season
+          example: "summer"
+        dayNumber:
+          type: integer
+          description: Current day number in the game
+          example: 147
+        activeEvents:
+          type: array
+          items:
+            $ref: '#/components/schemas/GameEvent'
+          description: Currently active in-game events
+        playerCount:
+          type: integer
+          description: Number of active players
+          example: 12450
+
+    GameEvent:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Event ID
+          example: 501
+        name:
+          type: string
+          description: Event name
+          example: "Summer Harvest Festival"
+        description:
+          type: string
+          description: Event description
+          example: "Double rewards for harvesting summer crops"
+        startTime:
+          type: string
+          format: date-time
+          example: "2025-07-20T00:00:00Z"
+        endTime:
+          type: string
+          format: date-time
+          example: "2025-07-27T23:59:59Z"
+        type:
+          type: string
+          enum: [seasonal, limited, daily, weekly]
+          example: "seasonal"
+
+    Error:
+      type: object
+      required:
+        - type
+        - title
+        - status
+      properties:
+        type:
+          type: string
+          description: Error type identifier
+          example: "validation_error"
+        title:
+          type: string
+          description: Human-readable error title
+          example: "Invalid API Key"
+        status:
+          type: integer
