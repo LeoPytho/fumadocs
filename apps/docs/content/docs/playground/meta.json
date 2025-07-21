@@ -1,0 +1,7 @@
+{
+  "title": "JKT48Connect PlayGround",
+  "description": "JKT48Connect RestAPI(API) Playground",
+  "root": true,
+  "icon": "Shapes",
+  "pages": ["index", "...(generated)"]
+}
