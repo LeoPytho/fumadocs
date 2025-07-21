@@ -3,12 +3,23 @@ import * as OpenAPI from 'fumadocs-openapi';
 import { rimraf } from 'rimraf';
 
 export async function generateDocs() {
-  await rimraf('./content/docs/openapi/(generated)');
+  // Clean up existing generated folders
+  await Promise.all([
+    rimraf('./content/docs/openapi/(generated)'),
+    rimraf('./content/docs/playground/(generated)')
+  ]);
 
+  // Generate documentation for both openapi and playground
   await Promise.all([
     OpenAPI.generateFiles({
       input: ['./scalar.yaml'],
       output: './content/docs/openapi/(generated)',
+      per: 'operation',
+      includeDescription: true,
+    }),
+    OpenAPI.generateFiles({
+      input: ['./growgarden.yaml'],
+      output: './content/docs/playground/(generated)',
       per: 'operation',
       includeDescription: true,
     }),
