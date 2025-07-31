@@ -64,8 +64,7 @@ export default function ApiKeyGenerator() {
           password: 'vzy',
           owner: owner.trim(),
           email: email.trim(),
-          type: 'free',
-          apikey: ''
+          type: 'free'
         }),
       });
 
