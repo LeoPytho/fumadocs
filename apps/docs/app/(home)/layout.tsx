@@ -62,18 +62,18 @@ export default function Layout({ children }: { children: ReactNode }) {
                   </div>
                   <p className="font-medium">Getting Started</p>
                   <p className="text-fd-muted-foreground text-sm">
-                    Learn to use Fumadocs on your docs site.
+                    Leaarn about jkt48connect.
                   </p>
                 </NavbarMenuLink>
 
                 <NavbarMenuLink
-                  href="/docs/ui/components"
+                  href="/docs/playground"
                   className="lg:col-start-2"
                 >
                   <ComponentIcon className="bg-fd-primary text-fd-primary-foreground p-1 mb-2 rounded-md" />
-                  <p className="font-medium">Components</p>
+                  <p className="font-medium">Grow A Garden Feature</p>
                   <p className="text-fd-muted-foreground text-sm">
-                    Add interactive experience to your docs.
+                    For gag player who want add gag system to apps.
                   </p>
                 </NavbarMenuLink>
 
@@ -82,10 +82,9 @@ export default function Layout({ children }: { children: ReactNode }) {
                   className="lg:col-start-2"
                 >
                   <Server className="bg-fd-primary text-fd-primary-foreground p-1 mb-2 rounded-md" />
-                  <p className="font-medium">OpenAPI</p>
+                  <p className="font-medium">JKT48Connect API</p>
                   <p className="text-fd-muted-foreground text-sm">
-                    Generate interactive playgrounds and docs for your OpenAPI
-                    schema.
+                    Playground untuk melihat ouput api secara realtime.
                   </p>
                 </NavbarMenuLink>
 
@@ -101,13 +100,13 @@ export default function Layout({ children }: { children: ReactNode }) {
                 </NavbarMenuLink>
 
                 <NavbarMenuLink
-                  href="/docs/ui/manual-installation"
+                  href="/docs/headless"
                   className="lg:col-start-3 lg:row-start-2"
                 >
                   <PlusIcon className="bg-fd-primary text-fd-primary-foreground p-1 mb-2 rounded-md" />
-                  <p className="font-medium">Manual Installation</p>
+                  <p className="font-medium">@jkt48/core</p>
                   <p className="text-fd-muted-foreground text-sm">
-                    Setup Fumadocs for your existing Next.js app.
+                    Dokumentasi untuk module npmjs.
                   </p>
                 </NavbarMenuLink>
               </NavbarMenuContent>
