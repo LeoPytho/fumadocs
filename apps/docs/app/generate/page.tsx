@@ -54,20 +54,12 @@ export default function ApiKeyGenerator() {
     setSuccess('');
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/admin/create-key?apikey=JKTCONNECT`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: 'vzy',
-          password: 'vzy',
-          owner: owner.trim(),
-          email: email.trim(),
-          type: 'free',
-          apikey: ''
-        }),
-      });
+  const response = await fetch(`${API_BASE_URL}/api/admin/create-key?username=vzy&password=vzy&owner=${encodeURIComponent(owner.trim())}&email=${encodeURIComponent(email.trim())}&type=free`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
 
       const result: ApiResponse = await response.json();
 
