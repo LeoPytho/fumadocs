@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { PlusIcon, CheckCircleIcon, XCircleIcon, KeyIcon, CopyIcon, RefreshCwIcon } from 'lucide-react';
 
