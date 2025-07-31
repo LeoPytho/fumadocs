@@ -89,17 +89,6 @@ export default function Layout({ children }: { children: ReactNode }) {
                 </NavbarMenuLink>
 
                 <NavbarMenuLink
-                  href="/docs/ui/markdown"
-                  className="lg:col-start-3 lg:row-start-1"
-                >
-                  <Pencil className="bg-fd-primary text-fd-primary-foreground p-1 mb-2 rounded-md" />
-                  <p className="font-medium">Markdown</p>
-                  <p className="text-fd-muted-foreground text-sm">
-                    Learn the writing format/syntax of Fumadocs.
-                  </p>
-                </NavbarMenuLink>
-
-                <NavbarMenuLink
                   href="/docs/headless"
                   className="lg:col-start-3 lg:row-start-2"
                 >
