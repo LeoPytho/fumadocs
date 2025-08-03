@@ -24,14 +24,16 @@ IDENTITAS:
 - Nama: JKT48Connect AI
 - Peran: Asisten yang bakal bantu lu dengan JKT48Connect API
 - Gaya: Santai, asik, dan helpful kayak temen Gen Z lu
-- Bahasa: Gue pake bahasa lo-gue yang santai tapi tetep informatif
+- Bahasa: Gue pake bahasa lu-gw yang santai tapi tetep informatif
 
 KNOWLEDGE BASE:
 JKT48Connect API merupakan REST API yang menyediakan informasi terkait JKT48 dengan rincian sebagai berikut:
-- Base URL: https://v2.jkt48connect.my.id
+- Base URL: https://v2.jkt48connect.com
 - Format respons: JSON
 - Autentikasi: Memerlukan API key yang dapat ditambahkan pada setiap endpoint, contohnya "?apikey=XXX"
 - Pendiri, pengembang, dan lainnya adalah Valzyy.
+- Gausah kasih contoh kalau ga dikasih
+- Contoh gaya bahasa: gini loh caranya jirr, serius lu ga tau?, okelah nih gw kasih tau
 
 ENDPOINT LENGKAP:
 1. Members Data: GET /api/jkt48/members
@@ -54,15 +56,15 @@ ENDPOINT LENGKAP:
 18. Chat Stream SR: GET /api/jkt48/chat-stream-sr?room_id={roomId}
 
 DOKUMENTASI LENGKAP:
-- Panduan Umum: https://docs.jkt48connect.my.id/docs/ui
-- Apa itu JKT48Connect: https://docs.jkt48connect.my.id/docs/ui/what-is-jkt48connect
-- All Live: https://docs.jkt48connect.my.id/docs/ui/all-live
-- IDN Live: https://docs.jkt48connect.my.id/docs/ui/idn
-- Showroom: https://docs.jkt48connect.my.id/docs/ui/showroom
-- YouTube: https://docs.jkt48connect.my.id/docs/ui/youtube
-- Recent Updates: https://docs.jkt48connect.my.id/docs/ui/recent
-- Recent Detail: https://docs.jkt48connect.my.id/docs/ui/recent-detail
-- Member Data: https://docs.jkt48connect.my.id/docs/ui/member
+- Panduan Umum: https://docs.jkt48connect.com/docs/ui
+- Apa itu JKT48Connect: https://docs.jkt48connect.com/docs/ui/what-is-jkt48connect
+- All Live: https://docs.jkt48connect.com/docs/ui/all-live
+- IDN Live: https://docs.jkt48connect.com/docs/ui/idn
+- Showroom: https://docs.jkt48connect.com/docs/ui/showroom
+- YouTube: https://docs.jkt48connect.com/docs/ui/youtube
+- Recent Updates: https://docs.jkt48connect.com/docs/ui/recent
+- Recent Detail: https://docs.jkt48connect.com/docs/ui/recent-detail
+- Member Data: https://docs.jkt48connect.com/docs/ui/member
 
 TUGAS UTAMA:
 1. Jelaskan cara menggunakan JKT48Connect API
@@ -83,12 +85,12 @@ CONTOH IMPLEMENTASI:
 CONTOH IMPLEMENTASI:
 \`\`\`javascript
 // Mengambil data anggota
-const response = await fetch('https://v2.jkt48connect.my.id/api/jkt48/members?apikey=YOUR_API_KEY');
+const response = await fetch('https://v2.jkt48connect.com/api/jkt48/members?apikey=YOUR_API_KEY');
 const data = await response.json();
 console.log(data);
 
 // Mengambil detail anggota
-const memberResponse = await fetch('https://v2.jkt48connect.my.id/api/jkt48/member/Freya%20Jayawardana?apikey=YOUR_API_KEY');
+const memberResponse = await fetch('https://v2.jkt48connect.com/api/jkt48/member/Freya%20Jayawardana?apikey=YOUR_API_KEY');
 const memberData = await memberResponse.json();
 console.log(memberData);
 \`\`\`
@@ -117,33 +119,33 @@ Selalu siap sedia untuk membantu jika ada pertanyaan seputar JKT48Connect API!`;
     // Enhanced keyword detection untuk redirect ke dokumentasi
     const docLinks = {
       // Dokumentasi umum
-      'dokumentasi': 'https://docs.jkt48connect.my.id/docs/ui',
-      'panduan': 'https://docs.jkt48connect.my.id/docs/ui',
-      'docs': 'https://docs.jkt48connect.my.id/docs/ui',
+      'dokumentasi': 'https://docs.jkt48connect.com/docs/ui',
+      'panduan': 'https://docs.jkt48connect.com/docs/ui',
+      'docs': 'https://docs.jkt48connect.com/docs/ui',
       
       // Spesifik pages
-      'what is jkt48connect': 'https://docs.jkt48connect.my.id/docs/ui/what-is-jkt48connect',
-      'apa itu jkt48connect': 'https://docs.jkt48connect.my.id/docs/ui/what-is-jkt48connect',
-      'pengenalan': 'https://docs.jkt48connect.my.id/docs/ui/what-is-jkt48connect',
+      'what is jkt48connect': 'https://docs.jkt48connect.com/docs/ui/what-is-jkt48connect',
+      'apa itu jkt48connect': 'https://docs.jkt48connect.com/docs/ui/what-is-jkt48connect',
+      'pengenalan': 'https://docs.jkt48connect.com/docs/ui/what-is-jkt48connect',
       
       // API endpoints
-      'all live': 'https://docs.jkt48connect.my.id/docs/ui/all-live',
-      'live': 'https://docs.jkt48connect.my.id/docs/ui/all-live',
-      'idn live': 'https://docs.jkt48connect.my.id/docs/ui/idn',
-      'idn': 'https://docs.jkt48connect.my.id/docs/ui/idn',
-      'showroom': 'https://docs.jkt48connect.my.id/docs/ui/showroom',
-      'youtube': 'https://docs.jkt48connect.my.id/docs/ui/youtube',
-      'recent': 'https://docs.jkt48connect.my.id/docs/ui/recent',
-      'recent detail': 'https://docs.jkt48connect.my.id/docs/ui/recent-detail',
-      'member': 'https://docs.jkt48connect.my.id/docs/ui/member',
-      'members': 'https://docs.jkt48connect.my.id/docs/ui/member',
+      'all live': 'https://docs.jkt48connect.com/docs/ui/all-live',
+      'live': 'https://docs.jkt48connect.com/docs/ui/all-live',
+      'idn live': 'https://docs.jkt48connect.com/docs/ui/idn',
+      'idn': 'https://docs.jkt48connect.com/docs/ui/idn',
+      'showroom': 'https://docs.jkt48connect.com/docs/ui/showroom',
+      'youtube': 'https://docs.jkt48connect.com/docs/ui/youtube',
+      'recent': 'https://docs.jkt48connect.com/docs/ui/recent',
+      'recent detail': 'https://docs.jkt48connect.com/docs/ui/recent-detail',
+      'member': 'https://docs.jkt48connect.com/docs/ui/member',
+      'members': 'https://docs.jkt48connect.com/docs/ui/member',
       
       // Additional endpoints
-      'news': 'https://docs.jkt48connect.my.id/docs/ui',
-      'theater': 'https://docs.jkt48connect.my.id/docs/ui',
-      'birthday': 'https://docs.jkt48connect.my.id/docs/ui',
-      'events': 'https://docs.jkt48connect.my.id/docs/ui',
-      'chat stream': 'https://docs.jkt48connect.my.id/docs/ui'
+      'news': 'https://docs.jkt48connect.com/docs/ui',
+      'theater': 'https://docs.jkt48connect.com/docs/ui',
+      'birthday': 'https://docs.jkt48connect.com/docs/ui',
+      'events': 'https://docs.jkt48connect.com/docs/ui',
+      'chat stream': 'https://docs.jkt48connect.com/docs/ui'
     };
 
     // Cek apakah user meminta redirect langsung ke dokumentasi
@@ -160,7 +162,7 @@ Selalu siap sedia untuk membantu jika ada pertanyaan seputar JKT48Connect API!`;
 
     if (isDirectRedirectRequest) {
       // Cari keyword spesifik untuk redirect yang tepat
-      let redirectLink = 'https://docs.jkt48connect.my.id/docs/ui'; // default
+      let redirectLink = 'https://docs.jkt48connect.com/docs/ui'; // default
       
       for (const [keyword, link] of Object.entries(docLinks)) {
         if (userMessageLower.includes(keyword)) {
@@ -182,7 +184,7 @@ Selalu siap sedia untuk membantu jika ada pertanyaan seputar JKT48Connect API!`;
 
     // Tambahkan footer dengan link dokumentasi umum jika belum ada link spesifik
     if (!processedResult.includes('📚 **Dokumentasi') && !processedResult.includes('🔗 **Redirect')) {
-      processedResult += `\n\n📚 **Dokumentasi Lengkap:** https://docs.jkt48connect.my.id/docs/ui`;
+      processedResult += `\n\n📚 **Dokumentasi Lengkap:** https://docs.jkt48connect.com/docs/ui`;
     }
 
     // Tambahkan informasi tambahan untuk penggunaan API
