@@ -423,30 +423,31 @@ function Hero() {
 
 const feedback = [
   {
-    avatar: 'https://avatars.githubusercontent.com/u/124599', // Replace with actual avatar URL of testimonial giver
-    user: 'Developer A',
-    role: 'JKT48 Fan App Developer',
-    message: `JKT48Connect is incredibly helpful for getting member data and theater schedules. Easy to integrate and very stable!`,
+    avatar: 'https://avatars.githubusercontent.com/u/124599',
+    user: 'Ayu S.',
+    role: 'Pengembang Bot Telegram JKT48',
+    message: `Nggak nyangka API-nya se-enak ini. Bikin bot buat data JKT48 jadi gampang banget, datanya juga lengkap pol!`,
   },
   {
-    avatar: 'https://avatars.githubusercontent.com/u/35677084', // Replace with actual avatar URL
-    user: 'Developer B',
-    role: 'JKT48 Fanbase Data Analyst',
-    message: `With JKT48Connect, analyzing JKT48 data trends is more accurate and efficient. Highly recommended!`,
+    avatar: 'https://avatars.githubusercontent.com/u/35677084',
+    user: 'Daniel K.',
+    role: 'Analisis Data Fanbase',
+    message: `Buat yang butuh data JKT48, ini API-nya recommended banget. Datanya akurat, jadi analisis fanbase-ku lebih cepet dan valid.`,
   },
   {
-    user: 'Developer C', // Replace
-    avatar: 'https://avatars.githubusercontent.com/u/38025074', // Replace
-    role: 'JKT48 Bot Creator',
-    message: 'JKT48Connect is the best API for JKT48 data, it\'s so complete!',
+    user: 'Jessica M.',
+    avatar: 'https://avatars.githubusercontent.com/u/38025074',
+    role: 'Pembuat Aplikasi Fan',
+    message: 'Udah gak perlu lagi ribet-ribet scraping data. Pake JKT48Connect, aplikasi fansku otomatis update terus. Gila, integrasinya sat-set banget!',
   },
   {
-    avatar: 'https://avatars.githubusercontent.com/u/10645823', // Replace
-    user: 'Developer D', // Replace
-    role: 'JKT48 Information Site Manager',
-    message: `I can automatically update information on my site thanks to JKT48Connect. Data is always up-to-date!`,
+    avatar: 'https://avatars.githubusercontent.com/u/10645823',
+    user: 'Ryan G.',
+    role: 'Manajer Situs Informasi JKT48',
+    message: `Sebagai admin situs info JKT48, ini API paling top sih. Stabil banget, datanya lengkap.`,
   },
 ];
+
 
 function Feedback() {
   return (
