@@ -1,0 +1,283 @@
+
+---
+title: Recent Live
+description: Get recent JKT48 live stream data using @jkt48/core module
+icon: Video
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## What is Recent Live API?
+
+The Recent Live API from `@jkt48/core` allows you to retrieve the latest live stream activity from JKT48 members. This includes both SHOWROOM and IDN Live sessions with detailed information such as member profile, duration, viewers, and total gifts.
+
+- Latest live streams from all platforms
+- Includes member details (profile, nickname, graduation status)
+- Gift, points, and viewer stats
+- Support for both official and individual member rooms
+
+<Callout>
+You can use this endpoint to track real-time or recent member live streaming activity. Data is updated frequently.
+</Callout>
+
+## Installation
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tab>
+
+```bash
+npm install @jkt48/core
+````
+
+</Tab>
+<Tab>
+
+```bash
+yarn add @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+pnpm add @jkt48/core
+```
+
+</Tab>
+</Tabs>
+
+## Basic Usage
+
+\<Tabs items={\['CommonJS', 'ES Modules']}> <Tab>
+
+```javascript
+const jkt48Api = require('@jkt48/core');
+
+// Get recent live data
+async function getRecentLives() {
+  const apiKey = 'your-api-key-here';
+  const recent = await jkt48Api.recent(apiKey);
+  console.log(recent);
+}
+
+getRecentLives();
+```
+
+</Tab>
+<Tab>
+
+```javascript
+import { recent } from '@jkt48/core';
+
+// Get recent live data
+async function getRecentLives() {
+  const apiKey = 'your-api-key-here';
+  const recentList = await recent(apiKey);
+  console.log(recentList);
+}
+
+getRecentLives();
+```
+
+</Tab>
+</Tabs>
+
+<Callout title="Warning" type="error">
+Never expose your API key in public repositories or client-side code.
+</Callout>
+
+## API Key Required
+
+<Callout title="Important">
+A valid API key is required to access recent live data.
+</Callout>
+
+### Purchase Options
+
+<Cards>
+<Card
+  title="Website Purchase"
+  href="https://www.jkt48connect.my.id/buyapi"
+  description="Get your API key directly via our official site"
+/>
+
+<Card
+title="WhatsApp Bot"
+description="Order your API key via automated WhatsApp chat"
+/>
+
+<Card
+title="Discord Bot"
+description="Use our Discord bot to buy your API key"
+/> </Cards>
+
+## Response Structure
+
+The `recent()` function returns an array of live stream objects with rich metadata:
+
+<AutoTypeTable>
+
+```ts
+{
+  _id: string;
+  data_id: string;
+  type: 'showroom' | 'idn';
+  room_id: number;
+  points: number;
+  gift_rate: number;
+  total_gift: string;
+  created_at: string;
+  idn?: {
+    id: string;
+    username: string;
+    slug: string;
+    title: string;
+    image: string;
+  };
+  member: {
+    name: string;
+    nickname?: string;
+    img: string;
+    img_alt: string;
+    url: string;
+    is_graduate: boolean;
+    is_official: boolean;
+  };
+  live_info: {
+    duration: number;
+    viewers: {
+      num: number;
+      is_excitement: boolean;
+    };
+    date: {
+      start: string;
+      end: string;
+    };
+  };
+}
+```
+
+</AutoTypeTable>
+
+## Sample Response
+
+```json
+[
+  {
+    "_id": "68935520b38b7c0a4fc683ad",
+    "data_id": "125470731754485401",
+    "type": "idn",
+    "room_id": 547073,
+    "points": 138,
+    "gift_rate": 2500,
+    "total_gift": "Rp 345.000",
+    "created_at": "2025-08-06T13:14:04.450Z",
+    "idn": {
+      "id": "cbc0bbe1-d6ea-4646-bfcf-24b3a642fa21",
+      "username": "jkt48_intan",
+      "slug": "bub-250806200302",
+      "title": "bub",
+      "image": "https://cdn.idntimes.com/..."
+    },
+    "member": {
+      "name": "Intan / インタン (JKT48)",
+      "nickname": "Intan",
+      "img": "https://static.showroom-live.com/image/room/cover/...",
+      "img_alt": "https://res.cloudinary.com/.../nur_intan.jpg",
+      "url": "intan",
+      "is_graduate": false,
+      "is_official": false
+    },
+    "live_info": {
+      "duration": 642696,
+      "viewers": {
+        "num": 1236,
+        "is_excitement": false
+      },
+      "date": {
+        "start": "2025-08-06T13:03:21.754Z",
+        "end": "2025-08-06T13:14:04.450Z"
+      }
+    }
+  }
+]
+```
+
+## Advanced Example: Print Summary of Recent Lives
+
+```javascript
+import { recent } from '@jkt48/core';
+
+async function showRecentLives() {
+  const apiKey = 'your-api-key-here';
+  const recentLives = await recent(apiKey);
+
+  recentLives.forEach(live => {
+    const { name, nickname } = live.member;
+    const platform = live.type.toUpperCase();
+    const duration = Math.round(live.live_info.duration / 60000); // convert ms to minutes
+    console.log(`${name} (${nickname}) streamed on ${platform} for ${duration} minutes.`);
+  });
+}
+
+showRecentLives();
+```
+
+## Use Cases
+
+<Cards>
+<Card
+  title="Live Feed Widget"
+  description="Show who recently went live on your app"
+/>
+<Card
+  title="Performance Analytics"
+  description="Track streaming frequency, duration, and audience"
+/>
+<Card
+  title="Fan Engagement"
+  description="Notify fans of recent broadcasts"
+/>
+</Cards>
+
+## Getting Started
+
+<Steps>
+<Step>
+
+### Install the Package
+
+```bash
+npm install @jkt48/core
+```
+
+</Step>
+
+<Step>
+
+### Get an API Key
+
+Visit [jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi) to obtain your access key.
+
+</Step>
+
+<Step>
+
+### Use `recent(apiKey)`
+
+Call the function to retrieve a list of recent lives.
+
+</Step>
+
+<Step>
+
+### Display or Process
+
+You can show the data on a dashboard, send push notifications, or analyze it for insights.
+
+</Step>
+</Steps>
+
+<Callout title="Support">
+Need help? Contact us at **support@jkt48connect.my.id** or **+62 857-0147-9245**
+</Callout>
