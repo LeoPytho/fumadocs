@@ -1,33 +1,38 @@
 
 ---
 title: Recent Live
-description: Get recent JKT48 live stream data using @jkt48/core module
+description: Get recent JKT48 live streaming data using @jkt48/core module
 icon: Video
 ---
-
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 ## What is Recent Live API?
 
-The Recent Live API from `@jkt48/core` allows you to retrieve the latest live stream activity from JKT48 members. This includes both SHOWROOM and IDN Live sessions with detailed information such as member profile, duration, viewers, and total gifts.
+The Recent Live API from @jkt48/core allows you to retrieve comprehensive information about recent JKT48 member live streaming sessions. This endpoint provides detailed live stream data including member information, viewer statistics, gift totals, and platform details in a single API call.
 
-- Latest live streams from all platforms
-- Includes member details (profile, nickname, graduation status)
-- Gift, points, and viewer stats
-- Support for both official and individual member rooms
+- Complete live stream records from SHOWROOM and IDN platforms
+- Member profile information and social media data
+- Live stream duration and viewer statistics
+- Gift totals and monetization data
+- Platform-specific metadata (IDN Live and SHOWROOM)
+- Real-time streaming status tracking
 
 <Callout>
-You can use this endpoint to track real-time or recent member live streaming activity. Data is updated frequently.
+This API endpoint returns data for recent live streaming sessions from all JKT48 members across multiple platforms, providing comprehensive streaming analytics.
+
+All features require an API key for authentication and access.
 </Callout>
 
 ## Installation
+
+The module is available on NPM and can be installed easily:
 
 <Tabs items={['npm', 'yarn', 'pnpm']}>
 <Tab>
 
 ```bash
 npm install @jkt48/core
-````
+```
 
 </Tab>
 <Tab>
@@ -48,16 +53,23 @@ pnpm add @jkt48/core
 
 ## Basic Usage
 
-\<Tabs items={\['CommonJS', 'ES Modules']}> <Tab>
+Here's how to get recent JKT48 live streaming data:
+
+<Tabs items={['CommonJS', 'ES Modules']}>
+<Tab>
 
 ```javascript
 const jkt48Api = require('@jkt48/core');
 
-// Get recent live data
+// Get recent live streams
 async function getRecentLives() {
-  const apiKey = 'your-api-key-here';
-  const recent = await jkt48Api.recent(apiKey);
-  console.log(recent);
+  try {
+    const apiKey = 'your-api-key-here';
+    const recent = await jkt48Api.recent(apiKey);
+    console.log(recent);
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
 getRecentLives();
@@ -69,11 +81,15 @@ getRecentLives();
 ```javascript
 import { recent } from '@jkt48/core';
 
-// Get recent live data
+// Get recent live streams
 async function getRecentLives() {
-  const apiKey = 'your-api-key-here';
-  const recentList = await recent(apiKey);
-  console.log(recentList);
+  try {
+    const apiKey = 'your-api-key-here';
+    const recentList = await recent(apiKey);
+    console.log(recentList);
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
 getRecentLives();
@@ -83,50 +99,104 @@ getRecentLives();
 </Tabs>
 
 <Callout title="Warning" type="error">
-Never expose your API key in public repositories or client-side code.
+Make sure to keep your API key secure and never expose it in client-side code or public repositories.
 </Callout>
 
 ## API Key Required
 
 <Callout title="Important">
-A valid API key is required to access recent live data.
+All features in this module require a valid API key to function properly.
 </Callout>
+
+To get your API key, you have several options:
 
 ### Purchase Options
 
 <Cards>
+
 <Card
   title="Website Purchase"
   href="https://www.jkt48connect.my.id/buyapi"
-  description="Get your API key directly via our official site"
+  description="Buy your API key directly from the official website"
 />
 
 <Card
-title="WhatsApp Bot"
-description="Order your API key via automated WhatsApp chat"
+  title="WhatsApp Bot"
+  description="Get your API key through our WhatsApp bot service"
 />
 
 <Card
-title="Discord Bot"
-description="Use our Discord bot to buy your API key"
-/> </Cards>
+  title="Discord Bot"
+  description="Purchase via our Discord bot for quick access"
+/>
 
-## Response Structure
+</Cards>
 
-The `recent()` function returns an array of live stream objects with rich metadata:
+### Support & Contact
+
+Need help or have questions? We're here to assist you:
+
+<Steps>
+<Step>
+
+### Email Support
+Send your inquiries to: **support@jkt48connect.my.id**
+
+</Step>
+
+<Step>
+
+### WhatsApp Support
+Contact us directly: **+62 857-0147-9245**
+
+</Step>
+
+<Step>
+
+### Phone Support
+Call us directly for immediate assistance
+
+</Step>
+</Steps>
+
+## Project Structure
+
+When working with @jkt48/core for recent live data, here's a recommended project structure:
+
+<Files>
+  <Folder name="src" defaultOpen>
+    <File name="index.js" />
+    <File name="config.js" />
+    <Folder name="services">
+      <File name="liveStreamService.js" />
+      <File name="dataProcessor.js" />
+      <File name="analyticsHelper.js" />
+    </Folder>
+    <Folder name="utils">
+      <File name="apiHelper.js" />
+      <File name="errorHandler.js" />
+    </Folder>
+  </Folder>
+  <Folder name="tests">
+    <File name="recent.test.js" />
+    <File name="liveData.test.js" />
+  </Folder>
+  <File name="package.json" />
+  <File name=".env" />
+  <File name="README.md" />
+</Files>
+
+## API Response Structure
+
+The @jkt48/core recent endpoint returns an array of live stream objects with the following structure:
+
+### Recent Live Data Type
 
 <AutoTypeTable>
-
 ```ts
 {
   _id: string;
   data_id: string;
-  type: 'showroom' | 'idn';
-  room_id: number;
-  points: number;
-  gift_rate: number;
-  total_gift: string;
-  created_at: string;
   idn?: {
     id: string;
     username: string;
@@ -137,12 +207,13 @@ The `recent()` function returns an array of live stream objects with rich metada
   member: {
     name: string;
     nickname?: string;
-    img: string;
     img_alt: string;
+    img: string;
     url: string;
     is_graduate: boolean;
     is_official: boolean;
   };
+  created_at: string;
   live_info: {
     duration: number;
     viewers: {
@@ -154,40 +225,41 @@ The `recent()` function returns an array of live stream objects with rich metada
       end: string;
     };
   };
+  gift_rate: number;
+  room_id: number;
+  points: number;
+  type: "idn" | "showroom";
+  total_gift: string;
 }
 ```
-
 </AutoTypeTable>
 
 ## Sample Response
+
+Here's an example of the data structure returned by the recent live API:
 
 ```json
 [
   {
     "_id": "68935520b38b7c0a4fc683ad",
     "data_id": "125470731754485401",
-    "type": "idn",
-    "room_id": 547073,
-    "points": 138,
-    "gift_rate": 2500,
-    "total_gift": "Rp 345.000",
-    "created_at": "2025-08-06T13:14:04.450Z",
     "idn": {
       "id": "cbc0bbe1-d6ea-4646-bfcf-24b3a642fa21",
       "username": "jkt48_intan",
       "slug": "bub-250806200302",
       "title": "bub",
-      "image": "https://cdn.idntimes.com/..."
+      "image": "https://cdn.idntimes.com/content-images/post/20250806/cbc0bbe1-d6ea-4646-bfcf-24b3a642fa21-250806200302.jpg"
     },
     "member": {
       "name": "Intan / インタン (JKT48)",
       "nickname": "Intan",
-      "img": "https://static.showroom-live.com/image/room/cover/...",
-      "img_alt": "https://res.cloudinary.com/.../nur_intan.jpg",
+      "img_alt": "https://res.cloudinary.com/haymzm4wp/image/upload/v1733164660/jkt48/kabesha-gen13/nur_intan.jpg",
+      "img": "https://static.showroom-live.com/image/room/cover/a1e1c18ae74668eb568ed90208dbde1afbb55ca8d5049387d5c06ffbfe11d41c_m.jpeg?v=1743174498",
       "url": "intan",
       "is_graduate": false,
       "is_official": false
     },
+    "created_at": "2025-08-06T13:14:04.450Z",
     "live_info": {
       "duration": 642696,
       "viewers": {
@@ -198,86 +270,242 @@ The `recent()` function returns an array of live stream objects with rich metada
         "start": "2025-08-06T13:03:21.754Z",
         "end": "2025-08-06T13:14:04.450Z"
       }
-    }
+    },
+    "gift_rate": 2500,
+    "room_id": 547073,
+    "points": 138,
+    "type": "idn",
+    "total_gift": "Rp 345.000"
   }
 ]
 ```
 
-## Advanced Example: Print Summary of Recent Lives
+## Data Field Explanations
+
+<Accordions type="single">
+
+<Accordion title="Basic Information">
+- **_id**: Unique identifier for the live stream record
+- **data_id**: Platform-specific data identifier
+- **type**: Streaming platform ("idn" or "showroom")
+- **created_at**: Timestamp when the live stream ended
+</Accordion>
+
+<Accordion title="Member Information">
+- **member.name**: Full name of the streaming member
+- **member.nickname**: Member's nickname or stage name
+- **member.img**: Primary profile image URL
+- **member.img_alt**: Alternative high-quality profile image
+- **member.url**: URL-friendly member identifier
+- **member.is_graduate**: Whether the member has graduated
+- **member.is_official**: Whether this is an official JKT48 account
+</Accordion>
+
+<Accordion title="Live Stream Data">
+- **live_info.duration**: Stream duration in milliseconds
+- **live_info.viewers.num**: Peak viewer count
+- **live_info.viewers.is_excitement**: Whether the stream reached excitement mode
+- **live_info.date.start**: Stream start timestamp
+- **live_info.date.end**: Stream end timestamp
+</Accordion>
+
+<Accordion title="Platform Specific">
+- **idn**: IDN Live platform data (present for IDN streams)
+- **room_id**: Platform room identifier
+- **gift_rate**: Gift conversion rate
+- **points**: Points earned from gifts
+- **total_gift**: Total gift amount in Indonesian Rupiah
+</Accordion>
+
+</Accordions>
+
+## Advanced Examples
+
+### Processing Recent Live Data
 
 ```javascript
-import { recent } from '@jkt48/core';
+const jkt48Api = require('@jkt48/core');
 
-async function showRecentLives() {
-  const apiKey = 'your-api-key-here';
-  const recentLives = await recent(apiKey);
-
-  recentLives.forEach(live => {
-    const { name, nickname } = live.member;
-    const platform = live.type.toUpperCase();
-    const duration = Math.round(live.live_info.duration / 60000); // convert ms to minutes
-    console.log(`${name} (${nickname}) streamed on ${platform} for ${duration} minutes.`);
-  });
+async function processRecentLives() {
+  try {
+    const apiKey = 'your-api-key-here';
+    const recent = await jkt48Api.recent(apiKey);
+    
+    // Separate by platform
+    const idnStreams = recent.filter(stream => stream.type === 'idn');
+    const showroomStreams = recent.filter(stream => stream.type === 'showroom');
+    
+    console.log(`Total streams: ${recent.length}`);
+    console.log(`IDN streams: ${idnStreams.length}`);
+    console.log(`SHOWROOM streams: ${showroomStreams.length}`);
+    
+    // Calculate total earnings
+    const totalEarnings = recent.reduce((sum, stream) => {
+      const amount = parseInt(stream.total_gift.replace(/[^\d]/g, ''));
+      return sum + amount;
+    }, 0);
+    
+    console.log(`Total earnings: Rp ${totalEarnings.toLocaleString('id-ID')}`);
+  } catch (error) {
+    console.error('Error fetching recent lives:', error.message);
+  }
 }
-
-showRecentLives();
 ```
 
-## Use Cases
+### Get Top Performing Streams
+
+```javascript
+async function getTopStreams() {
+  try {
+    const apiKey = 'your-api-key-here';
+    const recent = await jkt48Api.recent(apiKey);
+    
+    // Sort by viewer count
+    const topByViewers = recent
+      .sort((a, b) => b.live_info.viewers.num - a.live_info.viewers.num)
+      .slice(0, 5);
+    
+    console.log('Top 5 streams by viewers:');
+    topByViewers.forEach((stream, index) => {
+      console.log(`${index + 1}. ${stream.member.nickname} - ${stream.live_info.viewers.num} viewers`);
+    });
+    
+    // Sort by gift earnings
+    const topByGifts = recent
+      .sort((a, b) => {
+        const aAmount = parseInt(a.total_gift.replace(/[^\d]/g, ''));
+        const bAmount = parseInt(b.total_gift.replace(/[^\d]/g, ''));
+        return bAmount - aAmount;
+      })
+      .slice(0, 5);
+    
+    console.log('\nTop 5 streams by earnings:');
+    topByGifts.forEach((stream, index) => {
+      console.log(`${index + 1}. ${stream.member.nickname} - ${stream.total_gift}`);
+    });
+  } catch (error) {
+    console.error('Error processing top streams:', error.message);
+  }
+}
+```
+
+### Filter by Member
+
+```javascript
+async function getMemberStreams(memberName) {
+  try {
+    const apiKey = 'your-api-key-here';
+    const recent = await jkt48Api.recent(apiKey);
+    
+    const memberStreams = recent.filter(stream => 
+      stream.member.name.toLowerCase().includes(memberName.toLowerCase()) ||
+      (stream.member.nickname && stream.member.nickname.toLowerCase().includes(memberName.toLowerCase()))
+    );
+    
+    if (memberStreams.length > 0) {
+      console.log(`Found ${memberStreams.length} recent streams for ${memberName}:`);
+      memberStreams.forEach(stream => {
+        const duration = Math.floor(stream.live_info.duration / 60000); // Convert to minutes
+        console.log(`- ${stream.live_info.date.start}: ${duration} mins, ${stream.live_info.viewers.num} viewers, ${stream.total_gift}`);
+      });
+    } else {
+      console.log(`No recent streams found for ${memberName}`);
+    }
+  } catch (error) {
+    console.error('Error searching member streams:', error.message);
+  }
+}
+
+// Usage
+getMemberStreams('Intan');
+```
+
+<Callout title="Tip">
+Always handle errors properly when making API calls and consider implementing caching for frequently accessed live stream data to improve performance and reduce API usage.
+</Callout>
+
+## Common Use Cases
 
 <Cards>
+
 <Card
-  title="Live Feed Widget"
-  description="Show who recently went live on your app"
+  title="Live Stream Analytics"
+  description="Analyze streaming performance, viewer engagement, and earnings"
 />
+
 <Card
-  title="Performance Analytics"
-  description="Track streaming frequency, duration, and audience"
+  title="Member Activity Tracker"
+  description="Track which members are most active on streaming platforms"
 />
+
 <Card
-  title="Fan Engagement"
-  description="Notify fans of recent broadcasts"
+  title="Platform Comparison"
+  description="Compare performance between IDN Live and SHOWROOM platforms"
 />
+
+<Card
+  title="Revenue Dashboard"
+  description="Create dashboards showing gift earnings and monetization data"
+/>
+
 </Cards>
 
 ## Getting Started
 
+Ready to start working with JKT48 recent live data? Follow these steps:
+
 <Steps>
 <Step>
 
-### Install the Package
+### Install the Module
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tab>
 
 ```bash
 npm install @jkt48/core
 ```
 
+</Tab>
+<Tab>
+
+```bash
+yarn add @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+pnpm add @jkt48/core
+```
+
+</Tab>
+</Tabs>
+
 </Step>
 
 <Step>
 
-### Get an API Key
-
-Visit [jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi) to obtain your access key.
-
-</Step>
-
-<Step>
-
-### Use `recent(apiKey)`
-
-Call the function to retrieve a list of recent lives.
+### Get Your API Key
+Visit [jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi) to purchase your API key
 
 </Step>
 
 <Step>
 
-### Display or Process
+### Fetch Recent Live Data
+Use `const recent = await jkt48Api.recent(apiKey);` to get recent streaming information
 
-You can show the data on a dashboard, send push notifications, or analyze it for insights.
+</Step>
+
+<Step>
+
+### Analyze & Display
+Process the live stream data according to your analytics needs
 
 </Step>
 </Steps>
 
 <Callout title="Support">
-Need help? Contact us at **support@jkt48connect.my.id** or **+62 857-0147-9245**
+Need additional help? Don't hesitate to reach out to our support team at **support@jkt48connect.my.id** or **+62 857-0147-9245**.
 </Callout>
