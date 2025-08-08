@@ -1,0 +1,702 @@
+---
+title: Recent Live
+description: Get recent JKT48 live streaming data from all platforms using @jkt48/core module
+icon: Clock
+---
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## What is Recent Live API?
+
+The Recent Live API from @jkt48/core allows you to retrieve information about recently ended JKT48 live streams across all supported platforms including YouTube, IDN Live, and SHOWROOM. This endpoint provides comprehensive historical streaming data with stream details, member information, and platform-specific metadata for recently concluded streams.
+
+- Recently ended streams from all platforms (YouTube, IDN, SHOWROOM)
+- Stream duration and timestamps
+- Member profile information with images
+- Platform-specific metadata and room IDs
+- Stream titles and descriptions
+- View counts and engagement metrics
+
+<Callout>
+This API endpoint returns data about recently ended live streams, making it perfect for building stream history dashboards and analytics tools.
+
+All features require an API key for authentication and access.
+</Callout>
+
+## Installation
+
+The module is available on NPM and can be installed easily:
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tab>
+
+```bash
+npm install @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+yarn add @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+pnpm add @jkt48/core
+```
+
+</Tab>
+</Tabs>
+
+## Basic Usage
+
+Here's how to get recent JKT48 live streaming data from all platforms:
+
+<Tabs items={['CommonJS', 'ES Modules']}>
+<Tab>
+
+```javascript
+const jkt48Api = require('@jkt48/core');
+
+// Get recent live streams from all platforms
+async function getRecentLiveStreams() {
+  try {
+    const apiKey = 'your-api-key-here';
+    const recentLive = await jkt48Api.liveRecent(apiKey);
+    console.log(recentLive);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+getRecentLiveStreams();
+```
+
+</Tab>
+<Tab>
+
+```javascript
+import { liveRecent } from '@jkt48/core';
+
+// Get recent live streams from all platforms
+async function getRecentLiveStreams() {
+  try {
+    const apiKey = 'your-api-key-here';
+    const recentLive = await liveRecent(apiKey);
+    console.log(recentLive);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+getRecentLiveStreams();
+```
+
+</Tab>
+</Tabs>
+
+<Callout title="Warning" type="error">
+Make sure to keep your API key secure and never expose it in client-side code or public repositories.
+</Callout>
+
+## Platform-Specific Endpoints
+
+You can also get recent live data from specific platforms:
+
+### YouTube Recent Live
+
+<Tabs items={['CommonJS', 'ES Modules']}>
+<Tab>
+
+```javascript
+// Get recent YouTube live streams only
+const recentYoutube = await jkt48Api.liveYoutubeRecent(apiKey);
+```
+
+</Tab>
+<Tab>
+
+```javascript
+import { liveYoutubeRecent } from '@jkt48/core';
+
+const ytRecentLive = await liveYoutubeRecent(apiKey);
+```
+
+</Tab>
+</Tabs>
+
+### IDN Recent Live
+
+<Tabs items={['CommonJS', 'ES Modules']}>
+<Tab>
+
+```javascript
+// Get recent IDN live streams only
+const recentIdn = await jkt48Api.liveIdnRecent(apiKey);
+```
+
+</Tab>
+<Tab>
+
+```javascript
+import { liveIdnRecent } from '@jkt48/core';
+
+const idnRecentLive = await liveIdnRecent(apiKey);
+```
+
+</Tab>
+</Tabs>
+
+### SHOWROOM Recent Live
+
+<Tabs items={['CommonJS', 'ES Modules']}>
+<Tab>
+
+```javascript
+// Get recent SHOWROOM live streams only
+const recentShowroom = await jkt48Api.liveShowroomRecent(apiKey);
+```
+
+</Tab>
+<Tab>
+
+```javascript
+import { liveShowroomRecent } from '@jkt48/core';
+
+const showroomRecentLive = await liveShowroomRecent(apiKey);
+```
+
+</Tab>
+</Tabs>
+
+## API Key Required
+
+<Callout title="Important">
+All features in this module require a valid API key to function properly.
+</Callout>
+
+To get your API key, you have several options:
+
+### Purchase Options
+
+<Cards>
+
+<Card
+  title="Website Purchase"
+  href="https://www.jkt48connect.my.id/buyapi"
+  description="Buy your API key directly from the official website"
+/>
+
+<Card
+  title="WhatsApp Bot"
+  description="Get your API key through our WhatsApp bot service"
+/>
+
+<Card
+  title="Discord Bot"
+  description="Purchase via our Discord bot for quick access"
+/>
+
+</Cards>
+
+### Support & Contact
+
+Need help or have questions? We're here to assist you:
+
+<Steps>
+<Step>
+
+### Email Support
+Send your inquiries to: **support@jkt48connect.my.id**
+
+</Step>
+
+<Step>
+
+### WhatsApp Support
+Contact us directly: **+62 857-0147-9245**
+
+</Step>
+
+<Step>
+
+### Phone Support
+Call us directly for immediate assistance
+
+</Step>
+</Steps>
+
+## Project Structure
+
+When working with @jkt48/core for recent live streaming data, here's a recommended project structure:
+
+<Files>
+  <Folder name="src" defaultOpen>
+    <File name="index.js" />
+    <File name="config.js" />
+    <Folder name="services">
+      <File name="recentLiveService.js" />
+      <File name="historyAnalyzer.js" />
+      <File name="streamArchive.js" />
+    </Folder>
+    <Folder name="utils">
+      <File name="apiHelper.js" />
+      <File name="errorHandler.js" />
+      <File name="dataProcessor.js" />
+    </Folder>
+  </Folder>
+  <Folder name="tests">
+    <File name="recentLive.test.js" />
+    <File name="streamHistory.test.js" />
+  </Folder>
+  <File name="package.json" />
+  <File name=".env" />
+  <File name="README.md" />
+</Files>
+
+## API Response Structure
+
+The @jkt48/core recent live endpoint returns an array of recently ended live stream objects with the following structure:
+
+### Recent Live Stream Data Type
+
+<AutoTypeTable>
+```ts
+{
+  name: string;
+  img: string;
+  img_alt: string;
+  url_key: string;
+  slug: string;
+  room_id: number;
+  is_graduate: boolean;
+  is_group: boolean;
+  title: string;
+  description: string;
+  started_at: string;
+  ended_at: string;
+  duration: number;
+  view_count?: number;
+  like_count?: number;
+  comment_count?: number;
+  type: "youtube" | "idn" | "showroom";
+}
+```
+</AutoTypeTable>
+
+## Advanced Examples
+
+### Filter Recent Streams by Date Range
+
+```javascript
+const jkt48Api = require('@jkt48/core');
+
+async function getRecentStreamsByDateRange(startDate, endDate) {
+  try {
+    const apiKey = 'your-api-key-here';
+    const recentLive = await jkt48Api.liveRecent(apiKey);
+    
+    const filteredStreams = recentLive.filter(stream => {
+      const streamDate = new Date(stream.ended_at);
+      return streamDate >= startDate && streamDate <= endDate;
+    });
+    
+    console.log(`Recent streams from ${startDate.toDateString()} to ${endDate.toDateString()}:`);
+    filteredStreams.forEach(stream => {
+      console.log(`${stream.name}: ${stream.title} (${Math.floor(stream.duration / 60)}m)`);
+    });
+    
+    return filteredStreams;
+  } catch (error) {
+    console.error('Error filtering streams by date:', error.message);
+  }
+}
+
+// Usage: Get streams from last 7 days
+const lastWeek = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+const today = new Date();
+getRecentStreamsByDateRange(lastWeek, today);
+```
+
+### Stream Analytics Dashboard
+
+```javascript
+async function createRecentStreamAnalytics() {
+  try {
+    const apiKey = 'your-api-key-here';
+    const recentLive = await jkt48Api.liveRecent(apiKey);
+    
+    // Calculate analytics
+    const analytics = {
+      totalStreams: recentLive.length,
+      totalDuration: recentLive.reduce((sum, stream) => sum + stream.duration, 0),
+      averageDuration: 0,
+      platformBreakdown: {},
+      memberStats: {},
+      viewStats: {
+        total: 0,
+        average: 0,
+        highest: null
+      }
+    };
+    
+    // Process each stream
+    recentLive.forEach(stream => {
+      // Platform breakdown
+      if (!analytics.platformBreakdown[stream.type]) {
+        analytics.platformBreakdown[stream.type] = { count: 0, duration: 0 };
+      }
+      analytics.platformBreakdown[stream.type].count++;
+      analytics.platformBreakdown[stream.type].duration += stream.duration;
+      
+      // Member statistics
+      if (!analytics.memberStats[stream.name]) {
+        analytics.memberStats[stream.name] = { streams: 0, totalDuration: 0 };
+      }
+      analytics.memberStats[stream.name].streams++;
+      analytics.memberStats[stream.name].totalDuration += stream.duration;
+      
+      // View statistics
+      if (stream.view_count) {
+        analytics.viewStats.total += stream.view_count;
+        if (!analytics.viewStats.highest || stream.view_count > analytics.viewStats.highest.view_count) {
+          analytics.viewStats.highest = stream;
+        }
+      }
+    });
+    
+    // Calculate averages
+    analytics.averageDuration = analytics.totalStreams > 0 ? 
+      Math.round(analytics.totalDuration / analytics.totalStreams) : 0;
+    analytics.viewStats.average = analytics.totalStreams > 0 ? 
+      Math.round(analytics.viewStats.total / analytics.totalStreams) : 0;
+    
+    console.log('📊 Recent Stream Analytics');
+    console.log('==========================');
+    console.log(`Total Streams: ${analytics.totalStreams}`);
+    console.log(`Total Duration: ${Math.floor(analytics.totalDuration / 3600)}h ${Math.floor((analytics.totalDuration % 3600) / 60)}m`);
+    console.log(`Average Duration: ${Math.floor(analytics.averageDuration / 60)}m ${analytics.averageDuration % 60}s`);
+    
+    console.log('\nPlatform Breakdown:');
+    Object.entries(analytics.platformBreakdown).forEach(([platform, stats]) => {
+      const avgDuration = Math.round(stats.duration / stats.count);
+      console.log(`  ${platform.toUpperCase()}: ${stats.count} streams, avg ${Math.floor(avgDuration / 60)}m`);
+    });
+    
+    if (analytics.viewStats.highest) {
+      console.log(`\nMost Viewed Stream: ${analytics.viewStats.highest.name} - ${analytics.viewStats.highest.view_count.toLocaleString()} views`);
+    }
+    
+    return analytics;
+    
+  } catch (error) {
+    console.error('Error creating analytics:', error.message);
+  }
+}
+```
+
+### Member Activity Report
+
+```javascript
+async function getMemberActivityReport(memberName = null) {
+  try {
+    const apiKey = 'your-api-key-here';
+    const recentLive = await jkt48Api.liveRecent(apiKey);
+    
+    let filteredStreams = recentLive;
+    if (memberName) {
+      filteredStreams = recentLive.filter(stream => 
+        stream.name.toLowerCase().includes(memberName.toLowerCase())
+      );
+    }
+    
+    // Group by member
+    const memberActivity = filteredStreams.reduce((acc, stream) => {
+      if (!acc[stream.name]) {
+        acc[stream.name] = {
+          streams: [],
+          totalDuration: 0,
+          totalViews: 0,
+          platforms: new Set(),
+          averageDuration: 0
+        };
+      }
+      
+      acc[stream.name].streams.push(stream);
+      acc[stream.name].totalDuration += stream.duration;
+      acc[stream.name].totalViews += stream.view_count || 0;
+      acc[stream.name].platforms.add(stream.type);
+      
+      return acc;
+    }, {});
+    
+    // Calculate averages and sort
+    const sortedMembers = Object.entries(memberActivity)
+      .map(([name, data]) => ({
+        name,
+        streamCount: data.streams.length,
+        totalDuration: data.totalDuration,
+        totalViews: data.totalViews,
+        averageDuration: Math.round(data.totalDuration / data.streams.length),
+        platforms: Array.from(data.platforms),
+        recentStream: data.streams.sort((a, b) => 
+          new Date(b.ended_at) - new Date(a.ended_at)
+        )[0]
+      }))
+      .sort((a, b) => b.streamCount - a.streamCount);
+    
+    console.log('👥 Member Activity Report');
+    console.log('=========================');
+    
+    sortedMembers.forEach((member, index) => {
+      console.log(`\n${index + 1}. ${member.name}`);
+      console.log(`   Streams: ${member.streamCount}`);
+      console.log(`   Total Duration: ${Math.floor(member.totalDuration / 3600)}h ${Math.floor((member.totalDuration % 3600) / 60)}m`);
+      console.log(`   Average Duration: ${Math.floor(member.averageDuration / 60)}m`);
+      console.log(`   Platforms: ${member.platforms.join(', ').toUpperCase()}`);
+      
+      if (member.totalViews > 0) {
+        console.log(`   Total Views: ${member.totalViews.toLocaleString()}`);
+      }
+      
+      const lastStreamDate = new Date(member.recentStream.ended_at);
+      const daysAgo = Math.floor((Date.now() - lastStreamDate) / (1000 * 60 * 60 * 24));
+      console.log(`   Last Stream: ${daysAgo} day${daysAgo !== 1 ? 's' : ''} ago`);
+    });
+    
+    return sortedMembers;
+    
+  } catch (error) {
+    console.error('Error generating member activity report:', error.message);
+  }
+}
+
+// Usage
+getMemberActivityReport(); // All members
+getMemberActivityReport('Virgi'); // Specific member
+```
+
+### Stream History Search
+
+```javascript
+async function searchStreamHistory(searchTerm) {
+  try {
+    const apiKey = 'your-api-key-here';
+    const recentLive = await jkt48Api.liveRecent(apiKey);
+    
+    const results = recentLive.filter(stream => {
+      const searchLower = searchTerm.toLowerCase();
+      return stream.title.toLowerCase().includes(searchLower) ||
+             stream.description.toLowerCase().includes(searchLower) ||
+             stream.name.toLowerCase().includes(searchLower);
+    });
+    
+    console.log(`🔍 Search Results for "${searchTerm}"`);
+    console.log('================================');
+    
+    if (results.length === 0) {
+      console.log('No streams found matching your search.');
+      return [];
+    }
+    
+    results
+      .sort((a, b) => new Date(b.ended_at) - new Date(a.ended_at))
+      .forEach(stream => {
+        const endDate = new Date(stream.ended_at);
+        const duration = Math.floor(stream.duration / 60);
+        
+        console.log(`\n📺 ${stream.title}`);
+        console.log(`   Member: ${stream.name}`);
+        console.log(`   Platform: ${stream.type.toUpperCase()}`);
+        console.log(`   Duration: ${duration} minutes`);
+        console.log(`   Ended: ${endDate.toLocaleDateString()} ${endDate.toLocaleTimeString()}`);
+        
+        if (stream.view_count) {
+          console.log(`   Views: ${stream.view_count.toLocaleString()}`);
+        }
+        
+        if (stream.description && stream.description !== stream.title) {
+          const shortDesc = stream.description.length > 100 ? 
+            stream.description.substring(0, 100) + '...' : stream.description;
+          console.log(`   Description: ${shortDesc}`);
+        }
+      });
+    
+    return results;
+    
+  } catch (error) {
+    console.error('Error searching stream history:', error.message);
+  }
+}
+
+// Usage
+searchStreamHistory('birthday');
+searchStreamHistory('handshake');
+searchStreamHistory('graduation');
+```
+
+### Daily Stream Summary
+
+```javascript
+async function getDailyStreamSummary(targetDate = new Date()) {
+  try {
+    const apiKey = 'your-api-key-here';
+    const recentLive = await jkt48Api.liveRecent(apiKey);
+    
+    // Filter streams for target date
+    const dayStart = new Date(targetDate);
+    dayStart.setHours(0, 0, 0, 0);
+    const dayEnd = new Date(targetDate);
+    dayEnd.setHours(23, 59, 59, 999);
+    
+    const dayStreams = recentLive.filter(stream => {
+      const streamDate = new Date(stream.ended_at);
+      return streamDate >= dayStart && streamDate <= dayEnd;
+    });
+    
+    if (dayStreams.length === 0) {
+      console.log(`📅 No streams ended on ${targetDate.toDateString()}`);
+      return null;
+    }
+    
+    // Calculate summary stats
+    const summary = {
+      date: targetDate.toDateString(),
+      totalStreams: dayStreams.length,
+      totalDuration: dayStreams.reduce((sum, stream) => sum + stream.duration, 0),
+      members: [...new Set(dayStreams.map(stream => stream.name))],
+      platforms: dayStreams.reduce((acc, stream) => {
+        acc[stream.type] = (acc[stream.type] || 0) + 1;
+        return acc;
+      }, {}),
+      longestStream: dayStreams.reduce((longest, stream) => 
+        stream.duration > (longest?.duration || 0) ? stream : longest, null
+      )
+    };
+    
+    console.log(`📅 Stream Summary for ${summary.date}`);
+    console.log('=======================================');
+    console.log(`Total Streams: ${summary.totalStreams}`);
+    console.log(`Active Members: ${summary.members.length}`);
+    console.log(`Total Duration: ${Math.floor(summary.totalDuration / 3600)}h ${Math.floor((summary.totalDuration % 3600) / 60)}m`);
+    
+    console.log('\nPlatform Distribution:');
+    Object.entries(summary.platforms).forEach(([platform, count]) => {
+      console.log(`  ${platform.toUpperCase()}: ${count} stream${count !== 1 ? 's' : ''}`);
+    });
+    
+    if (summary.longestStream) {
+      const duration = Math.floor(summary.longestStream.duration / 60);
+      console.log(`\nLongest Stream: ${summary.longestStream.name} - ${duration} minutes`);
+    }
+    
+    console.log('\nActive Members:');
+    summary.members.forEach(member => {
+      const memberStreams = dayStreams.filter(stream => stream.name === member);
+      const totalDuration = memberStreams.reduce((sum, stream) => sum + stream.duration, 0);
+      console.log(`  ${member}: ${memberStreams.length} stream${memberStreams.length !== 1 ? 's' : ''}, ${Math.floor(totalDuration / 60)}m total`);
+    });
+    
+    return summary;
+    
+  } catch (error) {
+    console.error('Error generating daily summary:', error.message);
+  }
+}
+
+// Usage
+getDailyStreamSummary(); // Today
+getDailyStreamSummary(new Date('2025-08-06')); // Specific date
+```
+
+<Callout title="Tip">
+The recent live API is perfect for building analytics dashboards, generating reports, and tracking streaming patterns over time. Consider combining it with the current live API for comprehensive stream monitoring.
+</Callout>
+
+## Common Use Cases
+
+<Cards>
+
+<Card
+  title="Stream Analytics"
+  description="Analyze streaming patterns and member activity over time"
+/>
+
+<Card
+  title="Historical Dashboard"
+  description="Build dashboards showing recent streaming history"
+/>
+
+<Card
+  title="Member Performance Tracking"
+  description="Track individual member streaming frequency and engagement"
+/>
+
+<Card
+  title="Content Archive"
+  description="Create searchable archives of past stream content"
+/>
+
+</Cards>
+
+## Getting Started
+
+Ready to start working with JKT48 recent live streaming data? Follow these steps:
+
+<Steps>
+<Step>
+
+### Install the Module
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tab>
+
+```bash
+npm install @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+yarn add @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+pnpm add @jkt48/core
+```
+
+</Tab>
+</Tabs>
+
+</Step>
+
+<Step>
+
+### Get Your API Key
+Visit [jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi) to purchase your API key
+
+</Step>
+
+<Step>
+
+### Fetch Recent Stream Data
+Use `const recentLive = await jkt48Api.liveRecent(apiKey);` to get historical streaming information
+
+</Step>
+
+<Step>
+
+### Build & Analyze
+Create analytics tools, reports, or historical dashboards
+
+</Step>
+</Steps>
+
+<Callout title="Support">
+Need additional help? Don't hesitate to reach out to our support team at **support@jkt48connect.my.id** or **+62 857-0147-9245**.
+</Callout>
