@@ -122,10 +122,10 @@ const projects: ProjectObject[] = [
     tech: ['Javascript', 'Express']
   },
  {
-    name: 'JKT48Connect SDKs',
+    name: '@jkt48connect-corp/sdk',
     description: 'Software Development Kits untuk berbagai bahasa pemrograman (JavaScript, Python, PHP)',
     category: 'Developer Tools',
-    status: 'Deprecated',
+    status: 'Active',
     tech: ['JavaScript', 'Python', 'PHP']
   }
 ];
