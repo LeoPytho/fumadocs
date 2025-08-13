@@ -34,7 +34,7 @@ export default function DocsPage(): React.ReactElement {
         You can start with jkt48connect api, or just use the core library.
       </p>
       <div className="mt-4 grid grid-cols-2 gap-4">
-        
+        <a
           href="https://github.com/j-forces"
           rel="noreferrer noopener"
           className={cn(buttonVariants({ size: 'lg' }))}
