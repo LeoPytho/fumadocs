@@ -1,4 +1,4 @@
-import { Building2, LibraryIcon } from 'lucide-react';
+import { Building2, LibraryIcon, Code, Gamepad2 } from 'lucide-react';
 import Link, { type LinkProps } from 'next/link';
 import Image from 'next/image';
 import { buttonVariants } from '@/components/ui/button';
@@ -34,7 +34,7 @@ export default function DocsPage(): React.ReactElement {
         You can start with jkt48connect api, or just use the core library.
       </p>
       <div className="mt-4 grid grid-cols-2 gap-4">
-        <a
+        
           href="https://github.com/j-forces"
           rel="noreferrer noopener"
           className={cn(buttonVariants({ size: 'lg' }))}
@@ -65,6 +65,24 @@ export default function DocsPage(): React.ReactElement {
           <h2 className="mb-2 text-lg font-semibold">JKT48Connect Core</h2>
           <p className="text-sm text-fd-muted-foreground">
             The core library of JKT48Connect.
+          </p>
+        </Item>
+        <Item href="/docs/openapi">
+          <Icon>
+            <Code className="size-full" />
+          </Icon>
+          <h2 className="mb-2 text-lg font-semibold">JKT48Connect RestAPI</h2>
+          <p className="text-sm text-fd-muted-foreground">
+            Interactive playground to test API features directly in your browser with real-time output.
+          </p>
+        </Item>
+        <Item href="/docs/playground">
+          <Icon>
+            <Gamepad2 className="size-full" />
+          </Icon>
+          <h2 className="mb-2 text-lg font-semibold">Grow A Garden API</h2>
+          <p className="text-sm text-fd-muted-foreground">
+            Interactive playground to experiment with Garden API features and see results in real-time.
           </p>
         </Item>
       </div>
