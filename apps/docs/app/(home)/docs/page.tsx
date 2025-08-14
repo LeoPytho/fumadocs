@@ -1,6 +1,6 @@
 'use client';
 
-import { Building2, Code, ChevronDown, Package, Globe } from 'lucide-react';
+import { Building2, Code, X, Package, Globe } from 'lucide-react';
 import Link, { type LinkProps } from 'next/link';
 import Image from 'next/image';
 import { buttonVariants } from '@/components/ui/button';
@@ -9,10 +9,14 @@ import Spot from '@/public/spot.png';
 import { useState } from 'react';
 
 export default function DocsPage(): React.ReactElement {
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [activeModal, setActiveModal] = useState<string | null>(null);
 
-  const handleDropdownToggle = (dropdownId: string) => {
-    setOpenDropdown(openDropdown === dropdownId ? null : dropdownId);
+  const handleModalOpen = (modalId: string) => {
+    setActiveModal(modalId);
+  };
+
+  const handleModalClose = () => {
+    setActiveModal(null);
   };
 
   return (
@@ -59,140 +63,219 @@ export default function DocsPage(): React.ReactElement {
       </div>
       <div className="mt-16 grid grid-cols-1 gap-6 text-left md:grid-cols-2 w-full max-w-4xl">
         {/* Module Card */}
-        <DropdownCard
+        <ClickableCard
           id="modules"
-          isOpen={openDropdown === 'modules'}
-          onToggle={() => handleDropdownToggle('modules')}
+          onOpen={() => handleModalOpen('modules')}
           icon={<Package className="size-full" />}
           title="Modules"
           description="Core libraries and modules for JKT48Connect"
-          items={[
-            {
-              href: '/docs/headless',
-              title: 'JKT48Connect Core',
-              description: 'The core library of JKT48Connect.',
-              icon: <Building2 className="size-4" />
-            },
-            {
-              href: '/docs/ui',
-              title: 'JKT48Connect API',
-              description: 'The full-powered documentation for api instead.',
-              icon: <Globe className="size-4" />
-            }
-          ]}
         />
 
         {/* APIs Card */}
-        <DropdownCard
+        <ClickableCard
           id="apis"
-          isOpen={openDropdown === 'apis'}
-          onToggle={() => handleDropdownToggle('apis')}
+          onOpen={() => handleModalOpen('apis')}
           icon={<Code className="size-full" />}
           title="APIs (RestAPI)"
           description="Interactive API endpoints and playground tools"
-          items={[
-            {
-              href: '/docs/openapi',
-              title: 'JKT48Connect RestAPI',
-              description: 'Interactive playground to test API features directly in your browser with real-time output.',
-              icon: <Code className="size-4" />
-            },
-            {
-              href: '/docs/playground',
-              title: 'Grow A Garden API',
-              description: 'Interactive playground to experiment with Garden API features and see results in real-time.',
-              icon: <Building2 className="size-4" />
-            }
-          ]}
         />
       </div>
+
+      {/* Modal Overlay */}
+      {activeModal && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div 
+            className="bg-fd-background rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {activeModal === 'modules' && (
+              <ModulesModal onClose={handleModalClose} />
+            )}
+            {activeModal === 'apis' && (
+              <APIsModal onClose={handleModalClose} />
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Background overlay click to close */}
+      {activeModal && (
+        <div 
+          className="fixed inset-0 z-40" 
+          onClick={handleModalClose}
+        />
+      )}
     </main>
   );
 }
 
-interface DropdownItem {
-  href: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-}
-
-interface DropdownCardProps {
+interface ClickableCardProps {
   id: string;
-  isOpen: boolean;
-  onToggle: () => void;
+  onOpen: () => void;
   icon: React.ReactNode;
   title: string;
   description: string;
-  items: DropdownItem[];
 }
 
-function DropdownCard({ 
+function ClickableCard({ 
   id, 
-  isOpen, 
-  onToggle, 
+  onOpen, 
   icon, 
   title, 
-  description, 
-  items 
-}: DropdownCardProps): React.ReactElement {
+  description 
+}: ClickableCardProps): React.ReactElement {
   return (
-    <div className="relative">
-      <div
-        className="rounded-2xl border border-transparent p-6 shadow-lg cursor-pointer transition-all duration-300 hover:shadow-xl"
-        style={{
-          backgroundImage:
-            'linear-gradient(to right bottom, var(--color-fd-background) 10%, var(--color-fd-accent), var(--color-fd-background) 60%),' +
-            'linear-gradient(to right bottom, rgb(40,40,40) 10%, rgb(180,180,180), rgb(30,30,30) 60%)',
-          backgroundOrigin: 'border-box',
-          backgroundClip: 'padding-box, border-box',
-        }}
-        onClick={onToggle}
-      >
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <Icon>{icon}</Icon>
-            <h2 className="mb-2 text-lg font-semibold">{title}</h2>
-            <p className="text-sm text-fd-muted-foreground pr-2">
-              {description}
+    <div
+      className="rounded-2xl border border-transparent p-6 shadow-lg cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105"
+      style={{
+        backgroundImage:
+          'linear-gradient(to right bottom, var(--color-fd-background) 10%, var(--color-fd-accent), var(--color-fd-background) 60%),' +
+          'linear-gradient(to right bottom, rgb(40,40,40) 10%, rgb(180,180,180), rgb(30,30,30) 60%)',
+        backgroundOrigin: 'border-box',
+        backgroundClip: 'padding-box, border-box',
+      }}
+      onClick={onOpen}
+    >
+      <Icon>{icon}</Icon>
+      <h2 className="mb-2 text-lg font-semibold">{title}</h2>
+      <p className="text-sm text-fd-muted-foreground">
+        {description}
+      </p>
+      <p className="text-xs text-fd-primary mt-3 font-medium">
+        Click to explore →
+      </p>
+    </div>
+  );
+}
+
+interface ModalProps {
+  onClose: () => void;
+}
+
+function ModulesModal({ onClose }: ModalProps): React.ReactElement {
+  const items = [
+    {
+      href: '/docs/headless',
+      title: 'JKT48Connect Core',
+      description: 'The core library of JKT48Connect.',
+      icon: <Building2 className="size-5" />
+    },
+    {
+      href: '/docs/ui',
+      title: 'JKT48Connect API',
+      description: 'The full-powered documentation for api instead.',
+      icon: <Globe className="size-5" />
+    }
+  ];
+
+  return (
+    <div className="p-6">
+      <div className="flex items-start justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <Icon>
+            <Package className="size-full" />
+          </Icon>
+          <div>
+            <h2 className="text-xl font-semibold">Modules</h2>
+            <p className="text-sm text-fd-muted-foreground">
+              Core libraries and modules for JKT48Connect
             </p>
           </div>
-          <ChevronDown 
-            className={`size-5 text-fd-muted-foreground transition-transform duration-200 flex-shrink-0 mt-2 ${
-              isOpen ? 'rotate-180' : ''
-            }`}
-          />
         </div>
+        <button
+          onClick={onClose}
+          className="p-2 hover:bg-fd-accent/50 rounded-lg transition-colors duration-150"
+        >
+          <X className="size-5" />
+        </button>
       </div>
       
-      {/* Dropdown Menu */}
-      {isOpen && (
-        <div 
-          className="absolute top-full left-0 right-0 mt-2 bg-fd-background border rounded-xl shadow-xl z-10 overflow-hidden animate-in slide-in-from-top-2 duration-200"
-        >
-          {items.map((item, index) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`block p-4 hover:bg-fd-accent/50 transition-colors duration-150 ${
-                index !== items.length - 1 ? 'border-b border-fd-border' : ''
-              }`}
-            >
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 mt-1 text-fd-primary">
-                  {item.icon}
-                </div>
-                <div>
-                  <h3 className="font-medium text-sm mb-1">{item.title}</h3>
-                  <p className="text-xs text-fd-muted-foreground leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
+      <div className="space-y-4">
+        {items.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className="block p-4 rounded-xl border hover:bg-fd-accent/30 transition-all duration-200 hover:shadow-md"
+            onClick={onClose}
+          >
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 mt-1 text-fd-primary">
+                {item.icon}
               </div>
-            </Link>
-          ))}
+              <div>
+                <h3 className="font-semibold text-base mb-2">{item.title}</h3>
+                <p className="text-sm text-fd-muted-foreground leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function APIsModal({ onClose }: ModalProps): React.ReactElement {
+  const items = [
+    {
+      href: '/docs/openapi',
+      title: 'JKT48Connect RestAPI',
+      description: 'Interactive playground to test API features directly in your browser with real-time output.',
+      icon: <Code className="size-5" />
+    },
+    {
+      href: '/docs/playground',
+      title: 'Grow A Garden API',
+      description: 'Interactive playground to experiment with Garden API features and see results in real-time.',
+      icon: <Building2 className="size-5" />
+    }
+  ];
+
+  return (
+    <div className="p-6">
+      <div className="flex items-start justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <Icon>
+            <Code className="size-full" />
+          </Icon>
+          <div>
+            <h2 className="text-xl font-semibold">APIs (RestAPI)</h2>
+            <p className="text-sm text-fd-muted-foreground">
+              Interactive API endpoints and playground tools
+            </p>
+          </div>
         </div>
-      )}
+        <button
+          onClick={onClose}
+          className="p-2 hover:bg-fd-accent/50 rounded-lg transition-colors duration-150"
+        >
+          <X className="size-5" />
+        </button>
+      </div>
+      
+      <div className="space-y-4">
+        {items.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className="block p-4 rounded-xl border hover:bg-fd-accent/30 transition-all duration-200 hover:shadow-md"
+            onClick={onClose}
+          >
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 mt-1 text-fd-primary">
+                {item.icon}
+              </div>
+              <div>
+                <h3 className="font-semibold text-base mb-2">{item.title}</h3>
+                <p className="text-sm text-fd-muted-foreground leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }
