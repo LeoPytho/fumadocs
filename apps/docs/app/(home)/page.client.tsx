@@ -209,7 +209,7 @@ export function WhyInteractive(props: {
             </p>
             {props.codeblockTheme} {/* This codeblock should be relevant to styling within a JKT48 app */}
             <Link
-              href="/docs/integration/styling" // Changed link
+              href="/docs" // Changed link
               className={cn(buttonVariants(), 'not-prose')}
             >
               See Integration Guides
@@ -232,13 +232,13 @@ export function WhyInteractive(props: {
 
             <div className="mt-4 flex flex-row items-center gap-1.5 not-prose">
               <Link
-                href="/docs/api-reference/data-types" // Changed link
+                href="/docs/ui" // Changed link
                 className={cn(buttonVariants())}
               >
                 API Data Types
               </Link>
               <Link
-                href="/docs/api-reference/playground" // Changed link
+                href="/docs/openapi" // Changed link
                 className={cn(buttonVariants({ variant: 'ghost' }))}
               >
                 API Playground
