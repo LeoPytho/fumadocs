@@ -402,7 +402,7 @@ function Hero() {
           Get Started
         </Link>
         <a
-          href="https://www.jkt48connect.my.id" // Replace with your API demo link
+          href="https://docs.jkt48connect.com/showcase" // Replace with your API demo link
           target="_blank"
           rel="noreferrer noopener"
           className={cn(
