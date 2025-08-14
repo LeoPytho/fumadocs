@@ -31,7 +31,8 @@
     "turbo": "2.5.4",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.35.0",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "@vercel/analytics": "^1.5.0"
   },
   "packageManager": "pnpm@9.14.4",
   "engines": {
