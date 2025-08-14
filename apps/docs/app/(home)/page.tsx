@@ -259,7 +259,7 @@ function End() {
             Read API Docs
           </Link>
           <a
-            href="[LINK_DEMO_JKT48CONNECT]" // Replace with your API demo link
+            href="/showcase" // Replace with your API demo link
             rel="noreferrer noopener"
             className={cn(
               buttonVariants({
