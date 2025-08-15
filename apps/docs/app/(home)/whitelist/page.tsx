@@ -31,10 +31,10 @@ export default function IPWhitelistAdd() {
       const response = await fetch('https://api.ipify.org?format=json');
       const data = await response.json();
       setCurrentIP(data.ip);
-    } catch (error: any) {
+    } catch (error) {
       setResult({
         success: false,
-        message: 'Failed to detect current IP: ' + error.message
+        message: 'Failed to detect current IP: ' + (error instanceof Error ? error.message : String(error))
       });
     }
     setLoadingCurrentIP(false);
@@ -74,10 +74,10 @@ export default function IPWhitelistAdd() {
         setIpAddress('');
         setDescription('');
       }
-    } catch (error: any) {
+    } catch (error) {
       setResult({
         success: false,
-        message: 'Network error: ' + error.message
+        message: 'Network error: ' + (error instanceof Error ? error.message : String(error))
       });
     }
     setLoading(false);
@@ -115,10 +115,10 @@ export default function IPWhitelistAdd() {
       if (data.status) {
         setDescription('');
       }
-    } catch (error: any) {
+    } catch (error) {
       setResult({
         success: false,
-        message: 'Network error: ' + error.message
+        message: 'Network error: ' + (error instanceof Error ? error.message : String(error))
       });
     }
     setLoading(false);
