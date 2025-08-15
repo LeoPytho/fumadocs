@@ -1,6 +1,130 @@
-<div className="flex items-center gap-3 mb-4">
-            <Globe className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Your Current IP</h2import React, { useState, useRef } from 'react';
+{/* Single IP Tab */}
+            {activeTab === 'single' && (
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    IP Address <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={ipAddress}
+                    onChange={(e) => setIpAddress(e.target.value)}
+                    placeholder="192.168.1.100 or 2001:db8::1"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Description (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Office IP, Home IP, Server IP, etc."
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                  />
+                </div>
+                <button
+                  onClick={addSingleIP}
+                  disabled={loading}
+                  className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center gap-2"
+                >
+                  {loading ? <Loader className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                  Add IP to Whitelist
+                </button>
+              </div>
+            )}
+
+            {/* Current IP Tab */}
+            {activeTab === 'current' && (
+              <div className="space-y-6">
+                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h3 className="font-medium text-blue-900 dark:text-blue-100 mb-1">Auto-detect Current IP</h3>
+                      <p className="text-sm text-blue-700 dark:text-blue-300">
+                        This will automatically detect and add your current public IP address to the whitelist.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Description (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Auto-added current IP"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                  />
+                </div>
+                <button
+                  onClick={addCurrentIP}
+                  disabled={loading}
+                  className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center gap-2"
+                >
+                  {loading ? <Loader className="w-4 h-4 animate-spin" /> : <Globe className="w-4 h-4" />}
+                  Add Current IP ({currentIP})
+                </button>
+              </div>
+            )}
+
+            {/* Bulk Add Tab */}
+            {activeTab === 'bulk' && (
+              <div className="space-y-6">
+                <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-4">
+                  <div className="flex items-start gap-3">
+                    <Info className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h3 className="font-medium text-yellow-900 dark:text-yellow-100 mb-1">Bulk IP Addition</h3>
+                      <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                        Enter multiple IP addresses, one per line. Maximum 50 IPs per request.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    IP Addresses (one per line) <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    value={bulkIPs}
+                    onChange={(e) => setBulkIPs(e.target.value)}
+                    placeholder="192.168.1.100&#10;192.168.1.101&#10;10.0.0.50&#10;2001:db8::1"
+                    rows={8}
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors font-mono text-sm"
+                  />
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    {bulkIPs.split('\n').filter(ip => ip.trim()).length} IPs entered (max 50)
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Description for all IPs (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={bulkDescription}
+                    onChange={(e) => setBulkDescription(e.target.value)}
+                    placeholder="Office network IPs, Server farm IPs, etc."
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                  />
+                </div>
+                <button
+                  onClick={addBulkIPs}
+                  disabled={loading}
+                  className="w-full px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center gap-2"
+                >
+                  {loading ? <Loader className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                  Add Multiple IPs to Whitelist
+                </button>
+              </div>
+            )}
+import React, { useState, useRef } from 'react';
 import { Plus, Shield, Globe, Server, CheckCircle, XCircle, Loader, Info } from 'lucide-react';
 
 const API_BASE_URL = 'https://v2.jkt48connect.my.id';
@@ -36,8 +160,7 @@ export default function IPWhitelistAdd() {
   };
 
   // Add single IP
-  const addSingleIP = async (e) => {
-    e.preventDefault();
+  const addSingleIP = async () => {
     if (!apiKey || !ipAddress) {
       setResult({
         success: false,
@@ -121,8 +244,7 @@ export default function IPWhitelistAdd() {
   };
 
   // Add bulk IPs
-  const addBulkIPs = async (e) => {
-    e.preventDefault();
+  const addBulkIPs = async () => {
     if (!apiKey || !bulkIPs) {
       setResult({
         success: false,
@@ -191,7 +313,9 @@ export default function IPWhitelistAdd() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full mb-6">
-            <ShieldIcon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+          <div className="flex items-center gap-3 mb-4">
+            <Shield className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+          </div>
           </div>
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             IP Whitelist Manager
@@ -205,13 +329,13 @@ export default function IPWhitelistAdd() {
         {/* Current IP Detection */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8 border border-blue-100 dark:border-blue-800">
           <div className="flex items-center gap-3 mb-4">
-            <GlobeIcon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <Globe className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Your Current IP</h2>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               {loadingCurrentIP ? (
-                <LoaderIcon className="w-4 h-4 animate-spin text-blue-600" />
+                <Loader className="w-4 h-4 animate-spin text-blue-600" />
               ) : (
                 <code className="px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm font-mono text-gray-800 dark:text-gray-200">
                   {currentIP || 'Detecting...'}
@@ -231,7 +355,7 @@ export default function IPWhitelistAdd() {
         {/* API Key Input */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <ServerIcon className="w-5 h-5 text-green-600 dark:text-green-400" />
+            <Server className="w-5 h-5 text-green-600 dark:text-green-400" />
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">API Configuration</h2>
           </div>
           <div>
@@ -422,9 +546,9 @@ export default function IPWhitelistAdd() {
           }`}>
             <div className="flex items-center gap-3">
               {result.success ? (
-                <CheckCircleIcon className="w-5 h-5 text-green-600 dark:text-green-400" />
+                <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
               ) : (
-                <XCircleIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
+                <XCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
               )}
               <p className={`font-medium ${
                 result.success
@@ -441,7 +565,7 @@ export default function IPWhitelistAdd() {
         <div className="grid md:grid-cols-3 gap-6 mt-12">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
             <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-4">
-              <ShieldIcon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <Shield className="w-6 h-6 text-blue-600 dark:text-blue-400" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Enhanced Security</h3>
             <p className="text-gray-600 dark:text-gray-300 text-sm">
@@ -450,7 +574,7 @@ export default function IPWhitelistAdd() {
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
             <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-4">
-              <GlobeIcon className="w-6 h-6 text-green-600 dark:text-green-400" />
+              <Globe className="w-6 h-6 text-green-600 dark:text-green-400" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">IPv4 & IPv6 Support</h3>
             <p className="text-gray-600 dark:text-gray-300 text-sm">
@@ -459,7 +583,7 @@ export default function IPWhitelistAdd() {
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
             <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-4">
-              <ServerIcon className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              <Server className="w-6 h-6 text-purple-600 dark:text-purple-400" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Bulk Operations</h3>
             <p className="text-gray-600 dark:text-gray-300 text-sm">
