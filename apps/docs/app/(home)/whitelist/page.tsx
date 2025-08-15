@@ -286,7 +286,7 @@ export default function IPWhitelistAdd() {
           <div className="p-6">
             {/* Single IP Tab */}
             {activeTab === 'single' && (
-              <form onSubmit={addSingleIP} className="space-y-6">
+              <form onSubmit={(e) => { e.preventDefault(); addSingleIP(); }} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     IP Address <span className="text-red-500">*</span>
@@ -316,7 +316,7 @@ export default function IPWhitelistAdd() {
                   disabled={loading}
                   className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center gap-2"
                 >
-                  {loading ? <LoaderIcon className="w-4 h-4 animate-spin" /> : <PlusIcon className="w-4 h-4" />}
+                  {loading ? <Loader className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                   Add IP to Whitelist
                 </button>
               </form>
@@ -327,7 +327,7 @@ export default function IPWhitelistAdd() {
               <div className="space-y-6">
                 <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
                   <div className="flex items-start gap-3">
-                    <InfoIcon className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                    <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
                     <div>
                       <h3 className="font-medium text-blue-900 dark:text-blue-100 mb-1">Auto-detect Current IP</h3>
                       <p className="text-sm text-blue-700 dark:text-blue-300">
@@ -353,7 +353,7 @@ export default function IPWhitelistAdd() {
                   disabled={loading}
                   className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center gap-2"
                 >
-                  {loading ? <LoaderIcon className="w-4 h-4 animate-spin" /> : <GlobeIcon className="w-4 h-4" />}
+                  {loading ? <Loader className="w-4 h-4 animate-spin" /> : <Globe className="w-4 h-4" />}
                   Add Current IP ({currentIP})
                 </button>
               </div>
@@ -361,10 +361,10 @@ export default function IPWhitelistAdd() {
 
             {/* Bulk Add Tab */}
             {activeTab === 'bulk' && (
-              <form onSubmit={addBulkIPs} className="space-y-6">
+              <form onSubmit={(e) => { e.preventDefault(); addBulkIPs(); }} className="space-y-6">
                 <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-4">
                   <div className="flex items-start gap-3">
-                    <InfoIcon className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
+                    <Info className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
                     <div>
                       <h3 className="font-medium text-yellow-900 dark:text-yellow-100 mb-1">Bulk IP Addition</h3>
                       <p className="text-sm text-yellow-700 dark:text-yellow-300">
@@ -405,7 +405,7 @@ export default function IPWhitelistAdd() {
                   disabled={loading}
                   className="w-full px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center gap-2"
                 >
-                  {loading ? <LoaderIcon className="w-4 h-4 animate-spin" /> : <PlusIcon className="w-4 h-4" />}
+                  {loading ? <Loader className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                   Add Multiple IPs to Whitelist
                 </button>
               </form>
@@ -473,7 +473,7 @@ export default function IPWhitelistAdd() {
           <p className="text-gray-600 dark:text-gray-400 text-sm">
             Powered by{' '}
             <a 
-              href="https://www.jkt48connect.my.id" 
+              href="https://www.jkt48connect.com" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
