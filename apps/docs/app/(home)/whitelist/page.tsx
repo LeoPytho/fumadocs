@@ -1,3 +1,4 @@
+"use client";
 
 import React, { useState, useRef } from 'react';
 import { Plus, Shield, Globe, Server, CheckCircle, XCircle, Loader, Info } from 'lucide-react';
