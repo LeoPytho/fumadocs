@@ -5,19 +5,24 @@ import { Plus, Shield, Globe, Server, CheckCircle, XCircle, Loader, Info } from 
 
 const API_BASE_URL = 'https://v2.jkt48connect.my.id';
 
-export default function IPWhitelistAdd() {
-  const [apiKey, setApiKey] = useState('');
-  const [ipAddress, setIpAddress] = useState('');
-  const [description, setDescription] = useState('');
-  const [bulkIPs, setBulkIPs] = useState('');
-  const [bulkDescription, setBulkDescription] = useState('');
-  const [activeTab, setActiveTab] = useState('single');
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
-  const [currentIP, setCurrentIP] = useState('');
-  const [loadingCurrentIP, setLoadingCurrentIP] = useState(false);
+interface ResultState {
+  success: boolean;
+  message: string;
+}
 
-  const fileInputRef = useRef(null);
+export default function IPWhitelistAdd() {
+  const [apiKey, setApiKey] = useState<string>('');
+  const [ipAddress, setIpAddress] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [bulkIPs, setBulkIPs] = useState<string>('');
+  const [bulkDescription, setBulkDescription] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<string>('single');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [result, setResult] = useState<ResultState | null>(null);
+  const [currentIP, setCurrentIP] = useState<string>('');
+  const [loadingCurrentIP, setLoadingCurrentIP] = useState<boolean>(false);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Get current IP
   const getCurrentIP = async () => {
@@ -26,7 +31,7 @@ export default function IPWhitelistAdd() {
       const response = await fetch('https://api.ipify.org?format=json');
       const data = await response.json();
       setCurrentIP(data.ip);
-    } catch (error) {
+    } catch (error: any) {
       setResult({
         success: false,
         message: 'Failed to detect current IP: ' + error.message
@@ -69,7 +74,7 @@ export default function IPWhitelistAdd() {
         setIpAddress('');
         setDescription('');
       }
-    } catch (error) {
+    } catch (error: any) {
       setResult({
         success: false,
         message: 'Network error: ' + error.message
@@ -110,7 +115,7 @@ export default function IPWhitelistAdd() {
       if (data.status) {
         setDescription('');
       }
-    } catch (error) {
+    } catch (error: any) {
       setResult({
         success: false,
         message: 'Network error: ' + error.message
@@ -473,7 +478,7 @@ export default function IPWhitelistAdd() {
           <p className="text-gray-600 dark:text-gray-400 text-sm">
             Powered by{' '}
             <a 
-              href="https://www.jkt48connect.com" 
+              href="https://www.jkt48connect.my.id" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
