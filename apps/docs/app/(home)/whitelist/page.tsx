@@ -24,6 +24,17 @@ export default function IPWhitelistAdd() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Helper function to get error message
+  const getErrorMessage = (error: unknown): string => {
+    if (error instanceof Error) {
+      return error.message;
+    }
+    if (typeof error === 'string') {
+      return error;
+    }
+    return String(error);
+  };
+
   // Get current IP
   const getCurrentIP = async () => {
     setLoadingCurrentIP(true);
@@ -34,7 +45,7 @@ export default function IPWhitelistAdd() {
     } catch (error) {
       setResult({
         success: false,
-        message: 'Failed to detect current IP: ' + (error instanceof Error ? error.message : String(error))
+        message: 'Failed to detect current IP: ' + getErrorMessage(error)
       });
     }
     setLoadingCurrentIP(false);
@@ -77,7 +88,7 @@ export default function IPWhitelistAdd() {
     } catch (error) {
       setResult({
         success: false,
-        message: 'Network error: ' + (error instanceof Error ? error.message : String(error))
+        message: 'Network error: ' + getErrorMessage(error)
       });
     }
     setLoading(false);
@@ -118,7 +129,7 @@ export default function IPWhitelistAdd() {
     } catch (error) {
       setResult({
         success: false,
-        message: 'Network error: ' + (error instanceof Error ? error.message : String(error))
+        message: 'Network error: ' + getErrorMessage(error)
       });
     }
     setLoading(false);
@@ -178,7 +189,7 @@ export default function IPWhitelistAdd() {
     } catch (error) {
       setResult({
         success: false,
-        message: 'Network error: ' + error.message
+        message: 'Network error: ' + getErrorMessage(error)
       });
     }
     setLoading(false);
