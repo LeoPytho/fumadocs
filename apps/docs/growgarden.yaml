@@ -8,13 +8,13 @@ info:
 
     ## Resources
 
-    * https://v2.jkt48connect.my.id/api
+    * https://v2.jkt48connect.com/api
   version: 1.1.1
   contact:
     name: JKT48Connect
-    url: https://v2.jkt48connect.my.id/api
+    url: https://v2.jkt48connect.com/api
 servers:
-  - url: https://v2.jkt48connect.my.id/api
+  - url: https://v2.jkt48connect.com/api
 security:
   - apiKeyQuery: []
 tags:
