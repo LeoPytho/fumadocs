@@ -2,12 +2,12 @@ openapi: 3.1.1
 info:
   title: JKT48Connect API
   description: |
-    The JKT48Connect API provides access to various data related to JKT48 members, live streams, news, events, and theater schedules. All endpoints require an API key for authentication.
+    The JKT48Connect API provides access to various data related to JKT48 members, live streams, news, events, theater schedules, and video call sessions. All endpoints require an API key for authentication.
 
     ## Resources
 
     * https://v2.jkt48connect.com/api
-  version: 1.1.1
+  version: 1.2.0
   contact:
     name: JKT48Connect
     url: https://v2.jkt48connect.com/api
@@ -26,6 +26,8 @@ tags:
     description: News articles and upcoming events
   - name: Theater
     description: Theater schedules and performances
+  - name: Video Call
+    description: JKT48 video call sessions and schedules
   - name: Chat
     description: Live stream chat functionality
 paths:
@@ -356,6 +358,64 @@ paths:
                 $ref: '#/components/schemas/TheaterDetail'
         '404':
           $ref: '#/components/responses/NotFound'
+
+  '/jkt48/videocall':
+    get:
+      tags:
+        - Video Call
+      summary: Get JKT48 video call sessions
+      description: |
+        Retrieve JKT48 video call session data with optional filtering.
+        
+        **Example usage:**
+        - `/jkt48/videocall` - All video call data
+        - `/jkt48/videocall?date=16` - Sessions on date 16
+        - `/jkt48/videocall?sesi=1` - All session 1 data
+        - `/jkt48/videocall?member=Adeline` - All sessions with Adeline (partial match)
+      operationId: getVideocalls
+      parameters:
+        - name: sesi
+          in: query
+          description: Filter by session number (1, 2, 3, etc.)
+          schema:
+            type: integer
+        - name: date
+          in: query
+          description: Filter by date (format 13, 14, 15, etc.)
+          schema:
+            type: integer
+        - name: member
+          in: query
+          description: Filter by member name (partial match)
+          schema:
+            type: string
+        - $ref: '#/components/parameters/apiKeyQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideocallResponse'
+
+  '/jkt48/videocall/today':
+    get:
+      tags:
+        - Video Call
+      summary: Get today's JKT48 video call sessions
+      description: |
+        Retrieve today's JKT48 video call schedule with real-time status for each session.
+        Shows statistics and countdown information for upcoming sessions.
+      operationId: getTodayVideocalls
+      parameters:
+        - $ref: '#/components/parameters/apiKeyQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodayVideocallResponse'
 
   '/jkt48/chat-stream':
     get:
@@ -719,6 +779,84 @@ components:
             ticketInfo:
               type: string
               description: Ticket information
+
+    VideocallSession:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Video call session ID
+        sesi:
+          type: integer
+          description: Session number
+        date:
+          type: integer
+          description: Date of the session
+        time:
+          type: string
+          description: Session time
+        member:
+          type: string
+          description: Member participating in the video call
+        status:
+          type: string
+          enum: [upcoming, preparation, ongoing, finished]
+          description: Current status of the session
+        duration:
+          type: integer
+          description: Session duration in minutes
+        countdown:
+          type: integer
+          description: Minutes until session starts (for upcoming sessions)
+
+    VideocallResponse:
+      type: object
+      properties:
+        sessions:
+          type: array
+          items:
+            $ref: '#/components/schemas/VideocallSession'
+        totalSessions:
+          type: integer
+          description: Total number of sessions
+        currentTime:
+          type: string
+          format: date-time
+          description: Current time in Indonesia timezone
+
+    VideocallStatistics:
+      type: object
+      properties:
+        totalSessions:
+          type: integer
+          description: Total sessions for today
+        ongoingSessions:
+          type: integer
+          description: Currently ongoing sessions
+        finishedSessions:
+          type: integer
+          description: Finished sessions today
+        upcomingSessions:
+          type: integer
+          description: Upcoming sessions today
+
+    TodayVideocallResponse:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: Today's date
+        currentTime:
+          type: string
+          format: date-time
+          description: Current time in Indonesia timezone
+        statistics:
+          $ref: '#/components/schemas/VideocallStatistics'
+        sessions:
+          type: array
+          items:
+            $ref: '#/components/schemas/VideocallSession'
 
     ChatMessage:
       type: object
