@@ -359,7 +359,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
-'/jkt48/videocall':
+  '/jkt48/videocall':
     get:
       tags:
         - Video Call
