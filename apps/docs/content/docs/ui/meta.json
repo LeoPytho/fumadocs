@@ -33,6 +33,8 @@
     "content",
     "---Chat---",
     "idn-chat",
-    "showroom-chat"
+    "showroom-chat",
+    "---VideoCall---",
+    "video-call"
      ]
 }
