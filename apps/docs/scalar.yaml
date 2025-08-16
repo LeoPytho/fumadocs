@@ -383,18 +383,21 @@ paths:
           description: Optional filter by session number (1, 2, 3, etc.). If not provided, all sessions are returned.
           schema:
             type: integer
+          example: null
         - name: date
           in: query
           required: false
           description: Optional filter by date (format 13, 14, 15, etc.). If not provided, all dates are returned.
           schema:
             type: integer
+          example: null
         - name: member
           in: query
           required: false
           description: Optional filter by member name (partial match). If not provided, all members are included.
           schema:
             type: string
+          example: null
         - $ref: '#/components/parameters/apiKeyQuery'
       responses:
         '200':
@@ -499,6 +502,7 @@ components:
       description: Your unique API key for authentication.
       schema:
         type: string
+      example: ""
 
   responses:
     BadRequest:
