@@ -31,6 +31,8 @@
     "replay",
     "---LiveChat---",
     "idn-chat",
-    "showroom-chat"
+    "showroom-chat",
+    "---VideoCall---",
+    "video-call"
   ]
 }
