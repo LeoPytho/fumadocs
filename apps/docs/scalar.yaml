@@ -359,34 +359,40 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
-  '/jkt48/videocall':
+'/jkt48/videocall':
     get:
       tags:
         - Video Call
       summary: Get JKT48 video call sessions
       description: |
         Retrieve JKT48 video call session data with optional filtering.
+        All parameters are optional - if no parameters are provided, all video call data will be returned.
         
         **Example usage:**
-        - `/jkt48/videocall` - All video call data
+        - `/jkt48/videocall` - All video call data (default)
         - `/jkt48/videocall?date=16` - Sessions on date 16
         - `/jkt48/videocall?sesi=1` - All session 1 data
         - `/jkt48/videocall?member=Adeline` - All sessions with Adeline (partial match)
+        - `/jkt48/videocall?date=16&sesi=1` - Session 1 on date 16
+        - `/jkt48/videocall?member=Adeline&sesi=2` - Session 2 with Adeline
       operationId: getVideocalls
       parameters:
         - name: sesi
           in: query
-          description: Filter by session number (1, 2, 3, etc.)
+          required: false
+          description: Optional filter by session number (1, 2, 3, etc.). If not provided, all sessions are returned.
           schema:
             type: integer
         - name: date
           in: query
-          description: Filter by date (format 13, 14, 15, etc.)
+          required: false
+          description: Optional filter by date (format 13, 14, 15, etc.). If not provided, all dates are returned.
           schema:
             type: integer
         - name: member
           in: query
-          description: Filter by member name (partial match)
+          required: false
+          description: Optional filter by member name (partial match). If not provided, all members are included.
           schema:
             type: string
         - $ref: '#/components/parameters/apiKeyQuery'
