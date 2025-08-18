@@ -76,7 +76,7 @@ export default function DocsPage(): React.ReactElement {
           id="apis"
           onOpen={() => handleModalOpen('apis')}
           icon={<Code className="size-full" />}
-          title="APIs (RestAPI)"
+          title="Playground (RestAPI)"
           description="Interactive API endpoints and playground tools"
         />
       </div>
