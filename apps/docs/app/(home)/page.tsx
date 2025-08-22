@@ -124,7 +124,7 @@ function PrioritySystem() {
         </div>
 
         <Link
-          href="/priority-registration" // Replace with your priority registration link
+          href="https://forms.gle/KeqJF9nAeEq7hxWP9" // Replace with your priority registration link
           className={cn(buttonVariants({ className: 'mt-6' }))}
         >
           Apply for Priority Access
