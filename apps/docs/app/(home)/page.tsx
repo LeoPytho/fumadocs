@@ -16,9 +16,6 @@ import {
   SearchIcon,
   Terminal,
   TimerIcon,
-  ShieldCheckIcon,
-  CheckCircleIcon,
-  StarIcon,
 } from 'lucide-react';
 import { File, Files, Folder } from 'fumadocs-ui/components/files';
 import Link from 'next/link';
@@ -40,6 +37,7 @@ import { TypeTable } from 'fumadocs-ui/components/type-table';
 import { owner, repo } from '@/lib/github'; // Keep if JKT48Connect is on GitHub
 import { Marquee } from '@/app/(home)/marquee'; // Keep for testimonials/marquee
 import ArchImg from './arch.png'; // Replace with JKT48Connect architecture image
+import { ShieldCheckIcon } from 'lucide-react';
 
 const badgeVariants = cva(
   'inline-flex size-7 items-center justify-center rounded-full bg-fd-primary font-medium text-fd-primary-foreground',
@@ -85,8 +83,8 @@ export default function Page() {
             </h2>
           </div>
           <Architecture />
-          <PrioritySystem />
           <Features />
+          <PrioritySystem /> 
           <Highlights />
           <Why />
           <Contributing />
@@ -99,128 +97,98 @@ export default function Page() {
 
 function PrioritySystem() {
   return (
-    <div className="border-x border-t overflow-hidden">
-      {/* Header Section */}
-      <div className="relative bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 dark:from-amber-950/20 dark:via-yellow-950/20 dark:to-amber-950/20 px-8 py-16">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,theme(colors.amber.200/20),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,theme(colors.amber.400/10),transparent_50%)]" />
-        <div className="relative z-10 text-center max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 px-4 py-2 rounded-full text-sm font-semibold mb-6">
-            <StarIcon className="size-4" />
-            Priority Access Program
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent">
-            Enhanced Access for Verified Organizations
-          </h2>
-          <p className="text-lg text-fd-muted-foreground mb-8 max-w-2xl mx-auto">
-            Get unrestricted API access with priority support for qualified JKT48 communities, organizations, and media partners through our verification program.
-          </p>
+    <div className="grid grid-cols-1 border-r md:grid-cols-2">
+      <div className="border-l border-t px-6 py-12 md:py-16">
+        <div className="mb-4 inline-flex items-center gap-2 text-sm font-medium text-fd-muted-foreground">
+          <ShieldCheckIcon className="size-4" />
+          <p>Priority Access</p>
         </div>
+        <h2 className="mb-2 text-lg font-semibold">Enhanced Access for Verified Organizations</h2>
+        <p className="text-fd-muted-foreground mb-8">
+          Get priority access with unlimited requests, no API keys required, and enhanced support for verified organizations, communities, fanbase groups, developers, and media partners.
+        </p>
+        
+        <div className="space-y-4">
+          <div className="rounded-lg border bg-fd-background p-4">
+            <h3 className="font-semibold mb-2">✓ JKT48 Official Organizations</h3>
+            <p className="text-sm text-fd-muted-foreground">Official JKT48 groups and theater management</p>
+          </div>
+          <div className="rounded-lg border bg-fd-background p-4">
+            <h3 className="font-semibold mb-2">✓ Verified Communities & Fanbase</h3>
+            <p className="text-sm text-fd-muted-foreground">Registered JKT48 fan communities and official fanbase groups</p>
+          </div>
+          <div className="rounded-lg border bg-fd-background p-4">
+            <h3 className="font-semibold mb-2">✓ Verified Developers</h3>
+            <p className="text-sm text-fd-muted-foreground">Certified developers building JKT48-related applications</p>
+          </div>
+          <div className="rounded-lg border bg-fd-background p-4">
+            <h3 className="font-semibold mb-2">✓ Media Partners</h3>
+            <p className="text-sm text-fd-muted-foreground">Accredited media organizations covering JKT48</p>
+          </div>
+        </div>
+
+        <Link
+          href="/priority-registration" // Replace with your priority registration link
+          className={cn(buttonVariants({ className: 'mt-6' }))}
+        >
+          Apply for Priority Access
+        </Link>
       </div>
 
-      {/* Benefits Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 border-t">
-        <div className="border-l border-t p-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 mb-4">
-            <CheckCircleIcon className="size-8" />
-          </div>
-          <h3 className="text-xl font-semibold mb-3">No API Key Required</h3>
-          <p className="text-fd-muted-foreground">
-            Skip API key management entirely. Verified organizations get direct access to all endpoints without authentication overhead.
-          </p>
-        </div>
-        
-        <div className="border-l border-t p-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 mb-4">
-            <ShieldCheckIcon className="size-8" />
-          </div>
-          <h3 className="text-xl font-semibold mb-3">IP Whitelist Bypass</h3>
-          <p className="text-fd-muted-foreground">
-            No need for IP whitelisting. Access the API from any location or infrastructure without restrictions once verified.
-          </p>
-        </div>
-        
-        <div className="border-l border-t p-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 mb-4">
-            <RocketIcon className="size-8" />
-          </div>
-          <h3 className="text-xl font-semibold mb-3">Priority Support</h3>
-          <p className="text-fd-muted-foreground">
-            Get dedicated support channel with faster response times and priority assistance for your JKT48 projects.
-          </p>
-        </div>
-      </div>
+      <div className="border-l border-t px-6 py-12 md:py-16">
+        <h3 className="text-xl font-semibold mb-4">Priority Benefits</h3>
+        <p className="text-fd-muted-foreground mb-8">
+          Verified organizations enjoy enhanced access with legal registration requirements.
+        </p>
 
-      {/* Eligible Organizations */}
-      <div className="border-t p-8">
-        <h3 className="text-2xl font-semibold text-center mb-8">Who Qualifies for Priority Access?</h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-          <div className="bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-950/20 dark:to-rose-950/20 border border-pink-200 dark:border-pink-800 rounded-lg p-6">
-            <div className="text-pink-600 dark:text-pink-400 font-semibold mb-2">JKT48 Communities</div>
-            <ul className="text-sm text-fd-muted-foreground space-y-1">
-              <li>• Official fan communities</li>
-              <li>• Verified fanbase groups</li>
-              <li>• Community forums</li>
-            </ul>
+        <div className="relative">
+          <div className="grid grid-cols-[1fr_2fr_1fr] h-[220px] *:border-fd-foreground/50 *:border-dashed mask-radial-circle mask-radial-from-white">
+            <div className="border-r border-b" />
+            <div className="border-b" />
+            <div className="border-l border-b" />
+
+            <div className="border-r" />
+            <div className="w-[200px]" />
+            <div className="border-l" />
+
+            <div className="border-r border-t" />
+            <div className="border-t" />
+            <div className="border-l border-t" />
           </div>
-          
-          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
-            <div className="text-blue-600 dark:text-blue-400 font-semibold mb-2">Organizations</div>
-            <ul className="text-sm text-fd-muted-foreground space-y-1">
-              <li>• Event organizers</li>
-              <li>• Educational institutions</li>
-              <li>• Non-profit organizations</li>
-            </ul>
+          <code className="absolute inset-0 flex items-center justify-center">
+            <code className="text-sm text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-fd-foreground font-medium">
+              No API Key Required
+            </code>
+          </code>
+        </div>
+
+        <div className="mt-8 space-y-3">
+          <div className="flex items-center gap-2 text-sm">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span>Unlimited API Requests</span>
           </div>
-          
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border border-green-200 dark:border-green-800 rounded-lg p-6">
-            <div className="text-green-600 dark:text-green-400 font-semibold mb-2">Media Partners</div>
-            <ul className="text-sm text-fd-muted-foreground space-y-1">
-              <li>• News outlets</li>
-              <li>• Entertainment media</li>
-              <li>• Content platforms</li>
-            </ul>
+          <div className="flex items-center gap-2 text-sm">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span>No IP Whitelisting Required</span>
           </div>
-          
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-6">
-            <div className="text-amber-600 dark:text-amber-400 font-semibold mb-2">Verified Developers</div>
-            <ul className="text-sm text-fd-muted-foreground space-y-1">
-              <li>• Open source contributors</li>
-              <li>• App developers</li>
-              <li>• Integration partners</li>
-            </ul>
+          <div className="flex items-center gap-2 text-sm">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span>Priority Support Channel</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span>Advanced Analytics Dashboard</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span>Early Access to New Features</span>
           </div>
         </div>
-      </div>
 
-      {/* Registration Process */}
-      <div className="border-t bg-fd-muted/30 px-8 py-12">
-        <div className="max-w-4xl mx-auto text-center">
-          <h3 className="text-2xl font-semibold mb-4">Legal Registration Required</h3>
-          <p className="text-fd-muted-foreground mb-8 max-w-2xl mx-auto">
-            Priority access requires verification of your organization's legal status and authenticity. Our review process ensures the integrity of the JKT48 data ecosystem.
+        <div className="mt-8 p-4 bg-fd-muted/30 rounded-lg border">
+          <p className="text-sm text-fd-muted-foreground">
+            <strong>Legal Registration Required:</strong> Organizations must provide valid legal documentation and undergo verification process.
           </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/priority-access/apply" // Replace with your priority application link
-              className={cn(buttonVariants({ size: 'lg', className: 'rounded-full' }))}
-            >
-              Apply for Priority Access
-            </Link>
-            <Link
-              href="/priority-access/requirements" // Replace with requirements documentation
-              className={cn(
-                buttonVariants({
-                  size: 'lg',
-                  variant: 'outline',
-                  className: 'rounded-full bg-fd-background',
-                }),
-              )}
-            >
-              View Requirements
-            </Link>
-          </div>
         </div>
       </div>
     </div>
