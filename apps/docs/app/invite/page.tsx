@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 export default function DiscordRedirect() {
   useEffect(() => {
     // Redirect langsung saat komponen di-mount
-    window.location.href = 'https://discord.com/oauth2/authorize?client_id=1305141693477027891';
+    window.location.href = 'https://discord.com/oauth2/authorize?client_id=1305141693477027891&permissions=8&integration_type=0&scope=bot';
   }, []);
 
   return (
