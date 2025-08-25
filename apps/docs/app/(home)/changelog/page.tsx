@@ -29,96 +29,17 @@ interface ChangelogEntry {
 const changelog: ChangelogEntry[] = [
   {
     version: '2.1.0',
-    date: '2025-01-15',
+    date: '2025-08-18',
     type: 'Minor',
-    title: 'Enhanced Member API & Live Streaming',
-    description: 'Significant improvements to member data API and live streaming capabilities',
+    title: 'Penambahan feature baru yaitu videocall',
+    description: 'Adanya feature baru yaitu videocall untuk mengambil data videocall member jkt48 yang ada.',
     breaking: false,
     changes: [
       {
         type: 'Added',
         items: [
-          'New member profile photos endpoint with high-resolution images',
-          'Live streaming status indicator API',
-          'Member birthday countdown feature',
-          'Enhanced member statistics endpoint'
-        ]
-      },
-      {
-        type: 'Changed',
-        items: [
-          'Improved response time for member list API by 40%',
-          'Updated member data structure with additional fields',
-          'Enhanced error messages for better debugging'
-        ]
-      },
-      {
-        type: 'Fixed',
-        items: [
-          'Fixed member graduation status not updating correctly',
-          'Resolved timezone issues in schedule API',
-          'Fixed memory leak in live stream monitoring'
-        ]
-      }
-    ]
-  },
-  {
-    version: '2.0.5',
-    date: '2025-01-08',
-    type: 'Patch',
-    title: 'Bug Fixes & Performance',
-    breaking: false,
-    changes: [
-      {
-        type: 'Fixed',
-        items: [
-          'Fixed rate limiting issues with high-traffic endpoints',
-          'Resolved CORS errors for certain origins',
-          'Fixed theater schedule displaying incorrect times'
-        ]
-      },
-      {
-        type: 'Changed',
-        items: [
-          'Optimized database queries for faster response times',
-          'Updated API documentation with better examples'
-        ]
-      }
-    ]
-  },
-  {
-    version: '2.0.0',
-    date: '2024-12-20',
-    type: 'Major',
-    title: 'JKT48Connect API v2 Release',
-    description: 'Complete API redesign with improved performance and new features',
-    breaking: true,
-    changes: [
-      {
-        type: 'Added',
-        items: [
-          'New RESTful API design with consistent endpoints',
-          'Real-time WebSocket connections for live updates',
-          'Advanced filtering and sorting capabilities',
-          'Member social media integration',
-          'Theater schedule API with seat availability',
-          'News and announcement API with rich content support'
-        ]
-      },
-      {
-        type: 'Changed',
-        items: [
-          'Complete API endpoint restructure',
-          'New authentication system using API keys',
-          'Improved error handling with detailed error codes',
-          'Updated response formats for better consistency'
-        ]
-      },
-      {
-        type: 'Deprecated',
-        items: [
-          'API v1 endpoints (will be removed in v3.0)',
-          'Legacy member ID format'
+          '/api/jkt48/videocall',
+          '/api/jkt48/videocall/today'
         ]
       }
     ]
