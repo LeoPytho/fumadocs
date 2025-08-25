@@ -209,6 +209,70 @@ const getChangeTypeColor = (type: ChangelogEntry['changes'][0]['type']) => {
   }
 };
 
+function ChangelogEntryCard({ version, date, type, title, description, changes, breaking }: ChangelogEntry) {
+  const formattedDate = new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
+  return (
+    <div className="border border-dashed rounded-lg p-6">
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <TagIcon className="size-4" />
+            <h3 className="text-xl font-medium">{version}</h3>
+          </div>
+          <span className={cn(
+            "px-2 py-1 text-xs font-medium rounded-full border",
+            getTypeColor(type)
+          )}>
+            {type}
+          </span>
+          {breaking && (
+            <span className="px-2 py-1 text-xs font-medium rounded-full border bg-red-100 text-red-800 border-red-200">
+              Breaking Changes
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-1 text-sm text-fd-muted-foreground">
+          <CalendarIcon className="size-4" />
+          {formattedDate}
+        </div>
+      </div>
+
+      <h4 className="text-lg font-medium mb-2">{title}</h4>
+      {description && (
+        <p className="text-fd-muted-foreground mb-4">{description}</p>
+      )}
+
+      <div className="space-y-4">
+        {changes.map((changeGroup, index) => (
+          <div key={index}>
+            <div className="flex items-center gap-2 mb-2">
+              <span className={cn(
+                "px-2 py-1 text-xs font-medium rounded border",
+                getChangeTypeColor(changeGroup.type)
+              )}>
+                {changeGroup.type}
+              </span>
+            </div>
+            <ul className="ml-4 space-y-1">
+              {changeGroup.items.map((item, itemIndex) => (
+                <li key={itemIndex} className="text-sm text-fd-muted-foreground flex items-start gap-2">
+                  <span className="text-fd-primary mt-1.5 text-xs">•</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Changelog() {
   return (
     <main className="px-4 py-12 z-[2] w-full max-w-[1400px] mx-auto [--color-fd-border:color-mix(in_oklab,var(--color-fd-primary)_30%,transparent)]">
@@ -257,14 +321,12 @@ export default function Changelog() {
         </div>
       </div>
 
-      {/* Changelog Entries */}
       <div className="mt-8 space-y-8">
         {changelog.map((entry, index) => (
           <ChangelogEntryCard key={entry.version} {...entry} />
         ))}
       </div>
 
-      {/* Legend */}
       <div className="mt-16 border border-dashed p-6 rounded-lg">
         <h3 className="text-lg font-medium mb-4">Change Types Legend</h3>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -289,7 +351,6 @@ export default function Changelog() {
         </div>
       </div>
 
-      {/* Call to Action */}
       <div className="mt-8 text-center border border-dashed p-8 rounded-lg">
         <h3 className="text-lg font-medium mb-2">Have feedback or suggestions?</h3>
         <p className="text-fd-muted-foreground mb-4">
@@ -325,72 +386,5 @@ export default function Changelog() {
         </div>
       </div>
     </main>
-  );
-}
-
-function ChangelogEntryCard({ version, date, type, title, description, changes, breaking }: ChangelogEntry) {
-  const formattedDate = new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-
-  return (
-    <div className="border border-dashed rounded-lg p-6">
-      {/* Header */}
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <TagIcon className="size-4" />
-            <h3 className="text-xl font-medium">{version}</h3>
-          </div>
-          <span className={cn(
-            "px-2 py-1 text-xs font-medium rounded-full border",
-            getTypeColor(type)
-          )}>
-            {type}
-          </span>
-          {breaking && (
-            <span className="px-2 py-1 text-xs font-medium rounded-full border bg-red-100 text-red-800 border-red-200">
-              Breaking Changes
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-1 text-sm text-fd-muted-foreground">
-          <CalendarIcon className="size-4" />
-          {formattedDate}
-        </div>
-      </div>
-
-      {/* Title and Description */}
-      <h4 className="text-lg font-medium mb-2">{title}</h4>
-      {description && (
-        <p className="text-fd-muted-foreground mb-4">{description}</p>
-      )}
-
-      {/* Changes */}
-      <div className="space-y-4">
-        {changes.map((changeGroup, index) => (
-          <div key={index}>
-            <div className="flex items-center gap-2 mb-2">
-              <span className={cn(
-                "px-2 py-1 text-xs font-medium rounded border",
-                getChangeTypeColor(changeGroup.type)
-              )}>
-                {changeGroup.type}
-              </span>
-            </div>
-            <ul className="ml-4 space-y-1">
-              {changeGroup.items.map((item, itemIndex) => (
-                <li key={itemIndex} className="text-sm text-fd-muted-foreground flex items-start gap-2">
-                  <span className="text-fd-primary mt-1.5 text-xs">•</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </div>
   );
 }
