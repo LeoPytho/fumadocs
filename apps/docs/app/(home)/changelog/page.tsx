@@ -1,9 +1,8 @@
 import { CalendarIcon, GitBranchIcon, TagIcon } from 'lucide-react';
-import Image, { type StaticImageData } from 'next/image';
+import Image from 'next/image';
 import { cn } from '@/lib/cn';
 import { buttonVariants } from '@/components/ui/button';
 import { createMetadata } from '@/lib/metadata';
-import Link from 'fumadocs-core/link';
 import Design from './design.png';
 
 export const metadata = createMetadata({
@@ -123,55 +122,6 @@ const changelog: ChangelogEntry[] = [
         ]
       }
     ]
-  },
-  {
-    version: '1.8.3',
-    date: '2024-11-28',
-    type: 'Patch',
-    title: 'Stability & Security Updates',
-    breaking: false,
-    changes: [
-      {
-        type: 'Security',
-        items: [
-          'Updated dependencies to patch security vulnerabilities',
-          'Enhanced rate limiting to prevent abuse',
-          'Improved input validation for all endpoints'
-        ]
-      },
-      {
-        type: 'Fixed',
-        items: [
-          'Fixed intermittent 500 errors on member endpoint',
-          'Resolved image loading issues for member photos'
-        ]
-      }
-    ]
-  },
-  {
-    version: '1.8.0',
-    date: '2024-11-15',
-    type: 'Minor',
-    title: 'Discord Bot Integration & New Features',
-    breaking: false,
-    changes: [
-      {
-        type: 'Added',
-        items: [
-          'Discord bot with notification features',
-          'Member birthday reminder system',
-          'Enhanced search functionality',
-          'New endpoint for member social media links'
-        ]
-      },
-      {
-        type: 'Changed',
-        items: [
-          'Improved API documentation with interactive examples',
-          'Updated member profile data structure'
-        ]
-      }
-    ]
   }
 ];
 
@@ -274,8 +224,10 @@ function ChangelogEntryCard({ version, date, type, title, description, changes, 
 }
 
 export default function Changelog() {
+  const mainClassName = "px-4 py-12 z-[2] w-full max-w-[1400px] mx-auto [--color-fd-border:color-mix(in_oklab,var(--color-fd-primary)_30%,transparent)]";
+  
   return (
-    <main className="px-4 py-12 z-[2] w-full max-w-[1400px] mx-auto [--color-fd-border:color-mix(in_oklab,var(--color-fd-primary)_30%,transparent)]">
+    <main className={mainClassName}>
       <div className="relative overflow-hidden border border-dashed p-6">
         <h1 className="mb-4 text-xl font-medium">
           JKT48Connect Changelog
@@ -322,7 +274,7 @@ export default function Changelog() {
       </div>
 
       <div className="mt-8 space-y-8">
-        {changelog.map((entry, index) => (
+        {changelog.map((entry) => (
           <ChangelogEntryCard key={entry.version} {...entry} />
         ))}
       </div>
@@ -354,7 +306,7 @@ export default function Changelog() {
       <div className="mt-8 text-center border border-dashed p-8 rounded-lg">
         <h3 className="text-lg font-medium mb-2">Have feedback or suggestions?</h3>
         <p className="text-fd-muted-foreground mb-4">
-          We'd love to hear from you. Help us improve JKT48Connect by sharing your thoughts.
+          We would love to hear from you. Help us improve JKT48Connect by sharing your thoughts.
         </p>
         <div className="flex justify-center gap-4">
           
