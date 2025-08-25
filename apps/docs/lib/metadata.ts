@@ -6,7 +6,7 @@ export function createMetadata(override: Metadata): Metadata {
     openGraph: {
       title: override.title ?? undefined,
       description: override.description ?? undefined,
-      url: 'https://docs.jkt48connect.my.id',
+      url: 'https://docs.jkt48connect.com',
       images: '/banner.png',
       siteName: 'JKT48Connect docs',
       ...override.openGraph,
@@ -24,7 +24,7 @@ export function createMetadata(override: Metadata): Metadata {
         'application/rss+xml': [
           {
             title: 'JKT48Connect Blog',
-            url: 'https://docs.jkt48connect.my.id/blog/rss.xml',
+            url: 'https://docs.jkt48connect.com/blog/rss.xml',
           },
         ],
       },
