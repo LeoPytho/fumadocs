@@ -236,7 +236,7 @@ export default function Changelog() {
           Stay updated with the latest changes, improvements, and new features in JKT48Connect API and services.
         </p>
         <div className="mt-6">
-          
+          <a
             href="https://github.com/jkt48connect"
             target="_blank"
             rel="noreferrer noopener"
@@ -309,7 +309,7 @@ export default function Changelog() {
           We would love to hear from you. Help us improve JKT48Connect by sharing your thoughts.
         </p>
         <div className="flex justify-center gap-4">
-          
+          <a
             href="https://github.com/jkt48connect/issues"
             target="_blank"
             rel="noreferrer noopener"
@@ -322,7 +322,7 @@ export default function Changelog() {
           >
             Report an Issue
           </a>
-          
+          <a
             href="https://wa.me/6285701479245"
             target="_blank"
             rel="noreferrer noopener"
