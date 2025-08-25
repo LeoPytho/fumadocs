@@ -2,7 +2,15 @@ openapi: 3.1.1
 info:
   title: JKT48Connect API
   description: |
-    The JKT48Connect API provides access to various data related to JKT48 members, live streams, news, events, theater schedules, and video call sessions. All endpoints require an API key for authentication.
+    The JKT48Connect API provides access to various data related to JKT48 members, live streams, news, events, theater schedules, and video call sessions. 
+    
+    ## Authentication
+    
+    This API supports two authentication methods:
+    1. **API Key (Query Parameter)** - Standard authentication using `apikey` query parameter
+    2. **Priority Token (Header)** - Enhanced authentication using `x-priority-token` header for priority access
+    
+    You can use either authentication method, but Priority Token is recommended for better performance and priority handling.
 
     ## Resources
 
@@ -15,6 +23,7 @@ servers:
   - url: https://v2.jkt48connect.com/api
 security:
   - apiKeyQuery: []
+  - priorityToken: []
 tags:
   - name: Members
     description: JKT48 member information and details
@@ -30,6 +39,7 @@ tags:
     description: JKT48 video call sessions and schedules
   - name: Chat
     description: Live stream chat functionality
+
 paths:
   '/jkt48/members':
     get:
@@ -38,8 +48,9 @@ paths:
       summary: Get all JKT48 members
       description: Retrieve a list of all JKT48 members.
       operationId: getMembers
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -64,7 +75,9 @@ paths:
           description: The name of the member.
           schema:
             type: string
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -82,8 +95,9 @@ paths:
       summary: Get JKT48 member birthdays
       description: Retrieve upcoming or recent JKT48 member birthdays.
       operationId: getBirthdays
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -101,8 +115,9 @@ paths:
       summary: Get current JKT48 live streams
       description: Retrieve a list of currently active JKT48 live streams across all platforms.
       operationId: getCurrentLives
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -120,8 +135,9 @@ paths:
       summary: Get JKT48 YouTube lives
       description: Retrieve a list of currently active JKT48 YouTube live streams.
       operationId: getYouTubeLives
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -139,8 +155,9 @@ paths:
       summary: Get JKT48 IDN lives
       description: Retrieve a list of currently active JKT48 IDN live streams.
       operationId: getIDNLives
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -158,8 +175,9 @@ paths:
       summary: Get JKT48 Showroom lives
       description: Retrieve a list of currently active JKT48 Showroom live streams.
       operationId: getShowroomLives
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -177,8 +195,9 @@ paths:
       summary: Get recent JKT48 live streams
       description: Retrieve a list of recently finished JKT48 live streams.
       operationId: getRecentLives
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -203,7 +222,9 @@ paths:
           description: The ID of the live stream.
           schema:
             type: string
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -221,8 +242,9 @@ paths:
       summary: Get JKT48 live stream replays
       description: Retrieve a list of available JKT48 live stream replays.
       operationId: getReplays
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -240,8 +262,9 @@ paths:
       summary: Get JKT48 YouTube videos
       description: Retrieve information about JKT48 YouTube videos.
       operationId: getYouTubeVideos
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -259,8 +282,9 @@ paths:
       summary: Get JKT48 events
       description: Retrieve a list of JKT48 events.
       operationId: getEvents
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -278,8 +302,9 @@ paths:
       summary: Get JKT48 news
       description: Retrieve a list of JKT48 news articles.
       operationId: getNews
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -304,7 +329,9 @@ paths:
           description: The ID of the news article.
           schema:
             type: integer
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -322,8 +349,9 @@ paths:
       summary: Get JKT48 theater schedules
       description: Retrieve upcoming JKT48 theater schedules.
       operationId: getTheater
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -348,7 +376,9 @@ paths:
           description: The ID of the theater schedule.
           schema:
             type: integer
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -398,7 +428,9 @@ paths:
           schema:
             type: string
           allowEmptyValue: true
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -416,8 +448,9 @@ paths:
         Retrieve today's JKT48 video call schedule with real-time status for each session.
         Shows statistics and countdown information for upcoming sessions.
       operationId: getTodayVideocalls
-      parameters:
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -446,7 +479,9 @@ paths:
           description: The slug of the live stream.
           schema:
             type: string
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -473,7 +508,9 @@ paths:
           description: The room ID of the Showroom live stream.
           schema:
             type: string
-        - $ref: '#/components/parameters/apiKeyQuery'
+      security:
+        - apiKeyQuery: []
+        - priorityToken: []
       responses:
         '200':
           description: OK
@@ -493,16 +530,11 @@ components:
       in: query
       name: apikey
       description: API key required for authentication
-
-  parameters:
-    apiKeyQuery:
-      name: apikey
-      in: query
-      required: true
-      description: Your unique API key for authentication.
-      schema:
-        type: string
-      allowEmptyValue: false
+    priorityToken:
+      type: apiKey
+      in: header
+      name: x-priority-token
+      description: Priority token for enhanced authentication and priority access
 
   responses:
     BadRequest:
