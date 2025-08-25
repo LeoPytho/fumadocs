@@ -18,8 +18,8 @@ export async function getLLMText(page: Page) {
     {
       ui: 'JKT48Connect API',
       headless: 'JKT48Connect Core',
-      mdx: 'Fumadocs MDX (the built-in content source)',
-      cli: 'Fumadocs CLI (the CLI tool for automating Fumadocs apps)',
+      mdx: 'JKT48Connect',
+      cli: 'JKT48Connect',
     }[page.slugs[0]] ?? page.slugs[0];
 
   const processed = await processor.process({
