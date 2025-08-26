@@ -15,6 +15,7 @@ import VisionUI from '@/public/showcases/vision-ui.png';
 import Design from './design.png';
 import Jeketian from './686103cd95e8ca13853ee2a9.jpg';
 import Jkt48connect from './685ff7f8525d02566271d545.png';
+import nayrakuen from './Screenshot 2025-08-26 195701.png';
 import Link from 'fumadocs-core/link';
 import MixSpace from '@/public/showcases/mix-space.png';
 import TurboStarter from '@/public/showcases/turbostarter.png';
@@ -51,7 +52,12 @@ const showcases: ShowcaseObject[] = [
   {
     image: Jkt48connect,
     name: 'JKT48Connect',
-    url: 'https://www.jkt48connect.my.id',
+    url: 'https://www.jkt48connect.com',
+  },
+  {
+    image: nayrakuen,
+    name: 'Nayrakuen',
+    url: 'https://nayrakuen.com',
   },
 ];
 
@@ -62,7 +68,7 @@ const blogs: ShowcaseObject[] = [
   },
   {
     name: 'JKT48Connect Discord Bot',
-    url: 'https://discord.com/oauth2/authorize?client_id=1305141693477027891',
+  url: 'https://docs.jkt48connect.com',
   },
 ];
 
