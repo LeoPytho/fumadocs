@@ -37,6 +37,11 @@ export default function Layout({ children }: { children: ReactNode }) {
               url: '/docs/openapi',
               icon: <ComponentIcon />,
             },
+            {
+              text: 'Changelog',
+              url: '/changelog',
+              icon: <ComponentIcon />,
+            },
           ],
         },
         {
