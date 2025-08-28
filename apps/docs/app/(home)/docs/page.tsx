@@ -1,6 +1,6 @@
 'use client';
 
-import { Building2, Code, X, Package, Globe } from 'lucide-react';
+import { Building2, Code, X, Package, Globe, ArrowLeft } from 'lucide-react';
 import Link, { type LinkProps } from 'next/link';
 import Image from 'next/image';
 import { buttonVariants } from '@/components/ui/button';
@@ -10,13 +10,24 @@ import { useState } from 'react';
 
 export default function DocsPage(): React.ReactElement {
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [subModal, setSubModal] = useState<string | null>(null);
 
   const handleModalOpen = (modalId: string) => {
     setActiveModal(modalId);
+    setSubModal(null);
+  };
+
+  const handleSubModalOpen = (subModalId: string) => {
+    setSubModal(subModalId);
   };
 
   const handleModalClose = () => {
     setActiveModal(null);
+    setSubModal(null);
+  };
+
+  const handleBackToMain = () => {
+    setSubModal(null);
   };
 
   return (
@@ -62,22 +73,22 @@ export default function DocsPage(): React.ReactElement {
         </Link>
       </div>
       <div className="mt-16 grid grid-cols-1 gap-6 text-left md:grid-cols-2 w-full max-w-4xl">
-        {/* Module Card */}
+        {/* JKT48 Card */}
         <ClickableCard
-          id="modules"
-          onOpen={() => handleModalOpen('modules')}
+          id="jkt48"
+          onOpen={() => handleModalOpen('jkt48')}
           icon={<Package className="size-full" />}
-          title="Modules"
-          description="Core libraries and modules for JKT48Connect"
+          title="JKT48"
+          description="JKT48 APIs, modules and playground tools"
         />
 
-        {/* APIs Card */}
+        {/* KLP48 Card */}
         <ClickableCard
-          id="apis"
-          onOpen={() => handleModalOpen('apis')}
+          id="klp48"
+          onOpen={() => handleModalOpen('klp48')}
           icon={<Code className="size-full" />}
-          title="Playground (RestAPI)"
-          description="Interactive API endpoints and playground tools"
+          title="KLP48"
+          description="KLP48 APIs, modules and playground tools"
         />
       </div>
 
@@ -88,11 +99,37 @@ export default function DocsPage(): React.ReactElement {
             className="bg-fd-background rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
-            {activeModal === 'modules' && (
-              <ModulesModal onClose={handleModalClose} />
+            {activeModal === 'jkt48' && !subModal && (
+              <CategoryModal 
+                title="JKT48" 
+                description="JKT48 APIs, modules and playground tools"
+                icon={<Package className="size-full" />}
+                onClose={handleModalClose} 
+                onSubModalOpen={handleSubModalOpen}
+                category="jkt48"
+              />
             )}
-            {activeModal === 'apis' && (
-              <APIsModal onClose={handleModalClose} />
+            {activeModal === 'klp48' && !subModal && (
+              <CategoryModal 
+                title="KLP48" 
+                description="KLP48 APIs, modules and playground tools"
+                icon={<Code className="size-full" />}
+                onClose={handleModalClose} 
+                onSubModalOpen={handleSubModalOpen}
+                category="klp48"
+              />
+            )}
+            {subModal === 'jkt48-modules' && (
+              <ModulesModal onClose={handleModalClose} onBack={handleBackToMain} category="jkt48" />
+            )}
+            {subModal === 'jkt48-apis' && (
+              <APIsModal onClose={handleModalClose} onBack={handleBackToMain} category="jkt48" />
+            )}
+            {subModal === 'klp48-modules' && (
+              <ModulesModal onClose={handleModalClose} onBack={handleBackToMain} category="klp48" />
+            )}
+            {subModal === 'klp48-apis' && (
+              <APIsModal onClose={handleModalClose} onBack={handleBackToMain} category="klp48" />
             )}
           </div>
         </div>
@@ -148,23 +185,30 @@ function ClickableCard({
   );
 }
 
-interface ModalProps {
+interface CategoryModalProps {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
   onClose: () => void;
+  onSubModalOpen: (subModalId: string) => void;
+  category: string;
 }
 
-function ModulesModal({ onClose }: ModalProps): React.ReactElement {
-  const items = [
+function CategoryModal({ title, description, icon, onClose, onSubModalOpen, category }: CategoryModalProps): React.ReactElement {
+  const options = [
     {
-      href: '/docs/headless',
-      title: 'JKT48Connect Core',
-      description: 'The core library of JKT48Connect.',
-      icon: <Building2 className="size-5" />
+      id: 'modules',
+      title: 'Modules',
+      description: `Core libraries and modules for ${title}Connect`,
+      icon: <Package className="size-5" />,
+      onClick: () => onSubModalOpen(`${category}-modules`)
     },
     {
-      href: '/docs/ui',
-      title: 'JKT48Connect API',
-      description: 'The full-powered documentation for api instead.',
-      icon: <Globe className="size-5" />
+      id: 'apis',
+      title: 'Playground (RestAPI)',
+      description: `Interactive API endpoints and playground tools for ${title}`,
+      icon: <Code className="size-5" />,
+      onClick: () => onSubModalOpen(`${category}-apis`)
     }
   ];
 
@@ -173,12 +217,110 @@ function ModulesModal({ onClose }: ModalProps): React.ReactElement {
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-3">
           <Icon>
+            {icon}
+          </Icon>
+          <div>
+            <h2 className="text-xl font-semibold">{title}</h2>
+            <p className="text-sm text-fd-muted-foreground">
+              {description}
+            </p>
+          </div>
+        </div>
+        <button
+          onClick={onClose}
+          className="p-2 hover:bg-fd-accent/50 rounded-lg transition-colors duration-150"
+        >
+          <X className="size-5" />
+        </button>
+      </div>
+      
+      <div className="space-y-4">
+        {options.map((option) => (
+          <button
+            key={option.id}
+            onClick={option.onClick}
+            className="w-full text-left p-4 rounded-xl border hover:bg-fd-accent/30 transition-all duration-200 hover:shadow-md"
+          >
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 mt-1 text-fd-primary">
+                {option.icon}
+              </div>
+              <div>
+                <h3 className="font-semibold text-base mb-2">{option.title}</h3>
+                <p className="text-sm text-fd-muted-foreground leading-relaxed">
+                  {option.description}
+                </p>
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+interface ModalProps {
+  onClose: () => void;
+  onBack: () => void;
+  category: string;
+}
+
+function ModulesModal({ onClose, onBack, category }: ModalProps): React.ReactElement {
+  const categoryName = category.toUpperCase();
+  
+  const getItems = () => {
+    if (category === 'klp48') {
+      return [
+        {
+          href: '/docs/klp48/headless',
+          title: 'KLP48Connect Core',
+          description: 'The core library of KLP48Connect.',
+          icon: <Building2 className="size-5" />
+        },
+        {
+          href: '/docs/klp48/ui',
+          title: 'KLP48Connect API',
+          description: 'The full-powered documentation for KLP48 api instead.',
+          icon: <Globe className="size-5" />
+        }
+      ];
+    } else {
+      return [
+        {
+          href: '/docs/headless',
+          title: 'JKT48Connect Core',
+          description: 'The core library of JKT48Connect.',
+          icon: <Building2 className="size-5" />
+        },
+        {
+          href: '/docs/ui',
+          title: 'JKT48Connect API',
+          description: 'The full-powered documentation for api instead.',
+          icon: <Globe className="size-5" />
+        }
+      ];
+    }
+  };
+
+  const items = getItems();
+
+  return (
+    <div className="p-6">
+      <div className="flex items-start justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onBack}
+            className="p-2 hover:bg-fd-accent/50 rounded-lg transition-colors duration-150"
+          >
+            <ArrowLeft className="size-5" />
+          </button>
+          <Icon>
             <Package className="size-full" />
           </Icon>
           <div>
-            <h2 className="text-xl font-semibold">Modules</h2>
+            <h2 className="text-xl font-semibold">{categoryName} Modules</h2>
             <p className="text-sm text-fd-muted-foreground">
-              Core libraries and modules for JKT48Connect
+              Core libraries and modules for {categoryName}Connect
             </p>
           </div>
         </div>
@@ -216,26 +358,55 @@ function ModulesModal({ onClose }: ModalProps): React.ReactElement {
   );
 }
 
-function APIsModal({ onClose }: ModalProps): React.ReactElement {
-  const items = [
-    {
-      href: '/docs/openapi',
-      title: 'JKT48Connect RestAPI',
-      description: 'Interactive playground to test API features directly in your browser with real-time output.',
-      icon: <Code className="size-5" />
-    },
-    {
-      href: '/docs/playground',
-      title: 'Grow A Garden API',
-      description: 'Interactive playground to experiment with Garden API features and see results in real-time.',
-      icon: <Building2 className="size-5" />
+function APIsModal({ onClose, onBack, category }: ModalProps): React.ReactElement {
+  const categoryName = category.toUpperCase();
+  
+  const getItems = () => {
+    if (category === 'klp48') {
+      return [
+        {
+          href: '/docs/klp48/openapi',
+          title: 'KLP48Connect RestAPI',
+          description: 'Interactive playground to test KLP48 API features directly in your browser with real-time output.',
+          icon: <Code className="size-5" />
+        },
+        {
+          href: '/docs/klp48/playground',
+          title: 'KLP48 Garden API',
+          description: 'Interactive playground to experiment with KLP48 Garden API features and see results in real-time.',
+          icon: <Building2 className="size-5" />
+        }
+      ];
+    } else {
+      return [
+        {
+          href: '/docs/openapi',
+          title: 'JKT48Connect RestAPI',
+          description: 'Interactive playground to test API features directly in your browser with real-time output.',
+          icon: <Code className="size-5" />
+        },
+        {
+          href: '/docs/playground',
+          title: 'Grow A Garden API',
+          description: 'Interactive playground to experiment with Garden API features and see results in real-time.',
+          icon: <Building2 className="size-5" />
+        }
+      ];
     }
-  ];
+  };
+
+  const items = getItems();
 
   return (
     <div className="p-6">
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-3">
+          <button
+            onClick={onBack}
+            className="p-2 hover:bg-fd-accent/50 rounded-lg transition-colors duration-150"
+          >
+            <ArrowLeft className="size-5" />
+          </button>
           <Icon>
             <Code className="size-full" />
           </Icon>
