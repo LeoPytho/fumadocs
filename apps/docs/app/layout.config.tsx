@@ -19,6 +19,12 @@ export const linkItems: LinkItemType[] = [
     active: 'url',
   },
   {
+    text: 'Changelog',
+    url: '/changelog',
+    icon: <LayoutTemplate />,
+    active: 'url',
+  },
+  {
     type: 'icon',
     url: 'https://github.com/j-forces',
     text: 'Github',
