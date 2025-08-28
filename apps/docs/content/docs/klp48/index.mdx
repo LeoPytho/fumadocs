@@ -1,0 +1,383 @@
+---
+title: Introduction
+description: Getting started with @jkt48/core module
+icon: Album
+---
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## What is this?
+
+@jkt48/core is a powerful Node.js module created by JKT48Connect to simplify developers' work when building JKT48-related projects. This module serves as an alternative to using REST API URLs directly, providing a more streamlined and developer-friendly approach.
+
+- Member Management & Information
+- Schedule & Event Handling
+- News & Announcements
+- Theater Show Data
+- Social Media Integration
+- Additional utilities for JKT48 ecosystem
+
+<Callout title="Info">
+
+    This entire ecosystem project was created by **Valzy** as the main developer, working independently to build comprehensive tools for the JKT48 community.
+
+    All features require an API key for authentication and access.
+
+</Callout>
+
+## Installation
+
+The module is available on NPM and can be installed easily:
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tab>
+
+```bash
+npm install @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+yarn add @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+pnpm add @jkt48/core
+```
+
+</Tab>
+</Tabs>
+
+## Basic Usage
+
+Here's a simple example of how to use the @jkt48/core module:
+
+<Tabs items={['CommonJS', 'ES Modules']}>
+<Tab>
+
+```javascript
+const jkt48Api = require('@jkt48/core');
+
+// Example: Get all JKT48 members
+async function getMembers() {
+  try {
+    const apiKey = 'your-api-key-here';
+    const members = await jkt48Api.members(apiKey);
+    console.log(members);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+getMembers();
+```
+
+</Tab>
+<Tab>
+
+```javascript
+import jkt48Api from '@jkt48/core';
+
+// Example: Get all JKT48 members
+async function getMembers() {
+  try {
+    const apiKey = 'your-api-key-here';
+    const members = await jkt48Api.members(apiKey);
+    console.log(members);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+getMembers();
+```
+
+</Tab>
+</Tabs>
+
+<Callout title="Warning">
+
+    Make sure to keep your API key secure and never expose it in client-side code or public repositories.
+
+</Callout>
+
+## API Key Required
+
+<Callout title="Important">
+
+    All features in this module require a valid API key to function properly.
+
+</Callout>
+
+To get your API key, you have several options:
+
+### Purchase Options
+
+<Cards>
+
+<Card
+  title="Website Purchase"
+  href="https://www.jkt48connect.my.id/buyapi"
+  description="Buy your API key directly from the official website"
+/>
+
+<Card
+  title="WhatsApp Bot"
+  description="Get your API key through our WhatsApp bot service"
+/>
+
+<Card
+  title="Discord Bot"
+  description="Purchase via our Discord bot for quick access"
+/>
+
+</Cards>
+
+### Support & Contact
+
+Need help or have questions? We're here to assist you:
+
+<Steps>
+<Step>
+
+### Email Support
+Send your inquiries to: **support@jkt48connect.my.id**
+
+</Step>
+
+<Step>
+
+### WhatsApp Support
+Contact us directly: **+62 857-0147-9245**
+
+</Step>
+
+<Step>
+
+### Phone Support
+Call us directly for immediate assistance
+
+</Step>
+</Steps>
+
+## Project Structure
+
+When working with @jkt48/core, here's a recommended project structure:
+
+<Files>
+  <Folder name="src" defaultOpen>
+    <File name="index.js" />
+    <File name="config.js" />
+    <Folder name="services">
+      <File name="memberService.js" />
+      <File name="scheduleService.js" />
+      <File name="newsService.js" />
+    </Folder>
+    <Folder name="utils">
+      <File name="apiHelper.js" />
+      <File name="errorHandler.js" />
+    </Folder>
+  </Folder>
+  <Folder name="tests">
+    <File name="members.test.js" />
+    <File name="schedule.test.js" />
+  </Folder>
+  <File name="package.json" />
+  <File name=".env" />
+  <File name="README.md" />
+</Files>
+
+## API Response Types
+
+The @jkt48/core module returns structured data with the following types:
+
+### Member Data Type
+<AutoTypeTable type="{ 
+  id: string; 
+  name: string; 
+  generation: string; 
+  team: string; 
+  socialMedia: { 
+    instagram?: string; 
+    twitter?: string; 
+    tiktok?: string; 
+  }; 
+  profileImage: string; 
+  isActive: boolean; 
+}" />
+
+### Schedule Data Type
+<AutoTypeTable type="{ 
+  id: string; 
+  title: string; 
+  date: string; 
+  time: string; 
+  venue: string; 
+  members: string[]; 
+  ticketInfo?: { 
+    price: number; 
+    availability: boolean; 
+  }; 
+}" />
+
+## Core Features
+
+The @jkt48/core module provides comprehensive access to JKT48 data and services:
+
+<Accordions type="single">
+
+<Accordion title="Member Information">
+Access detailed information about JKT48 members, including profiles, social media links, and current status.
+</Accordion>
+
+<Accordion title="Schedule Management">
+Retrieve theater schedules, upcoming events, and performance data.
+</Accordion>
+
+<Accordion title="News & Updates">
+Get the latest news, announcements, and updates from JKT48 official sources.
+</Accordion>
+
+<Accordion title="Social Media Integration">
+Access social media posts, updates, and engagement data from various platforms.
+</Accordion>
+
+</Accordions>
+
+## Advanced Examples
+
+### Getting Member Details
+
+```javascript
+const jkt48Api = require('@jkt48/core');
+
+async function getMemberDetails(memberId) {
+  try {
+    const apiKey = 'your-api-key-here';
+    const memberInfo = await jkt48Api.memberDetails(apiKey, memberId);
+    
+    console.log(`Name: ${memberInfo.name}`);
+    console.log(`Generation: ${memberInfo.generation}`);
+    console.log(`Social Media: ${memberInfo.socialMedia}`);
+  } catch (error) {
+    console.error('Error fetching member details:', error.message);
+  }
+}
+```
+
+### Fetching Theater Schedule
+
+```javascript
+async function getTheaterSchedule() {
+  try {
+    const apiKey = 'your-api-key-here';
+    const schedule = await jkt48Api.theaterSchedule(apiKey);
+    
+    schedule.forEach(show => {
+      console.log(`Show: ${show.title}`);
+      console.log(`Date: ${show.date}`);
+      console.log(`Members: ${show.members.join(', ')}`);
+    });
+  } catch (error) {
+    console.error('Error fetching schedule:', error.message);
+  }
+}
+```
+
+<Callout title="Tip">
+
+    Always handle errors properly when making API calls to ensure your application remains stable.
+
+</Callout>
+
+## Why Choose @jkt48/core?
+
+<Cards>
+
+<Card
+  title="Easy Integration"
+  description="Simple NPM installation and straightforward API calls"
+/>
+
+<Card
+  title="Comprehensive Data"
+  description="Access to complete JKT48 ecosystem information"
+/>
+
+<Card
+  title="Developer Friendly"
+  description="Well-documented with clear examples and error handling"
+/>
+
+<Card
+  title="Regular Updates"
+  description="Continuously maintained by the dedicated development team"
+/>
+
+</Cards>
+
+## Getting Started
+
+Ready to start building with @jkt48/core? Follow these steps:
+
+<Steps>
+<Step>
+
+### Install the Module
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tab>
+
+```bash
+npm install @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+yarn add @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+pnpm add @jkt48/core
+```
+
+</Tab>
+</Tabs>
+
+</Step>
+
+<Step>
+
+### Get Your API Key
+Visit [jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi) to purchase your API key
+
+</Step>
+
+<Step>
+
+### Start Coding
+Import the module and start building your JKT48 application
+
+</Step>
+
+<Step>
+
+### Deploy
+Deploy your application and start serving the JKT48 community
+
+</Step>
+</Steps>
+
+<Callout title="Support">
+
+    Need additional help? Don't hesitate to reach out to our support team at **support@jkt48connect.my.id** or **+62 857-0147-9245**.
+
+</Callout>

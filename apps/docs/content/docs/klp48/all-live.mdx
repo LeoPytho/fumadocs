@@ -1,0 +1,616 @@
+---
+title: Live All Platforms
+description: Get current JKT48 live streaming data from all platforms using @jkt48/core module
+icon: Video
+---
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## What is Live All Platforms API?
+
+The Live All Platforms API from @jkt48/core allows you to retrieve real-time information about currently active JKT48 live streams across all supported platforms including YouTube, IDN Live, and SHOWROOM. This endpoint provides comprehensive live streaming data with direct streaming URLs, chat room information, and member details for all ongoing streams in a single API call.
+
+- Real-time active streams from all platforms (YouTube, IDN, SHOWROOM)
+- Direct streaming URLs with quality options
+- Chat room integration details
+- Member profile information with images
+- Stream start timestamps and duration
+- Platform-specific metadata and room IDs
+
+<Callout>
+This API endpoint returns real-time data about currently active live streams across all platforms, making it perfect for building live stream aggregators and monitoring dashboards.
+
+All features require an API key for authentication and access.
+</Callout>
+
+## Installation
+
+The module is available on NPM and can be installed easily:
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tab>
+
+```bash
+npm install @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+yarn add @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+pnpm add @jkt48/core
+```
+
+</Tab>
+</Tabs>
+
+## Basic Usage
+
+Here's how to get current JKT48 live streaming data from all platforms:
+
+<Tabs items={['CommonJS', 'ES Modules']}>
+<Tab>
+
+```javascript
+const jkt48Api = require('@jkt48/core');
+
+// Get current live streams from all platforms
+async function getCurrentLiveStreams() {
+  try {
+    const apiKey = 'your-api-key-here';
+    const live = await jkt48Api.live(apiKey);
+    console.log(live);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+getCurrentLiveStreams();
+```
+
+</Tab>
+<Tab>
+
+```javascript
+import { live } from '@jkt48/core';
+
+// Get current live streams from all platforms
+async function getCurrentLiveStreams() {
+  try {
+    const apiKey = 'your-api-key-here';
+    const liveInfo = await live(apiKey);
+    console.log(liveInfo);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+getCurrentLiveStreams();
+```
+
+</Tab>
+</Tabs>
+
+<Callout title="Warning" type="error">
+Make sure to keep your API key secure and never expose it in client-side code or public repositories.
+</Callout>
+
+## API Key Required
+
+<Callout title="Important">
+All features in this module require a valid API key to function properly.
+</Callout>
+
+To get your API key, you have several options:
+
+### Purchase Options
+
+<Cards>
+
+<Card
+  title="Website Purchase"
+  href="https://www.jkt48connect.my.id/buyapi"
+  description="Buy your API key directly from the official website"
+/>
+
+<Card
+  title="WhatsApp Bot"
+  description="Get your API key through our WhatsApp bot service"
+/>
+
+<Card
+  title="Discord Bot"
+  description="Purchase via our Discord bot for quick access"
+/>
+
+</Cards>
+
+### Support & Contact
+
+Need help or have questions? We're here to assist you:
+
+<Steps>
+<Step>
+
+### Email Support
+Send your inquiries to: **support@jkt48connect.my.id**
+
+</Step>
+
+<Step>
+
+### WhatsApp Support
+Contact us directly: **+62 857-0147-9245**
+
+</Step>
+
+<Step>
+
+### Phone Support
+Call us directly for immediate assistance
+
+</Step>
+</Steps>
+
+## Project Structure
+
+When working with @jkt48/core for live streaming data, here's a recommended project structure:
+
+<Files>
+  <Folder name="src" defaultOpen>
+    <File name="index.js" />
+    <File name="config.js" />
+    <Folder name="services">
+      <File name="liveStreamService.js" />
+      <File name="platformAggregator.js" />
+      <File name="streamMonitor.js" />
+    </Folder>
+    <Folder name="utils">
+      <File name="apiHelper.js" />
+      <File name="errorHandler.js" />
+      <File name="streamValidator.js" />
+    </Folder>
+  </Folder>
+  <Folder name="tests">
+    <File name="live.test.js" />
+    <File name="streamData.test.js" />
+  </Folder>
+  <File name="package.json" />
+  <File name=".env" />
+  <File name="README.md" />
+</Files>
+
+## API Response Structure
+
+The @jkt48/core live endpoint returns an array of currently active live stream objects with the following structure:
+
+### Live Stream Data Type
+
+<AutoTypeTable>
+```ts
+{
+  name: string;
+  img: string;
+  img_alt: string;
+  url_key: string;
+  slug: string;
+  room_id: number;
+  is_graduate: boolean;
+  is_group: boolean;
+  chat_room_id: string;
+  started_at: string;
+  streaming_url_list: Array<{
+    label: string;
+    quality: number;
+    url: string;
+  }>;
+  type: "youtube" | "idn" | "showroom";
+}
+```
+</AutoTypeTable>
+
+## Sample Response
+
+Here's an example of the data structure returned by the live all platforms API:
+
+```json
+[
+  {
+    "name": "Virgi",
+    "img": "https://cdn.idntimes.com/content-images/post/20250806/147e83c8-f3ac-4680-9141-2f518b4b7810-250806200010.jpg",
+    "img_alt": "https://cdn.idn.media/idnaccount/avatar/500/ea02d0c4199b0f536272811de09a3fc5.webp?v=1743097272",
+    "url_key": "jkt48_virgi",
+    "slug": "ayo-ngobrol-bareng-250806200010",
+    "room_id": 547061,
+    "is_graduate": false,
+    "is_group": false,
+    "chat_room_id": "arn:aws:ivschat:us-east-1:050891932989:room/5g2pK94iTLKW",
+    "started_at": "2025-08-06T13:00:21.000Z",
+    "streaming_url_list": [
+      {
+        "label": "original",
+        "quality": 1,
+        "url": "https://4b964ca68cf1.us-east-1.playback.live-video.net/api/video/v1/us-east-1.050891932989.channel.9DxiaFf6lSom.m3u8"
+      }
+    ],
+    "type": "idn"
+  },
+  {
+    "name": "Jemima",
+    "img": "https://cdn.idntimes.com/content-images/post/20250806/fe70498c-cb4c-4f98-9ad8-e0bd3fe2c453-250806202243.jpg",
+    "img_alt": "https://cdn.idn.media/idnaccount/avatar/500/54c286f829c7ff60a713e07d607edcc2.webp?v=1743097513",
+    "url_key": "jkt48_jemima",
+    "slug": "ayo-ngobrol-bareng-250806202243",
+    "room_id": 547072,
+    "is_graduate": false,
+    "is_group": false,
+    "chat_room_id": "arn:aws:ivschat:us-east-1:050891932989:room/LE01hQ2n8yKq",
+    "started_at": "2025-08-06T13:23:00.000Z",
+    "streaming_url_list": [
+      {
+        "label": "original",
+        "quality": 1,
+        "url": "https://4b964ca68cf1.us-east-1.playback.live-video.net/api/video/v1/us-east-1.050891932989.channel.pYGgcUgAi8pI.m3u8"
+      }
+    ],
+    "type": "idn"
+  }
+]
+```
+
+## Data Field Explanations
+
+<Accordions type="single">
+
+<Accordion title="Basic Stream Information">
+- **name**: Member name or stream title
+- **img**: Stream thumbnail or member profile image
+- **img_alt**: Alternative or higher quality image
+- **url_key**: Platform-specific username or identifier
+- **slug**: URL slug for the stream
+- **type**: Platform type ("youtube", "idn", "showroom")
+</Accordion>
+
+<Accordion title="Platform & Room Data">
+- **room_id**: Platform-specific room identifier
+- **chat_room_id**: Chat room identifier (AWS IVS for IDN)
+- **is_graduate**: Member graduation status
+- **is_group**: Whether it's a group stream
+</Accordion>
+
+<Accordion title="Streaming Data">
+- **started_at**: Stream start timestamp (ISO 8601)
+- **streaming_url_list**: Array of streaming URLs with quality options
+- **streaming_url_list[].label**: Quality label (e.g., "original", "720p", "480p")
+- **streaming_url_list[].quality**: Quality level (1 = highest)
+- **streaming_url_list[].url**: Direct streaming URL (HLS/m3u8)
+</Accordion>
+
+</Accordions>
+
+## Advanced Examples
+
+### Filter Streams by Platform
+
+```javascript
+const jkt48Api = require('@jkt48/core');
+
+async function getStreamsByPlatform(platform) {
+  try {
+    const apiKey = 'your-api-key-here';
+    const live = await jkt48Api.live(apiKey);
+    
+    const filteredStreams = live.filter(stream => stream.type === platform);
+    
+    console.log(`Current ${platform.toUpperCase()} streams:`);
+    filteredStreams.forEach(stream => {
+      const duration = Math.floor((Date.now() - new Date(stream.started_at)) / 60000);
+      console.log(`${stream.name}: Live for ${duration} minutes`);
+    });
+    
+    return filteredStreams;
+  } catch (error) {
+    console.error('Error filtering streams:', error.message);
+  }
+}
+
+// Usage
+getStreamsByPlatform('idn');
+getStreamsByPlatform('showroom');
+getStreamsByPlatform('youtube');
+```
+
+### Real-time Stream Monitor
+
+```javascript
+async function monitorLiveStreams() {
+  try {
+    const apiKey = 'your-api-key-here';
+    let previousStreams = [];
+    
+    setInterval(async () => {
+      const currentStreams = await jkt48Api.live(apiKey);
+      
+      // Check for new streams
+      const newStreams = currentStreams.filter(current => 
+        !previousStreams.some(prev => prev.room_id === current.room_id && prev.type === current.type)
+      );
+      
+      // Check for ended streams
+      const endedStreams = previousStreams.filter(prev => 
+        !currentStreams.some(current => current.room_id === prev.room_id && current.type === prev.type)
+      );
+      
+      if (newStreams.length > 0) {
+        console.log('\n🟢 New streams started:');
+        newStreams.forEach(stream => {
+          console.log(`${stream.name} started streaming on ${stream.type.toUpperCase()}`);
+        });
+      }
+      
+      if (endedStreams.length > 0) {
+        console.log('\n🔴 Streams ended:');
+        endedStreams.forEach(stream => {
+          console.log(`${stream.name} ended stream on ${stream.type.toUpperCase()}`);
+        });
+      }
+      
+      if (currentStreams.length > 0) {
+        console.log(`\n📺 Currently live: ${currentStreams.length} streams`);
+        currentStreams.forEach(stream => {
+          const duration = Math.floor((Date.now() - new Date(stream.started_at)) / 60000);
+          console.log(`  ${stream.name} (${stream.type}) - ${duration}m`);
+        });
+      }
+      
+      previousStreams = [...currentStreams];
+    }, 30000); // Check every 30 seconds
+    
+  } catch (error) {
+    console.error('Error monitoring streams:', error.message);
+  }
+}
+
+// Start monitoring
+monitorLiveStreams();
+```
+
+### Stream Aggregator Dashboard
+
+```javascript
+async function createStreamDashboard() {
+  try {
+    const apiKey = 'your-api-key-here';
+    const live = await jkt48Api.live(apiKey);
+    
+    // Group by platform
+    const platformGroups = live.reduce((groups, stream) => {
+      if (!groups[stream.type]) groups[stream.type] = [];
+      groups[stream.type].push(stream);
+      return groups;
+    }, {});
+    
+    console.log('🎬 JKT48 Live Stream Dashboard');
+    console.log('===============================');
+    
+    Object.entries(platformGroups).forEach(([platform, streams]) => {
+      console.log(`\n📱 ${platform.toUpperCase()} (${streams.length} active)`);
+      
+      streams.forEach(stream => {
+        const startTime = new Date(stream.started_at);
+        const duration = Math.floor((Date.now() - startTime) / 60000);
+        const streamUrls = stream.streaming_url_list.length;
+        
+        console.log(`  ├─ ${stream.name}`);
+        console.log(`  │  ⏱️  Live for ${duration} minutes`);
+        console.log(`  │  🔗 ${streamUrls} quality option${streamUrls > 1 ? 's' : ''}`);
+        console.log(`  │  💬 Chat: ${stream.chat_room_id ? 'Available' : 'N/A'}`);
+      });
+    });
+    
+    if (live.length === 0) {
+      console.log('\n😴 No active streams at the moment');
+    }
+    
+  } catch (error) {
+    console.error('Error creating dashboard:', error.message);
+  }
+}
+```
+
+### Extract Streaming URLs
+
+```javascript
+async function getStreamingUrls(memberName = null) {
+  try {
+    const apiKey = 'your-api-key-here';
+    const live = await jkt48Api.live(apiKey);
+    
+    let filteredStreams = live;
+    if (memberName) {
+      filteredStreams = live.filter(stream => 
+        stream.name.toLowerCase().includes(memberName.toLowerCase())
+      );
+    }
+    
+    console.log('🔗 Available Streaming URLs:');
+    
+    filteredStreams.forEach(stream => {
+      console.log(`\n${stream.name} (${stream.type.toUpperCase()})`);
+      
+      stream.streaming_url_list.forEach(url => {
+        console.log(`  Quality: ${url.label} (${url.quality})`);
+        console.log(`  URL: ${url.url}`);
+      });
+      
+      if (stream.chat_room_id) {
+        console.log(`  Chat Room: ${stream.chat_room_id}`);
+      }
+    });
+    
+    return filteredStreams.map(stream => ({
+      member: stream.name,
+      platform: stream.type,
+      urls: stream.streaming_url_list
+    }));
+    
+  } catch (error) {
+    console.error('Error getting streaming URLs:', error.message);
+  }
+}
+
+// Usage
+getStreamingUrls(); // All streams
+getStreamingUrls('Virgi'); // Specific member
+```
+
+### Platform Statistics
+
+```javascript
+async function getPlatformStats() {
+  try {
+    const apiKey = 'your-api-key-here';
+    const live = await jkt48Api.live(apiKey);
+    
+    const stats = {
+      total: live.length,
+      platforms: {},
+      members: new Set(),
+      averageDuration: 0
+    };
+    
+    let totalDuration = 0;
+    
+    live.forEach(stream => {
+      // Platform counts
+      if (!stats.platforms[stream.type]) {
+        stats.platforms[stream.type] = 0;
+      }
+      stats.platforms[stream.type]++;
+      
+      // Unique members
+      stats.members.add(stream.name);
+      
+      // Duration calculation
+      const duration = Math.floor((Date.now() - new Date(stream.started_at)) / 60000);
+      totalDuration += duration;
+    });
+    
+    stats.averageDuration = live.length > 0 ? Math.round(totalDuration / live.length) : 0;
+    stats.uniqueMembers = stats.members.size;
+    
+    console.log('📊 Live Stream Statistics');
+    console.log('========================');
+    console.log(`Total Active Streams: ${stats.total}`);
+    console.log(`Unique Members: ${stats.uniqueMembers}`);
+    console.log(`Average Duration: ${stats.averageDuration} minutes`);
+    
+    console.log('\nPlatform Distribution:');
+    Object.entries(stats.platforms).forEach(([platform, count]) => {
+      const percentage = ((count / stats.total) * 100).toFixed(1);
+      console.log(`  ${platform.toUpperCase()}: ${count} streams (${percentage}%)`);
+    });
+    
+    return stats;
+    
+  } catch (error) {
+    console.error('Error getting platform stats:', error.message);
+  }
+}
+```
+
+<Callout title="Tip">
+The live API returns real-time data, so it's perfect for building live dashboards, stream notifications, and monitoring applications. Consider implementing WebSocket connections or polling intervals for real-time updates.
+</Callout>
+
+## Common Use Cases
+
+<Cards>
+
+<Card
+  title="Live Stream Aggregator"
+  description="Build a central hub showing all active streams across platforms"
+/>
+
+<Card
+  title="Stream Notification Bot"
+  description="Create bots that notify when members go live"
+/>
+
+<Card
+  title="Platform Analytics"
+  description="Analyze streaming patterns across different platforms"
+/>
+
+<Card
+  title="Stream Directory"
+  description="Create directories with direct links to active streams"
+/>
+
+</Cards>
+
+## Getting Started
+
+Ready to start working with JKT48 live streaming data? Follow these steps:
+
+<Steps>
+<Step>
+
+### Install the Module
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tab>
+
+```bash
+npm install @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+yarn add @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+pnpm add @jkt48/core
+```
+
+</Tab>
+</Tabs>
+
+</Step>
+
+<Step>
+
+### Get Your API Key
+Visit [jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi) to purchase your API key
+
+</Step>
+
+<Step>
+
+### Fetch Live Stream Data
+Use `const live = await jkt48Api.live(apiKey);` to get current streaming information
+
+</Step>
+
+<Step>
+
+### Build & Monitor
+Create dashboards, notifications, or aggregation services
+
+</Step>
+</Steps>
+
+<Callout title="Support">
+Need additional help? Don't hesitate to reach out to our support team at **support@jkt48connect.my.id** or **+62 857-0147-9245**.
+</Callout>

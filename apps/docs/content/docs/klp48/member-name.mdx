@@ -1,0 +1,539 @@
+---
+title: Member Detail
+description: Get specific JKT48 member data by name using @jkt48/core module
+icon: User
+---
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## What is Member Detail API?
+
+The Member Detail API from @jkt48/core allows you to retrieve comprehensive information about a specific JKT48 member by providing their name. This endpoint provides detailed member data including profiles, social media links, generation information, and current status for a single member.
+
+- Complete member profile with nicknames
+- Social media account links (Twitter, Instagram, TikTok, SHOWROOM, IDN)
+- Generation and group information
+- Profile images and alternative images
+- Graduate status tracking
+- SHOWROOM integration data
+
+<Callout>
+This API endpoint returns data for a specific JKT48 member based on their name, providing detailed information about that individual member.
+
+All features require an API key for authentication and access.
+</Callout>
+
+## Installation
+
+The module is available on NPM and can be installed easily:
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tab>
+
+```bash
+npm install @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+yarn add @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+pnpm add @jkt48/core
+```
+
+</Tab>
+</Tabs>
+
+## Basic Usage
+
+Here's how to get specific JKT48 member data by name:
+
+<Tabs items={['CommonJS', 'ES Modules']}>
+<Tab>
+
+```javascript
+const jkt48Api = require('@jkt48/core');
+
+// Get specific JKT48 member by name
+async function getMemberDetail() {
+  try {
+    const apiKey = 'your-api-key-here';
+    const memberName = 'Feni';
+    const memberDetail = await jkt48Api.memberDetail(memberName, apiKey);
+    console.log(memberDetail);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+getMemberDetail();
+```
+
+</Tab>
+<Tab>
+
+```javascript
+import { memberDetail } from '@jkt48/core';
+
+// Get specific JKT48 member by name
+async function getMemberDetail() {
+  try {
+    const apiKey = 'your-api-key-here';
+    const memberName = 'Feni';
+    const memberInfo = await memberDetail(memberName, apiKey);
+    console.log(memberInfo);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+getMemberDetail();
+```
+
+</Tab>
+</Tabs>
+
+<Callout title="Warning" type="error">
+Make sure to keep your API key secure and never expose it in client-side code or public repositories.
+</Callout>
+
+## API Key Required
+
+<Callout title="Important">
+All features in this module require a valid API key to function properly.
+</Callout>
+
+To get your API key, you have several options:
+
+### Purchase Options
+
+<Cards>
+
+<Card
+  title="Website Purchase"
+  href="https://www.jkt48connect.my.id/buyapi"
+  description="Buy your API key directly from the official website"
+/>
+
+<Card
+  title="WhatsApp Bot"
+  description="Get your API key through our WhatsApp bot service"
+/>
+
+<Card
+  title="Discord Bot"
+  description="Purchase via our Discord bot for quick access"
+/>
+
+</Cards>
+
+### Support & Contact
+
+Need help or have questions? We're here to assist you:
+
+<Steps>
+<Step>
+
+### Email Support
+Send your inquiries to: **support@jkt48connect.my.id**
+
+</Step>
+
+<Step>
+
+### WhatsApp Support
+Contact us directly: **+62 857-0147-9245**
+
+</Step>
+
+<Step>
+
+### Phone Support
+Call us directly for immediate assistance
+
+</Step>
+</Steps>
+
+## Project Structure
+
+When working with @jkt48/core for member detail data, here's a recommended project structure:
+
+<Files>
+  <Folder name="src" defaultOpen>
+    <File name="index.js" />
+    <File name="config.js" />
+    <Folder name="services">
+      <File name="memberDetailService.js" />
+      <File name="memberSearchService.js" />
+      <File name="socialMediaHelper.js" />
+    </Folder>
+    <Folder name="utils">
+      <File name="apiHelper.js" />
+      <File name="errorHandler.js" />
+      <File name="nameValidator.js" />
+    </Folder>
+  </Folder>
+  <Folder name="tests">
+    <File name="memberDetail.test.js" />
+    <File name="memberSearch.test.js" />
+  </Folder>
+  <File name="package.json" />
+  <File name=".env" />
+  <File name="README.md" />
+</Files>
+
+## API Response Structure
+
+The @jkt48/core memberDetail endpoint returns a single member object with the following structure:
+
+### Member Data Type
+
+<AutoTypeTable>
+```ts
+{
+  _id: string;
+  name: string;
+  nicknames: string[];
+  img: string;
+  img_alt: string;
+  url: string;
+  group: string;
+  socials: {
+    title: string;
+    url: string;
+  }[];
+  room_id: number;
+  sr_exists: boolean;
+  is_graduate: boolean;
+  generation: string;
+  idn_username: string;
+}
+```
+</AutoTypeTable>
+
+## Sample Response
+
+Here's an example of the data structure returned by the memberDetail API when searching for "Feni":
+
+```json
+{
+  "_id": "65ce68ed1dd7aa2c8c0ca76d",
+  "name": "Feni Fitriyanti",
+  "nicknames": [
+    "Feni"
+  ],
+  "img": "https://static.showroom-live.com/image/room/cover/8c9f128443499700909dea11a4e2d9973c9f9c74974b3dafe269ec7b6dbc3315_m.jpeg?v=1712491458",
+  "img_alt": "https://res.cloudinary.com/haymzm4wp/image/upload/v1730447278/assets/kabesha/oktober_2024/feni_fitriyanti.jpg",
+  "url": "feni",
+  "group": "jkt48",
+  "socials": [
+    {
+      "title": "X",
+      "url": "https://twitter.com/F_Feni_JKT48"
+    },
+    {
+      "title": "Instagram",
+      "url": "https://www.instagram.com/jkt48.feni/"
+    },
+    {
+      "title": "TikTok",
+      "url": "https://www.tiktok.com/@jkt48.feni/"
+    },
+    {
+      "title": "SHOWROOM",
+      "url": "https://www.showroom-live.com/JKT48_Feni"
+    },
+    {
+      "title": "IDN",
+      "url": "https://click.idn.media/VKUf?af_dp=idnapp://profile/f001ba66-3c51-4849-9afa-13cf74eb1572&af_web_dp=https://www.idn.app/jkt48_feni&c=web-android&deep_link_value=profile/f001ba66-3c51-4849-9afa-13cf74eb1572&pid=idnapp"
+    }
+  ],
+  "room_id": 509986,
+  "sr_exists": true,
+  "is_graduate": false,
+  "generation": "gen11-jkt48",
+  "idn_username": "jkt48_feni"
+}
+```
+
+## Data Field Explanations
+
+<Accordions type="single">
+
+<Accordion title="Basic Information">
+- **_id**: Unique identifier for the member
+- **name**: Full name of the member
+- **nicknames**: Array of known nicknames or stage names
+- **url**: URL-friendly identifier for the member
+- **group**: Group affiliation (e.g., "jkt48")
+</Accordion>
+
+<Accordion title="Images & Media">
+- **img**: Primary profile image URL (usually from SHOWROOM)
+- **img_alt**: Alternative profile image URL (high-quality version)
+</Accordion>
+
+<Accordion title="Social Media">
+- **socials**: Array of social media accounts with platform titles and URLs
+- **idn_username**: IDN Live platform username
+</Accordion>
+
+<Accordion title="Status & Generation">
+- **generation**: Member's generation (e.g., "gen11-jkt48")
+- **is_graduate**: Boolean indicating if the member has graduated
+- **sr_exists**: Boolean indicating SHOWROOM account existence
+- **room_id**: SHOWROOM room identifier
+</Accordion>
+
+</Accordions>
+
+## Advanced Examples
+
+### Search by Different Name Formats
+
+```javascript
+const jkt48Api = require('@jkt48/core');
+
+async function searchMemberByName() {
+  try {
+    const apiKey = 'your-api-key-here';
+    
+    // Search by nickname
+    const feniByNickname = await jkt48Api.memberDetail('Feni', apiKey);
+    console.log('Found by nickname:', feniByNickname.name);
+    
+    // Search by full name
+    const feniByFullName = await jkt48Api.memberDetail('Feni Fitriyanti', apiKey);
+    console.log('Found by full name:', feniByFullName.name);
+    
+    // Search by URL-friendly name
+    const feniByUrl = await jkt48Api.memberDetail('feni', apiKey);
+    console.log('Found by URL:', feniByUrl.name);
+    
+  } catch (error) {
+    console.error('Error searching member:', error.message);
+  }
+}
+```
+
+### Extract Member's Social Media
+
+```javascript
+async function getMemberSocialMedia(memberName) {
+  try {
+    const apiKey = 'your-api-key-here';
+    const member = await jkt48Api.memberDetail(memberName, apiKey);
+    
+    console.log(`\n${member.name} (${member.nicknames.join(', ')})`);
+    console.log('Social Media Accounts:');
+    
+    member.socials.forEach(social => {
+      console.log(`  ${social.title}: ${social.url}`);
+    });
+    
+    return member.socials;
+  } catch (error) {
+    console.error(`Error fetching social media for ${memberName}:`, error.message);
+    return null;
+  }
+}
+
+// Usage
+getMemberSocialMedia('Feni');
+```
+
+### Member Profile Display
+
+```javascript
+async function displayMemberProfile(memberName) {
+  try {
+    const apiKey = 'your-api-key-here';
+    const member = await jkt48Api.memberDetail(memberName, apiKey);
+    
+    console.log('='.repeat(50));
+    console.log(`MEMBER PROFILE: ${member.name}`);
+    console.log('='.repeat(50));
+    console.log(`Nicknames: ${member.nicknames.join(', ')}`);
+    console.log(`Generation: ${member.generation}`);
+    console.log(`Group: ${member.group.toUpperCase()}`);
+    console.log(`Status: ${member.is_graduate ? 'Graduate' : 'Active'}`);
+    console.log(`SHOWROOM: ${member.sr_exists ? 'Available' : 'Not Available'}`);
+    console.log(`Profile Image: ${member.img}`);
+    console.log(`Alternative Image: ${member.img_alt}`);
+    
+    if (member.idn_username) {
+      console.log(`IDN Username: ${member.idn_username}`);
+    }
+    
+    console.log('\nSocial Media:');
+    member.socials.forEach(social => {
+      console.log(`  - ${social.title}: ${social.url}`);
+    });
+    
+  } catch (error) {
+    console.error(`Error displaying profile for ${memberName}:`, error.message);
+  }
+}
+
+// Usage
+displayMemberProfile('Feni');
+```
+
+### Error Handling for Member Search
+
+```javascript
+async function safeMemberSearch(memberName) {
+  try {
+    const apiKey = 'your-api-key-here';
+    const member = await jkt48Api.memberDetail(memberName, apiKey);
+    
+    if (member) {
+      console.log(`✅ Found: ${member.name}`);
+      return member;
+    } else {
+      console.log(`❌ Member '${memberName}' not found`);
+      return null;
+    }
+    
+  } catch (error) {
+    if (error.message.includes('not found')) {
+      console.log(`❌ Member '${memberName}' does not exist`);
+    } else if (error.message.includes('API key')) {
+      console.log('❌ Invalid API key provided');
+    } else {
+      console.log(`❌ Error: ${error.message}`);
+    }
+    return null;
+  }
+}
+
+// Usage with error handling
+const memberNames = ['Feni', 'Aralie', 'NonExistentMember'];
+memberNames.forEach(async (name) => {
+  await safeMemberSearch(name);
+});
+```
+
+<Callout title="Tip">
+The memberDetail API supports searching by full name, nickname, or URL-friendly identifier. Always handle errors properly and consider implementing retry logic for network-related failures.
+</Callout>
+
+## Common Use Cases
+
+<Cards>
+
+<Card
+  title="Member Profile Page"
+  description="Build detailed member profile pages with comprehensive information"
+/>
+
+<Card
+  title="Search Functionality"
+  description="Implement member search features in your application"
+/>
+
+<Card
+  title="Social Media Integration"
+  description="Connect to member's social media accounts for content aggregation"
+/>
+
+<Card
+  title="Member Information Bot"
+  description="Create chatbots that provide member information on demand"
+/>
+
+</Cards>
+
+## Name Search Tips
+
+<Accordions type="single">
+
+<Accordion title="Supported Name Formats">
+The API accepts various name formats:
+- **Full Name**: "Feni Fitriyanti"
+- **Nickname**: "Feni" 
+- **URL Format**: "feni"
+- **Case Insensitive**: "FENI", "feni", "Feni" all work
+</Accordion>
+
+<Accordion title="Best Practices">
+- Use nicknames for faster recognition
+- Handle case variations in your search
+- Implement fuzzy matching for user input
+- Cache frequently searched members
+</Accordion>
+
+<Accordion title="Error Handling">
+- Member not found returns appropriate error
+- Invalid API key returns authentication error
+- Network issues should be handled with retries
+- Always validate input before making API calls
+</Accordion>
+
+</Accordions>
+
+## Getting Started
+
+Ready to start searching for JKT48 member data? Follow these steps:
+
+<Steps>
+<Step>
+
+### Install the Module
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tab>
+
+```bash
+npm install @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+yarn add @jkt48/core
+```
+
+</Tab>
+<Tab>
+
+```bash
+pnpm add @jkt48/core
+```
+
+</Tab>
+</Tabs>
+
+</Step>
+
+<Step>
+
+### Get Your API Key
+Visit [jkt48connect.my.id/buyapi](https://www.jkt48connect.my.id/buyapi) to purchase your API key
+
+</Step>
+
+<Step>
+
+### Search for Member
+Use `const memberDetail = await jkt48Api.memberDetail(memberName, apiKey);` to get specific member information
+
+</Step>
+
+<Step>
+
+### Process & Display
+Process the member data according to your application needs
+
+</Step>
+</Steps>
+
+<Callout title="Support">
+Need additional help? Don't hesitate to reach out to our support team at **support@jkt48connect.my.id** or **+62 857-0147-9245**.
+</Callout>
