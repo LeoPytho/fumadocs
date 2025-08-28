@@ -1,3 +1,4 @@
+
 ---
 title: KLP48 Members
 description: Get Complete KLP48 Members Information via JKT48Connect API
@@ -29,17 +30,17 @@ High-quality profile images for all KLP48 members.
 <Steps>
 <Step>
 ### Get Your API Key
-Obtain your API key from [JKT48Connect](https://www.jkt48connect.my.id/buyapi).
+Obtain your API key from [JKT48Connect](https://www.jkt48connect.com/buyapi).
 </Step>
 
 <Step>
 ### Make API Request
 ```bash
 # Get all members
-curl "https://v2.jkt48connect.my.id/api/klp48/members?apikey=YOUR_API_KEY"
+curl "https://v2.jkt48connect.com/api/klp48/members?apikey=YOUR_API_KEY"
 
 # Get specific member
-curl "https://v2.jkt48connect.my.id/api/klp48/member/hillary?apikey=YOUR_API_KEY"
+curl "https://v2.jkt48connect.com/api/klp48/member/hillary?apikey=YOUR_API_KEY"
 ```
 </Step>
 
@@ -56,7 +57,7 @@ Handle the JSON array or object containing member data.
 <Tab value="All Members">
 **Get All Members**
 
-**Base URL:** `https://v2.jkt48connect.my.id`  
+**Base URL:** `https://v2.jkt48connect.com`  
 **Endpoint:** `/api/klp48/members`  
 **Method:** `GET`  
 **Authentication:** API Key required
@@ -67,7 +68,7 @@ Handle the JSON array or object containing member data.
 **Example:**
 ```http
 GET /api/klp48/members?apikey=YOUR_API_KEY HTTP/1.1
-Host: v2.jkt48connect.my.id
+Host: v2.jkt48connect.com
 ```
 </Tab>
 
@@ -87,7 +88,7 @@ Host: v2.jkt48connect.my.id
 GET /api/klp48/member/hillary?apikey=YOUR_API_KEY HTTP/1.1
 GET /api/klp48/member/Shuen Hiu Yau?apikey=YOUR_API_KEY HTTP/1.1
 GET /api/klp48/member/Salwa?apikey=YOUR_API_KEY HTTP/1.1
-Host: v2.jkt48connect.my.id
+Host: v2.jkt48connect.com
 ```
 </Tab>
 
@@ -143,7 +144,7 @@ Returns single member object or null if not found.
 <Tab value="JavaScript">
 ```javascript
 const API_KEY = 'YOUR_API_KEY';
-const BASE_URL = 'https://v2.jkt48connect.my.id';
+const BASE_URL = 'https://v2.jkt48connect.com';
 
 // Get all KLP48 members
 async function getAllKLP48Members() {
@@ -232,7 +233,7 @@ import urllib.parse
 from typing import List, Dict, Optional
 
 API_KEY = 'YOUR_API_KEY'
-BASE_URL = 'https://v2.jkt48connect.my.id'
+BASE_URL = 'https://v2.jkt48connect.com'
 
 def get_all_klp48_members() -> List[Dict]:
     """Fetch all KLP48 members"""
@@ -337,7 +338,7 @@ import (
 
 const (
     APIKey  = "YOUR_API_KEY"
-    BaseURL = "https://v2.jkt48connect.my.id"
+    BaseURL = "https://v2.jkt48connect.com"
 )
 
 type Social struct {
@@ -619,4 +620,4 @@ async function safelyFetchKLP48Member(name) {
 
 ### Get Started
 
-Ready to build KLP48 member applications and fan platforms? [Get your API key](https://www.jkt48connect.my.id/buyapi) and start exploring KLP48 member data!
+Ready to build KLP48 member applications and fan platforms? [Get your API key](https://www.jkt48connect.com/buyapi) and start exploring KLP48 member data!
