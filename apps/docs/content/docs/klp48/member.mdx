@@ -1,0 +1,622 @@
+---
+title: KLP48 Members
+description: Get Complete KLP48 Members Information via JKT48Connect API
+icon: Users
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Introduction
+
+JKT48Connect KLP48 Members API provides comprehensive information about **all KLP48 members** including detailed profiles, social media links, and personal information. Access complete member data for building member directories, fan applications, and analytics dashboards.
+
+<Cards>
+<Card icon={<Users className="text-blue-400" />} title='Complete Member Database'>
+Access all KLP48 members with detailed profile information including personal details.
+</Card>
+
+<Card icon={<Globe className="text-green-400" />} title='Social Media Links'>
+Get official Instagram and X (Twitter) accounts for each member.
+</Card>
+
+<Card icon={<Image className="text-purple-400" />} title='Profile Images'>
+High-quality profile images for all KLP48 members.
+</Card>
+</Cards>
+
+## Quick Start
+
+<Steps>
+<Step>
+### Get Your API Key
+Obtain your API key from [JKT48Connect](https://www.jkt48connect.my.id/buyapi).
+</Step>
+
+<Step>
+### Make API Request
+```bash
+# Get all members
+curl "https://v2.jkt48connect.my.id/api/klp48/members?apikey=YOUR_API_KEY"
+
+# Get specific member
+curl "https://v2.jkt48connect.my.id/api/klp48/member/hillary?apikey=YOUR_API_KEY"
+```
+</Step>
+
+<Step>
+### Process Response
+Handle the JSON array or object containing member data.
+</Step>
+</Steps>
+
+## Endpoint Details
+
+<Tabs items={['All Members', 'Single Member', 'Response Format']}>
+
+<Tab value="All Members">
+**Get All Members**
+
+**Base URL:** `https://v2.jkt48connect.my.id`  
+**Endpoint:** `/api/klp48/members`  
+**Method:** `GET`  
+**Authentication:** API Key required
+
+**Query Parameters:**
+- `apikey` (required): Your API authentication key
+
+**Example:**
+```http
+GET /api/klp48/members?apikey=YOUR_API_KEY HTTP/1.1
+Host: v2.jkt48connect.my.id
+```
+</Tab>
+
+<Tab value="Single Member">
+**Get Member by Name**
+
+**Endpoint:** `/api/klp48/member/:name`  
+**Method:** `GET`  
+**Authentication:** API Key required
+
+**Parameters:**
+- `name` (required): Member's full name or nickname
+- `apikey` (required): Your API authentication key
+
+**Examples:**
+```http
+GET /api/klp48/member/hillary?apikey=YOUR_API_KEY HTTP/1.1
+GET /api/klp48/member/Shuen Hiu Yau?apikey=YOUR_API_KEY HTTP/1.1
+GET /api/klp48/member/Salwa?apikey=YOUR_API_KEY HTTP/1.1
+Host: v2.jkt48connect.my.id
+```
+</Tab>
+
+<Tab value="Response Format">
+**All Members Response:**
+Returns JSON array with all member objects.
+
+**Single Member Response:**
+Returns single member object or null if not found.
+
+```json
+{
+  "_id": "503068d18db4faa73d0a91c1",
+  "name": "Shuen Hiu Yau - - 孫曉柔",
+  "nicknames": [
+    "Hillary"
+  ],
+  "img": "https://qc-klp48-peeeps-jp-68352cc9b5e09.s3-ap-northeast-1.amazonaws.com/photos/Profile_250816/250805%20Kabesha-Hillary.jpg",
+  "img_alt": "https://qc-klp48-peeeps-jp-68352cc9b5e09.s3-ap-northeast-1.amazonaws.com/photos/Profile_250816/250805%20Kabesha-Hillary.jpg",
+  "url": "hillary",
+  "group": "klp48",
+  "socials": [
+    {
+      "title": "Instagram",
+      "url": "https://www.instagram.com/hillary.klp48"
+    },
+    {
+      "title": "X",
+      "url": "https://x.com/klp48hillary"
+    }
+  ],
+  "room_id": null,
+  "sr_exists": false,
+  "is_graduate": false,
+  "generation": "gen1-klp48",
+  "idn_username": null,
+  "birthday": "22.11.2008",
+  "birthplace": "Hong Kong China",
+  "height": "159cm",
+  "charm_point": "Pretty eyes, bunny teeth",
+  "special_skills": "Baking, volleyball, crocheting",
+  "hobby": "Watching anime, reading"
+}
+```
+</Tab>
+
+</Tabs>
+
+## Implementation Examples
+
+<Tabs items={['JavaScript', 'Python', 'Go']}>
+
+<Tab value="JavaScript">
+```javascript
+const API_KEY = 'YOUR_API_KEY';
+const BASE_URL = 'https://v2.jkt48connect.my.id';
+
+// Get all KLP48 members
+async function getAllKLP48Members() {
+  try {
+    const response = await fetch(`${BASE_URL}/api/klp48/members?apikey=${API_KEY}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+    
+    const members = await response.json();
+    return members;
+  } catch (error) {
+    console.error('Failed to fetch KLP48 members:', error);
+    throw error;
+  }
+}
+
+// Get specific member by name
+async function getKLP48MemberByName(name) {
+  try {
+    const encodedName = encodeURIComponent(name);
+    const response = await fetch(`${BASE_URL}/api/klp48/member/${encodedName}?apikey=${API_KEY}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+    
+    const member = await response.json();
+    return member;
+  } catch (error) {
+    console.error(`Failed to fetch member ${name}:`, error);
+    throw error;
+  }
+}
+
+// Search member by nickname
+function findMemberByNickname(members, nickname) {
+  return members.find(member => 
+    member.nicknames.some(nick => 
+      nick.toLowerCase() === nickname.toLowerCase()
+    )
+  );
+}
+
+// Get members by birthplace
+function getMembersByBirthplace(members, birthplace) {
+  return members.filter(member => 
+    member.birthplace && member.birthplace.toLowerCase().includes(birthplace.toLowerCase())
+  );
+}
+
+// Usage examples
+async function demonstrateKLP48API() {
+  try {
+    // Get all members
+    const allMembers = await getAllKLP48Members();
+    console.log(`Total KLP48 members: ${allMembers.length}`);
+    
+    // Get specific member
+    const hillary = await getKLP48MemberByName('hillary');
+    console.log(`Found member: ${hillary.name}`);
+    console.log(`Birthday: ${hillary.birthday}`);
+    console.log(`Height: ${hillary.height}`);
+    console.log(`Charm Point: ${hillary.charm_point}`);
+    
+    // Find Japanese members
+    const japaneseMembers = getMembersByBirthplace(allMembers, 'Japan');
+    console.log(`Japanese members: ${japaneseMembers.length}`);
+    
+    // Find Malaysian members
+    const malaysianMembers = getMembersByBirthplace(allMembers, 'Malaysia');
+    console.log(`Malaysian members: ${malaysianMembers.length}`);
+    
+  } catch (error) {
+    console.error('API demonstration failed:', error);
+  }
+}
+```
+</Tab>
+
+<Tab value="Python">
+```python
+import requests
+import urllib.parse
+from typing import List, Dict, Optional
+
+API_KEY = 'YOUR_API_KEY'
+BASE_URL = 'https://v2.jkt48connect.my.id'
+
+def get_all_klp48_members() -> List[Dict]:
+    """Fetch all KLP48 members"""
+    url = f"{BASE_URL}/api/klp48/members"
+    params = {'apikey': API_KEY}
+    
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching KLP48 members: {e}")
+        raise
+
+def get_klp48_member_by_name(name: str) -> Optional[Dict]:
+    """Get specific KLP48 member by name or nickname"""
+    encoded_name = urllib.parse.quote(name)
+    url = f"{BASE_URL}/api/klp48/member/{encoded_name}"
+    params = {'apikey': API_KEY}
+    
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching member {name}: {e}")
+        return None
+
+def filter_members_by_birthplace(members: List[Dict], birthplace: str) -> List[Dict]:
+    """Filter members by birthplace"""
+    return [member for member in members 
+            if member.get('birthplace') and birthplace.lower() in member['birthplace'].lower()]
+
+def get_member_age_range(members: List[Dict], min_year: int, max_year: int) -> List[Dict]:
+    """Get members born within specific year range"""
+    filtered = []
+    for member in members:
+        if member.get('birthday'):
+            try:
+                birth_year = int(member['birthday'].split('.')[-1])
+                if min_year <= birth_year <= max_year:
+                    filtered.append(member)
+            except ValueError:
+                continue
+    return filtered
+
+def display_member_profile(member: Dict):
+    """Display formatted member profile"""
+    print(f"=== {member['name']} ===")
+    print(f"Nickname: {', '.join(member['nicknames'])}")
+    print(f"Birthday: {member.get('birthday', 'N/A')}")
+    print(f"Birthplace: {member.get('birthplace', 'N/A')}")
+    print(f"Height: {member.get('height', 'N/A')}")
+    print(f"Charm Point: {member.get('charm_point', 'N/A')}")
+    print(f"Special Skills: {member.get('special_skills', 'N/A')}")
+    print(f"Hobby: {member.get('hobby', 'N/A')}")
+    print(f"Social Media: {len(member.get('socials', []))} platforms")
+    print("-" * 50)
+
+# Usage example
+if __name__ == "__main__":
+    try:
+        # Get all members
+        members = get_all_klp48_members()
+        print(f"Total KLP48 Members: {len(members)}")
+        
+        # Get specific member
+        hillary = get_klp48_member_by_name('hillary')
+        if hillary:
+            display_member_profile(hillary)
+        
+        # Filter by country
+        japanese_members = filter_members_by_birthplace(members, 'Japan')
+        malaysian_members = filter_members_by_birthplace(members, 'Malaysia')
+        indonesian_members = filter_members_by_birthplace(members, 'Indonesia')
+        
+        print(f"Japanese members: {len(japanese_members)}")
+        print(f"Malaysian members: {len(malaysian_members)}")
+        print(f"Indonesian members: {len(indonesian_members)}")
+        
+        # Get members born in 2000s
+        gen_2000s = get_member_age_range(members, 2000, 2009)
+        print(f"Members born in 2000s: {len(gen_2000s)}")
+        
+    except Exception as e:
+        print(f"Error: {e}")
+```
+</Tab>
+
+<Tab value="Go">
+```go
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "net/http"
+    "net/url"
+    "strings"
+    "time"
+)
+
+const (
+    APIKey  = "YOUR_API_KEY"
+    BaseURL = "https://v2.jkt48connect.my.id"
+)
+
+type Social struct {
+    Title string `json:"title"`
+    URL   string `json:"url"`
+}
+
+type KLP48Member struct {
+    ID           string   `json:"_id"`
+    Name         string   `json:"name"`
+    Nicknames    []string `json:"nicknames"`
+    Image        string   `json:"img"`
+    ImageAlt     string   `json:"img_alt"`
+    URL          string   `json:"url"`
+    Group        string   `json:"group"`
+    Socials      []Social `json:"socials"`
+    RoomID       *int     `json:"room_id"`
+    SRExists     bool     `json:"sr_exists"`
+    IsGraduate   bool     `json:"is_graduate"`
+    Generation   string   `json:"generation"`
+    IDNUsername  *string  `json:"idn_username"`
+    Birthday     string   `json:"birthday"`
+    Birthplace   string   `json:"birthplace"`
+    Height       string   `json:"height"`
+    CharmPoint   string   `json:"charm_point"`
+    SpecialSkills string  `json:"special_skills"`
+    Hobby        string   `json:"hobby"`
+}
+
+func getAllKLP48Members() ([]KLP48Member, error) {
+    url := fmt.Sprintf("%s/api/klp48/members?apikey=%s", BaseURL, APIKey)
+    
+    client := &http.Client{Timeout: 30 * time.Second}
+    resp, err := client.Get(url)
+    if err != nil {
+        return nil, err
+    }
+    defer resp.Body.Close()
+    
+    if resp.StatusCode != http.StatusOK {
+        return nil, fmt.Errorf("API request failed with status: %d", resp.StatusCode)
+    }
+    
+    var members []KLP48Member
+    err = json.NewDecoder(resp.Body).Decode(&members)
+    return members, err
+}
+
+func getKLP48MemberByName(name string) (*KLP48Member, error) {
+    encodedName := url.QueryEscape(name)
+    url := fmt.Sprintf("%s/api/klp48/member/%s?apikey=%s", BaseURL, encodedName, APIKey)
+    
+    client := &http.Client{Timeout: 30 * time.Second}
+    resp, err := client.Get(url)
+    if err != nil {
+        return nil, err
+    }
+    defer resp.Body.Close()
+    
+    if resp.StatusCode != http.StatusOK {
+        return nil, fmt.Errorf("API request failed with status: %d", resp.StatusCode)
+    }
+    
+    var member KLP48Member
+    err = json.NewDecoder(resp.Body).Decode(&member)
+    if err != nil {
+        return nil, err
+    }
+    
+    return &member, nil
+}
+
+func filterMembersByBirthplace(members []KLP48Member, birthplace string) []KLP48Member {
+    var filtered []KLP48Member
+    lowerBirthplace := strings.ToLower(birthplace)
+    
+    for _, member := range members {
+        if strings.Contains(strings.ToLower(member.Birthplace), lowerBirthplace) {
+            filtered = append(filtered, member)
+        }
+    }
+    return filtered
+}
+
+func displayMemberProfile(member KLP48Member) {
+    fmt.Printf("=== %s ===\n", member.Name)
+    fmt.Printf("Nickname: %s\n", strings.Join(member.Nicknames, ", "))
+    fmt.Printf("Birthday: %s\n", member.Birthday)
+    fmt.Printf("Birthplace: %s\n", member.Birthplace)
+    fmt.Printf("Height: %s\n", member.Height)
+    fmt.Printf("Charm Point: %s\n", member.CharmPoint)
+    fmt.Printf("Special Skills: %s\n", member.SpecialSkills)
+    fmt.Printf("Hobby: %s\n", member.Hobby)
+    fmt.Printf("Social Media: %d platforms\n", len(member.Socials))
+    fmt.Println(strings.Repeat("-", 50))
+}
+
+func main() {
+    // Get all members
+    members, err := getAllKLP48Members()
+    if err != nil {
+        fmt.Printf("Error fetching KLP48 members: %v\n", err)
+        return
+    }
+    
+    fmt.Printf("Total KLP48 Members: %d\n", len(members))
+    
+    // Get specific member
+    hillary, err := getKLP48MemberByName("hillary")
+    if err != nil {
+        fmt.Printf("Error fetching Hillary: %v\n", err)
+    } else {
+        displayMemberProfile(*hillary)
+    }
+    
+    // Filter by birthplace
+    japaneseMembers := filterMembersByBirthplace(members, "Japan")
+    malaysianMembers := filterMembersByBirthplace(members, "Malaysia")
+    indonesianMembers := filterMembersByBirthplace(members, "Indonesia")
+    
+    fmt.Printf("Japanese members: %d\n", len(japaneseMembers))
+    fmt.Printf("Malaysian members: %d\n", len(malaysianMembers))
+    fmt.Printf("Indonesian members: %d\n", len(indonesianMembers))
+}
+```
+</Tab>
+
+</Tabs>
+
+## Data Structure
+
+<Callout type="info">
+Each KLP48 member object contains comprehensive profile information including personal details, social media links, and physical characteristics.
+</Callout>
+
+**Key Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `_id` | string | Unique member identifier |
+| `name` | string | Full member name (may include Chinese characters) |
+| `nicknames` | array | List of member nicknames |
+| `img` | string | Primary profile image URL |
+| `img_alt` | string | Alternative profile image URL |
+| `url` | string | Member's profile URL slug |
+| `group` | string | Group affiliation (klp48) |
+| `socials` | array | Social media platform links (Instagram, X) |
+| `birthday` | string | Birthday in DD.MM.YYYY format |
+| `birthplace` | string | Birthplace with country |
+| `height` | string | Height in centimeters |
+| `charm_point` | string | Member's charm points |
+| `special_skills` | string | Special skills and talents |
+| `hobby` | string | Hobbies and interests |
+| `generation` | string | Member's generation (gen1-klp48) |
+
+## Member Statistics
+
+Based on the current KLP48 roster:
+
+- **Total Members:** 13 active members
+- **Countries Represented:** Japan (2), Malaysia (8), Indonesia (2), Hong Kong (1)
+- **Age Range:** Born between 1999-2009
+- **Generation:** All members belong to gen1-klp48
+
+## Common Use Cases
+
+<Tabs items={['Member Search', 'Demographics', 'Social Links']}>
+
+<Tab value="Member Search">
+```javascript
+// Search functionality
+async function searchKLP48Members(query) {
+  const members = await getAllKLP48Members();
+  
+  return members.filter(member => 
+    member.name.toLowerCase().includes(query.toLowerCase()) ||
+    member.nicknames.some(nick => 
+      nick.toLowerCase().includes(query.toLowerCase())
+    ) ||
+    member.birthplace.toLowerCase().includes(query.toLowerCase())
+  );
+}
+
+// Get member by exact nickname match
+function getMemberByNickname(members, nickname) {
+  return members.find(member => 
+    member.nicknames.some(nick => 
+      nick.toLowerCase() === nickname.toLowerCase()
+    )
+  );
+}
+```
+</Tab>
+
+<Tab value="Demographics">
+```javascript
+// Demographic analysis
+function analyzeKLP48Demographics(members) {
+  const countries = {};
+  const ageGroups = {
+    '1999-2000': 0,
+    '2001-2003': 0,
+    '2004-2006': 0,
+    '2007-2009': 0
+  };
+  
+  members.forEach(member => {
+    // Count by country
+    const country = member.birthplace.split(',').pop().trim();
+    countries[country] = (countries[country] || 0) + 1;
+    
+    // Age groups by birth year
+    const year = parseInt(member.birthday.split('.')[2]);
+    if (year >= 1999 && year <= 2000) ageGroups['1999-2000']++;
+    else if (year >= 2001 && year <= 2003) ageGroups['2001-2003']++;
+    else if (year >= 2004 && year <= 2006) ageGroups['2004-2006']++;
+    else if (year >= 2007 && year <= 2009) ageGroups['2007-2009']++;
+  });
+  
+  return { countries, ageGroups };
+}
+```
+</Tab>
+
+<Tab value="Social Links">
+```javascript
+// Social media integration
+function getMemberSocialLinks(member, platform) {
+  const social = member.socials.find(s => 
+    s.title.toLowerCase() === platform.toLowerCase()
+  );
+  return social ? social.url : null;
+}
+
+// Get all Instagram links
+function getAllInstagramLinks(members) {
+  return members.map(member => ({
+    name: member.name,
+    nickname: member.nicknames[0],
+    instagram: getMemberSocialLinks(member, 'Instagram')
+  })).filter(item => item.instagram);
+}
+```
+</Tab>
+
+</Tabs>
+
+## Error Handling
+
+<Callout type="warn">
+Implement proper error handling for both endpoint responses and data validation.
+</Callout>
+
+```javascript
+async function safelyFetchKLP48Member(name) {
+  try {
+    const member = await getKLP48MemberByName(name);
+    
+    if (!member) {
+      console.warn(`Member '${name}' not found`);
+      return null;
+    }
+    
+    // Validate required fields
+    if (!member.name || !member.nicknames || member.nicknames.length === 0) {
+      console.warn(`Invalid member data for '${name}'`);
+      return null;
+    }
+    
+    return member;
+  } catch (error) {
+    console.error(`Failed to fetch member '${name}':`, error);
+    return null;
+  }
+}
+```
+
+---
+
+### Get Started
+
+Ready to build KLP48 member applications and fan platforms? [Get your API key](https://www.jkt48connect.my.id/buyapi) and start exploring KLP48 member data!
