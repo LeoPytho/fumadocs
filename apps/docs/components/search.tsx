@@ -26,7 +26,7 @@ import { cn } from '@/lib/cn';
 
 const client = new OramaClient({
   endpoint: 'https://cloud.orama.run/v1/indexes/docs-nrkhe5',
-  api_key: 'wX4Ztmk9pb5oubfyLf2F2pXxCn96jU6Y',
+  api_key: 'w9SonoACtY3blCRVHH6pOYUOPDPvVjaz',
 });
 
 const items = [
