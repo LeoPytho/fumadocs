@@ -27,6 +27,7 @@ import { CodeBlock } from '@/components/code-block';
 import { UwuHero } from '@/app/(home)/uwu'; // Keep if you want this specific animation, otherwise remove
 import SourceImage from '@/public/1751117998520.png'; // Replace with relevant JKT48Connect image
 import ContributorCounter from '@/components/contributor-count';
+import { StatisticsClient } from '@/components/statistics-client';
 import {
   CreateAppAnimation,
   PreviewImages,
@@ -83,6 +84,7 @@ export default function Page() {
             </h2>
           </div>
           <Architecture />
+          <StatisticsClient />
           <Features />
           <PrioritySystem /> 
           <Highlights />
