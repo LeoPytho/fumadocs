@@ -84,7 +84,6 @@ export default function Page() {
             </h2>
           </div>
           <Architecture />
-          <StatisticsClient />
           <Features />
           <PrioritySystem /> 
           <Highlights />
