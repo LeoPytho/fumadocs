@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { KeyboardIcon, CpuIcon, RocketIcon } from 'lucide-react';
-import { Counter } from './counter';
 
 interface StatsData {
   totalKeys: number;
@@ -38,6 +37,10 @@ export function StatisticsClient() {
     
     return () => clearInterval(interval);
   }, []);
+
+  const formatNumber = (num: number) => {
+    return new Intl.NumberFormat('id-ID').format(num);
+  };
 
   return (
     <div className="relative overflow-hidden border-x border-t">
@@ -86,7 +89,7 @@ export function StatisticsClient() {
                   {loading ? (
                     <div className="h-12 bg-fd-muted animate-pulse rounded" />
                   ) : (
-                    <Counter end={stats.totalKeys} duration={2500} />
+                    formatNumber(stats.totalKeys)
                   )}
                 </div>
                 <div className="text-fd-muted-foreground font-medium">Active API Keys</div>
@@ -107,7 +110,7 @@ export function StatisticsClient() {
                   {loading ? (
                     <div className="h-12 bg-fd-muted animate-pulse rounded" />
                   ) : (
-                    <Counter end={stats.totalRequests} duration={3000} suffix="+" />
+                    `${formatNumber(stats.totalRequests)}+`
                   )}
                 </div>
                 <div className="text-fd-muted-foreground font-medium">API Requests Served</div>
