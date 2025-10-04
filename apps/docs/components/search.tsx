@@ -22,29 +22,8 @@ import { buttonVariants } from 'fumadocs-ui/components/ui/button';
 import { cn } from '@/lib/cn';
 
 const API_BASE_URL = 'https://v2.jkt48connect.com/api/zenova/search';
-const PRIORITY_TOKEN = 'yJ2mlQYmOQ2f';
-
-const items = [
-  {
-    name: 'All',
-    value: 'all',
-  },
-  {
-    name: 'Api',
-    description: 'Only results about api documentation & guides',
-    value: 'ui',
-  },
-  {
-    name: 'Core',
-    description: 'Only results about core features',
-    value: 'headless',
-  },
-  {
-    name: 'Blog',
-    description: 'Only results about Blog',
-    value: 'blog',
-  },
-];
+const API_USERNAME = 'vzy';
+const API_PASSWORD = 'vzy';
 
 interface SearchResult {
   id: string;
@@ -70,65 +49,78 @@ interface SearchResponse {
   };
 }
 
+const items = [
+  {
+    name: 'All',
+    value: 'all',
+  },
+  {
+    name: 'Api',
+    description: 'Only results about api documentation & guides',
+    value: 'ui',
+  },
+  {
+    name: 'Core',
+    description: 'Only results about core features',
+    value: 'headless',
+  },
+  {
+    name: 'Blog',
+    description: 'Only results about Blog',
+    value: 'blog',
+  },
+];
+
 export default function CustomSearchDialog(props: SharedProps) {
   const [open, setOpen] = useState(false);
   const [tag, setTag] = useState<string>('all');
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState<SearchResult[] | null>(null);
-
-  const fetchSearchResults = async (query: string, selectedTag: string) => {
-    if (!query.trim()) {
-      setSearchResults(null);
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const url = new URL(API_BASE_URL);
-      url.searchParams.append('q', query);
-      url.searchParams.append('tag', selectedTag);
-      url.searchParams.append('limit', '30');
-
-      const response = await fetch(url.toString(), {
-        headers: {
-          'x-priority-token': PRIORITY_TOKEN,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data: SearchResponse = await response.json();
-      
-      if (data.status && data.data.results.length > 0) {
-        setSearchResults(data.data.results);
-      } else {
-        setSearchResults([]);
-      }
-    } catch (error) {
-      console.error('Search error:', error);
-      setSearchResults([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const [results, setResults] = useState<any>(null);
 
   useEffect(() => {
-    const debounceTimer = setTimeout(() => {
-      fetchSearchResults(search, tag);
-    }, 300);
+    const fetchSearchResults = async () => {
+      if (!search || search.length < 2) {
+        setResults(null);
+        return;
+      }
 
+      setIsLoading(true);
+      try {
+        const params = new URLSearchParams({
+          q: search,
+          tag: tag,
+          limit: '30',
+          username: API_USERNAME,
+          password: API_PASSWORD,
+        });
+
+        const response = await fetch(`${API_BASE_URL}?${params}`);
+        const data: SearchResponse = await response.json();
+
+        if (data.status && data.data.results.length > 0) {
+          // Transform results to match fumadocs format
+          const transformedResults = data.data.results.map((result) => ({
+            id: result.document.path,
+            type: 'page',
+            content: result.document.title,
+            url: result.document.path,
+          }));
+          setResults(transformedResults);
+        } else {
+          setResults('empty');
+        }
+      } catch (error) {
+        console.error('Search error:', error);
+        setResults('empty');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    const debounceTimer = setTimeout(fetchSearchResults, 300);
     return () => clearTimeout(debounceTimer);
   }, [search, tag]);
-
-  const formattedResults = searchResults?.map((result) => ({
-    id: result.document.id,
-    type: 'page' as const,
-    content: result.document.content,
-    url: result.document.path,
-  }));
 
   return (
     <SearchDialog
@@ -144,7 +136,7 @@ export default function CustomSearchDialog(props: SharedProps) {
           <SearchDialogInput />
           <SearchDialogClose />
         </SearchDialogHeader>
-        <SearchDialogList items={formattedResults || null} />
+        <SearchDialogList items={results !== 'empty' ? results : null} />
         <SearchDialogFooter className="flex flex-row flex-wrap gap-2 items-center">
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger
