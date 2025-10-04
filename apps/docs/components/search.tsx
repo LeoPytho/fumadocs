@@ -1,4 +1,5 @@
 'use client';
+
 import { OramaClient } from '@oramacloud/client';
 import {
   SearchDialog,
