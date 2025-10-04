@@ -25,6 +25,11 @@ import { cn } from '@/lib/cn';
 const client = new OramaClient({
   endpoint: 'https://cloud.orama.run/v1/indexes/dokumentatiob-g9y69w',
   api_key: '3a9Ttxyjz27NZ5Gr8VebdmNPmzzJEdUX',
+  defaultSearchParams: {
+    groupBy: {
+      disable: true,
+    },
+  },
 });
 const items = [
   {
@@ -54,7 +59,6 @@ export default function CustomSearchDialog(props: SharedProps) {
     type: 'orama-cloud',
     client,
     tag,
-    groupBy: undefined, // Disable grouping
   });
 return (
     <SearchDialog
