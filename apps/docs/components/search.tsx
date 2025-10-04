@@ -9,6 +9,7 @@ import {
   SearchDialogIcon,
   SearchDialogInput,
   SearchDialogList,
+  SearchDialogOverlay,
   type SharedProps,
 } from 'fumadocs-ui/components/dialog/search';
 import { useDocsSearch } from 'fumadocs-core/search/client';
@@ -52,12 +53,11 @@ const items = [
 export default function CustomSearchDialog(props: SharedProps) {
   const [open, setOpen] = useState(false);
   const [tag, setTag] = useState<string | undefined>();
+  
   const { search, setSearch, query } = useDocsSearch({
     type: 'orama-cloud',
     client,
     tag,
-    // Tambahkan opsi ini untuk menonaktifkan groupBy
-    groupBy: undefined, // atau coba dengan field yang valid di index Anda
   });
 
   return (
