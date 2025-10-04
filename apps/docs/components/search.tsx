@@ -1,5 +1,4 @@
 'use client';
-
 import { OramaClient } from '@oramacloud/client';
 import {
   SearchDialog,
@@ -113,6 +112,7 @@ export default function CustomSearchDialog(props: SharedProps) {
               })}
             </PopoverContent>
           </Popover>
+          
           
             href="https://orama.com"
             rel="noreferrer noopener"
