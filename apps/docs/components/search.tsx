@@ -1,5 +1,4 @@
 'use client';
-
 import { OramaClient } from '@oramacloud/client';
 import {
   SearchDialog,
@@ -23,12 +22,10 @@ import {
 import { ChevronDown } from 'lucide-react';
 import { buttonVariants } from 'fumadocs-ui/components/ui/button';
 import { cn } from '@/lib/cn';
-
 const client = new OramaClient({
   endpoint: 'https://cloud.orama.run/v1/indexes/dokumentatiob-g9y69w',
   api_key: '3a9Ttxyjz27NZ5Gr8VebdmNPmzzJEdUX',
 });
-
 const items = [
   {
     name: 'All',
@@ -50,7 +47,6 @@ const items = [
     value: 'blog',
   },
 ];
-
 export default function CustomSearchDialog(props: SharedProps) {
   const [open, setOpen] = useState(false);
   const [tag, setTag] = useState<string | undefined>();
@@ -58,8 +54,8 @@ export default function CustomSearchDialog(props: SharedProps) {
     type: 'orama-cloud',
     client,
     tag,
+    groupBy: undefined, // Disable grouping
   });
-
   return (
     <SearchDialog
       search={search}
@@ -91,7 +87,6 @@ export default function CustomSearchDialog(props: SharedProps) {
             <PopoverContent className="flex flex-col p-1 gap-1" align="start">
               {items.map((item, i) => {
                 const isSelected = item.value === tag;
-
                 return (
                   <button
                     key={i}
@@ -113,7 +108,7 @@ export default function CustomSearchDialog(props: SharedProps) {
               })}
             </PopoverContent>
           </Popover>
-          <a
+          
             href="https://orama.com"
             rel="noreferrer noopener"
             className="text-xs text-nowrap text-fd-muted-foreground"
