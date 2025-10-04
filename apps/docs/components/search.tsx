@@ -21,7 +21,7 @@ import { ChevronDown } from 'lucide-react';
 import { buttonVariants } from 'fumadocs-ui/components/ui/button';
 import { cn } from '@/lib/cn';
 
-const API_BASE_URL = 'https://v2.jkt48connect.com/api/zenova/search';
+const API_BASE_URL = 'https://v2.jkt48connect.com/api/admin/search';
 const API_USERNAME = 'vzy';
 const API_PASSWORD = 'vzy';
 
