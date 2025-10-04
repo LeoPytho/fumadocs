@@ -56,8 +56,6 @@ export default function CustomSearchDialog(props: SharedProps) {
     type: 'orama-cloud',
     client,
     tag,
-    // Tambahkan opsi ini untuk menonaktifkan groupBy
-    groupBy: undefined, // atau coba dengan field yang valid di index Anda
   });
 
   return (
