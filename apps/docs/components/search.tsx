@@ -56,7 +56,7 @@ export default function CustomSearchDialog(props: SharedProps) {
     tag,
     groupBy: undefined, // Disable grouping
   });
-  return (
+return (
     <SearchDialog
       search={search}
       onSearchChange={setSearch}
@@ -87,6 +87,7 @@ export default function CustomSearchDialog(props: SharedProps) {
             <PopoverContent className="flex flex-col p-1 gap-1" align="start">
               {items.map((item, i) => {
                 const isSelected = item.value === tag;
+
                 return (
                   <button
                     key={i}
@@ -108,7 +109,7 @@ export default function CustomSearchDialog(props: SharedProps) {
               })}
             </PopoverContent>
           </Popover>
-          
+          <a
             href="https://orama.com"
             rel="noreferrer noopener"
             className="text-xs text-nowrap text-fd-muted-foreground"
