@@ -22,15 +22,20 @@ import {
 import { ChevronDown } from 'lucide-react';
 import { buttonVariants } from 'fumadocs-ui/components/ui/button';
 import { cn } from '@/lib/cn';
-const client = new OramaClient({
+const originalClient = new OramaClient({
   endpoint: 'https://cloud.orama.run/v1/indexes/dokumentatiob-g9y69w',
   api_key: '3a9Ttxyjz27NZ5Gr8VebdmNPmzzJEdUX',
-  defaultSearchParams: {
-    groupBy: {
-      disable: true,
-    },
-  },
 });
+
+// Wrap client to remove groupBy from params
+const client = {
+  ...originalClient,
+  search: async (params: any) => {
+    const { groupBy, ...restParams } = params;
+    return originalClient.search(restParams);
+  },
+} as typeof originalClient;
+
 const items = [
   {
     name: 'All',
