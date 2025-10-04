@@ -9,7 +9,6 @@ import {
   SearchDialogIcon,
   SearchDialogInput,
   SearchDialogList,
-  SearchDialogOverlay,
   type SharedProps,
 } from 'fumadocs-ui/components/dialog/search';
 import { useDocsSearch } from 'fumadocs-core/search/client';
@@ -53,11 +52,12 @@ const items = [
 export default function CustomSearchDialog(props: SharedProps) {
   const [open, setOpen] = useState(false);
   const [tag, setTag] = useState<string | undefined>();
-  
   const { search, setSearch, query } = useDocsSearch({
     type: 'orama-cloud',
     client,
     tag,
+    // Tambahkan opsi ini untuk menonaktifkan groupBy
+    groupBy: undefined, // atau coba dengan field yang valid di index Anda
   });
 
   return (
@@ -91,6 +91,7 @@ export default function CustomSearchDialog(props: SharedProps) {
             <PopoverContent className="flex flex-col p-1 gap-1" align="start">
               {items.map((item, i) => {
                 const isSelected = item.value === tag;
+
                 return (
                   <button
                     key={i}
@@ -112,8 +113,7 @@ export default function CustomSearchDialog(props: SharedProps) {
               })}
             </PopoverContent>
           </Popover>
-          
-          
+          <a
             href="https://orama.com"
             rel="noreferrer noopener"
             className="text-xs text-nowrap text-fd-muted-foreground"
