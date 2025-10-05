@@ -1,4 +1,6 @@
 'use client';
+
+import { OramaClient } from '@oramacloud/client';
 import {
   SearchDialog,
   SearchDialogClose,
@@ -9,124 +11,111 @@ import {
   SearchDialogInput,
   SearchDialogList,
   SearchDialogOverlay,
+  type SearchItemType,
   type SharedProps,
 } from 'fumadocs-ui/components/dialog/search';
-import { useState, useEffect } from 'react';
+import { useDocsSearch } from 'fumadocs-core/search/client';
+import { useMemo, useState } from 'react';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from 'fumadocs-ui/components/ui/popover';
-import { ChevronDown } from 'lucide-react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import { buttonVariants } from 'fumadocs-ui/components/ui/button';
 import { cn } from '@/lib/cn';
+import { useTreeContext } from 'fumadocs-ui/contexts/tree';
+import type { Item, Node } from 'fumadocs-core/page-tree';
+import { useRouter } from 'next/navigation';
 
-const API_BASE_URL = 'https://v2.jkt48connect.com/api/admin/search';
-const API_USERNAME = 'vzy';
-const API_PASSWORD = 'vzy';
-
-interface SearchResult {
-  id: string;
-  score: number;
-  document: {
-    category: string;
-    content: string;
-    id: string;
-    path: string;
-    section: string;
-    title: string;
-  };
-}
-
-interface SearchResponse {
-  status: boolean;
-  message: string;
-  data: {
-    query: string;
-    tag: string;
-    total: number;
-    results: SearchResult[];
-  };
-}
+const client = new OramaClient({
+  endpoint: 'https://cloud.orama.run/v1/indexes/docs-fk97oe',
+  api_key: 'oPZjdlFbq5BpR54bV5Vj57RYt83Xosk7',
+});
 
 const items = [
   {
     name: 'All',
-    value: 'all',
+    value: undefined,
   },
   {
-    name: 'Api',
-    description: 'Only results about api documentation & guides',
+    name: 'Framework',
+    description: 'Only results about Fumadocs UI & guides',
     value: 'ui',
   },
   {
     name: 'Core',
-    description: 'Only results about core features',
+    description: 'Only results about headless features',
     value: 'headless',
   },
   {
-    name: 'Blog',
-    description: 'Only results about Blog',
-    value: 'blog',
+    name: 'MDX',
+    description: 'Only results about Fumadocs MDX',
+    value: 'mdx',
+  },
+  {
+    name: 'CLI',
+    description: 'Only results about Fumadocs CLI',
+    value: 'cli',
   },
 ];
 
 export default function CustomSearchDialog(props: SharedProps) {
   const [open, setOpen] = useState(false);
-  const [tag, setTag] = useState<string>('all');
-  const [search, setSearch] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState<any>(null);
+  const [tag, setTag] = useState<string | undefined>();
+  const { search, setSearch, query } = useDocsSearch({
+    type: 'orama-cloud',
+    client,
+    tag,
+  });
+  const { full } = useTreeContext();
+  const router = useRouter();
+  const searchMap = useMemo(() => {
+    const map = new Map<string, Item>();
 
-  useEffect(() => {
-    const fetchSearchResults = async () => {
-      if (!search || search.length < 2) {
-        setResults(null);
-        return;
+    function onNode(node: Node) {
+      if (node.type === 'page' && typeof node.name === 'string') {
+        map.set(node.name.toLowerCase(), node);
+      } else if (node.type === 'folder') {
+        if (node.index) onNode(node.index);
+        for (const item of node.children) onNode(item);
       }
+    }
 
-      setIsLoading(true);
-      try {
-        const params = new URLSearchParams({
-          q: search,
-          tag: tag,
-          limit: '30',
-          username: API_USERNAME,
-          password: API_PASSWORD,
-        });
+    for (const item of full.children) onNode(item);
+    return map;
+  }, [full]);
+  const pageTreeAction = useMemo<SearchItemType | undefined>(() => {
+    if (search.length === 0) return;
 
-        const response = await fetch(`${API_BASE_URL}?${params}`);
-        const data: SearchResponse = await response.json();
+    const normalized = search.toLowerCase();
+    for (const [k, page] of searchMap) {
+      if (!k.startsWith(normalized)) continue;
 
-        if (data.status && data.data.results.length > 0) {
-          // Transform results to match fumadocs format
-          const transformedResults = data.data.results.map((result) => ({
-            id: result.document.path,
-            type: 'page',
-            content: result.document.title,
-            url: result.document.path,
-          }));
-          setResults(transformedResults);
-        } else {
-          setResults('empty');
-        }
-      } catch (error) {
-        console.error('Search error:', error);
-        setResults('empty');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    const debounceTimer = setTimeout(fetchSearchResults, 300);
-    return () => clearTimeout(debounceTimer);
-  }, [search, tag]);
+      return {
+        id: 'quick-action',
+        type: 'action',
+        node: (
+          <div className="inline-flex items-center gap-2 text-fd-muted-foreground">
+            <ArrowRight className="size-4" />
+            <p>
+              Jump to{' '}
+              <span className="font-medium text-fd-foreground">
+                {page.name}
+              </span>
+            </p>
+          </div>
+        ),
+        onSelect: () => router.push(page.url),
+      };
+    }
+  }, [router, search, searchMap]);
 
   return (
     <SearchDialog
       search={search}
       onSearchChange={setSearch}
-      isLoading={isLoading}
+      isLoading={query.isLoading}
       {...props}
     >
       <SearchDialogOverlay />
@@ -136,7 +125,16 @@ export default function CustomSearchDialog(props: SharedProps) {
           <SearchDialogInput />
           <SearchDialogClose />
         </SearchDialogHeader>
-        <SearchDialogList items={results !== 'empty' ? results : null} />
+        <SearchDialogList
+          items={
+            query.data !== 'empty' || pageTreeAction
+              ? [
+                  ...(pageTreeAction ? [pageTreeAction] : []),
+                  ...(Array.isArray(query.data) ? query.data : []),
+                ]
+              : null
+          }
+        />
         <SearchDialogFooter className="flex flex-row flex-wrap gap-2 items-center">
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger
@@ -176,11 +174,11 @@ export default function CustomSearchDialog(props: SharedProps) {
             </PopoverContent>
           </Popover>
           <a
-            href="https://jkt48connect.com"
+            href="https://orama.com"
             rel="noreferrer noopener"
             className="text-xs text-nowrap text-fd-muted-foreground"
           >
-            Powered by JKT48Connect
+            Powered by Orama
           </a>
         </SearchDialogFooter>
       </SearchDialogContent>
