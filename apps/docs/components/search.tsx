@@ -24,7 +24,6 @@ import { ArrowRight, ChevronDown } from 'lucide-react';
 import { buttonVariants } from 'fumadocs-ui/components/ui/button';
 import { cn } from '@/lib/cn';
 import { useTreeContext } from 'fumadocs-ui/contexts/tree';
-import type { Item, Node } from 'fumadocs-core/page-tree';
 import { useRouter } from 'next/navigation';
 
 const client = new OramaClient({
