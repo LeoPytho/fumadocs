@@ -66,7 +66,7 @@ export default function CustomSearchDialog(props: SharedProps) {
     client,
     tag,
   });
-  const { full } = useTreeContext();
+  const { root } = useTreeContext();;
   const router = useRouter();
   const searchMap = useMemo(() => {
     const map = new Map<string, Item>();
@@ -80,9 +80,9 @@ export default function CustomSearchDialog(props: SharedProps) {
       }
     }
 
-    for (const item of full.children) onNode(item);
+    for (const item of root.children) onNode(item);
     return map;
-  }, [full]);
+  }, [root]);
   const pageTreeAction = useMemo<SearchItemType | undefined>(() => {
     if (search.length === 0) return;
 
