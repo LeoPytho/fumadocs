@@ -62,14 +62,6 @@ const items = [
 // Define the PageNode type based on fumadocs structure
 type PageNode = Extract<PageTree.Node, { type: 'page' }>;
 
-// Define SearchItemType for the action
-interface SearchItemType {
-  id: string;
-  type: 'action';
-  node: React.ReactNode;
-  onSelect: () => void;
-}
-
 export default function CustomSearchDialog(props: SharedProps) {
   const [open, setOpen] = useState(false);
   const [tag, setTag] = useState<string | undefined>();
@@ -84,7 +76,7 @@ export default function CustomSearchDialog(props: SharedProps) {
   const searchMap = useMemo(() => {
     const map = new Map<string, PageNode>();
 
-    function onNode(node: PageTree.Node) {
+    function onNode(node: PageTree.Node): void {
       if (node.type === 'page' && typeof node.name === 'string') {
         map.set(node.name.toLowerCase(), node);
       } else if (node.type === 'folder') {
@@ -97,8 +89,8 @@ export default function CustomSearchDialog(props: SharedProps) {
     return map;
   }, [root]);
 
-  const pageTreeAction = useMemo<SearchItemType | undefined>(() => {
-    if (search.length === 0) return;
+  const pageTreeAction = useMemo(() => {
+    if (search.length === 0) return undefined;
 
     const normalized = search.toLowerCase();
     for (const [k, page] of searchMap) {
@@ -106,7 +98,7 @@ export default function CustomSearchDialog(props: SharedProps) {
 
       return {
         id: 'quick-action',
-        type: 'action',
+        type: 'action' as const,
         node: (
           <div className="inline-flex items-center gap-2 text-fd-muted-foreground">
             <ArrowRight className="size-4" />
@@ -121,7 +113,27 @@ export default function CustomSearchDialog(props: SharedProps) {
         onSelect: () => router.push(page.url),
       };
     }
+
+    return undefined;
   }, [router, search, searchMap]);
+
+  const searchItems = useMemo(() => {
+    if (query.data === 'empty' && !pageTreeAction) {
+      return null;
+    }
+
+    const results = [];
+    
+    if (pageTreeAction) {
+      results.push(pageTreeAction);
+    }
+    
+    if (Array.isArray(query.data)) {
+      results.push(...query.data);
+    }
+    
+    return results.length > 0 ? results : null;
+  }, [query.data, pageTreeAction]);
 
   return (
     <SearchDialog
@@ -137,16 +149,7 @@ export default function CustomSearchDialog(props: SharedProps) {
           <SearchDialogInput />
           <SearchDialogClose />
         </SearchDialogHeader>
-        <SearchDialogList
-          items={
-            query.data !== 'empty' || pageTreeAction
-              ? [
-                  ...(pageTreeAction ? [pageTreeAction] : []),
-                  ...(Array.isArray(query.data) ? query.data : []),
-                ]
-              : null
-          }
-        />
+        <SearchDialogList items={searchItems} />
         <SearchDialogFooter className="flex flex-row flex-wrap gap-2 items-center">
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger
