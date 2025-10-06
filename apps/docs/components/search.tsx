@@ -71,6 +71,190 @@ const items = [
   },
 ];
 
+// Function to build breadcrumb structure from API data
+function buildBreadcrumb(category: string, section: string, path: string): string {
+  const parts: string[] = [];
+  
+  // Add category if available
+  if (category) {
+    parts.push(category);
+  }
+  
+  // Parse path to get parent pages
+  const pathSegments = path.split('/').filter(Boolean);
+  if (pathSegments.length > 1) {
+    // Add parent page (e.g., "docs/ui" -> "UI")
+    const parentPage = pathSegments[1];
+    if (parentPage && parentPage !== pathSegments[pathSegments.length - 1]) {
+      parts.push(parentPage.toUpperCase());
+    }
+  }
+  
+  return parts.join(' > ');
+}
+
+export default function CustomSearchDialog(props: SharedProps) {
+  const [open, setOpen] = useState(false);
+  const [tag, setTag] = useState<string>('all');
+  const [search, setSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [results, setResults] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      if (!search || search.length < 2) {
+        setResults(null);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const params = new URLSearchParams({
+          q: search,
+          tag: tag,
+          limit: '30',
+          username: API_USERNAME,
+          password: API_PASSWORD,
+        });
+
+        const response = await fetch(`${API_BASE_URL}?${params}`);
+        const data: SearchResponse = await response.json();
+
+        if (data.status && data.data.results.length > 0) {
+          // Transform results to match fumadocs format with breadcrumbs
+          const transformedResults = data.data.results.map((result) => {
+            const breadcrumb = buildBreadcrumb(
+              result.document.category, 
+              result.document.section,
+              result.document.path
+            );
+            
+            return {
+              id: result.document.path,
+              type: 'page',
+              content: result.document.title,
+              url: result.document.path,
+              // Add locale for breadcrumb display
+              locale: breadcrumb,
+            };
+          });
+          setResults(transformedResults);
+        } else {
+          setResults('empty');
+        }
+      } catch (error) {
+        console.error('Search error:', error);
+        setResults('empty');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    const debounceTimer = setTimeout(fetchSearchResults, 300);
+    return () => clearTimeout(debounceTimer);
+  }, [search, tag]);
+
+  return (
+    <SearchDialog
+      search={search}
+      onSearchChange={setSearch}
+      isLoading={isLoading}
+      {...props}
+    >
+      <SearchDialogOverlay />
+      <SearchDialogContent>
+        <SearchDialogHeader>
+          <SearchDialogIcon />
+          <SearchDialogInput />
+          <SearchDialogClose />
+        </SearchDialogHeader>
+        <SearchDialogList items={results !== 'empty' ? results : null} />
+        <SearchDialogFooter className="flex flex-row flex-wrap gap-2 items-center">
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger
+              className={buttonVariants({
+                size: 'sm',
+                color: 'ghost',
+                className: '-m-1.5 me-auto',
+              })}
+            >
+              <span className="text-fd-muted-foreground/80 me-2">Filter</span>
+              {items.find((item) => item.value === tag)?.name}
+              <ChevronDown className="size-3.5 text-fd-muted-foreground" />
+            </PopoverTrigger>
+            <PopoverContent className="flex flex-col p-1 gap-1" align="start">
+              {items.map((item, i) => {
+                const isSelected = item.value === tag;
+
+                return (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      setTag(item.value);
+                      setOpen(false);
+                    }}
+                    className={cn(
+                      'rounded-lg text-start px-2 py-1.5',
+                      isSelected
+                        ? 'text-fd-primary bg-fd-primary/10'
+                        : 'hover:text-fd-accent-foreground hover:bg-fd-accent',
+                    )}
+                  >
+                    <p className="font-medium mb-0.5">{item.name}</p>
+                    <p className="text-xs opacity-70">{item.description}</p>
+                  </button>
+                );
+              })}
+            </PopoverContent>
+          </Popover>
+          <a
+            href="https://jkt48connect.com"
+            rel="noreferrer noopener"
+            className="text-xs text-nowrap text-fd-muted-foreground"
+          >
+            Powered by JKT48Connect
+          </a>
+        </SearchDialogFooter>
+      </SearchDialogContent>
+    </SearchDialog>
+  );
+}    title: string;
+  };
+}
+
+interface SearchResponse {
+  status: boolean;
+  message: string;
+  data: {
+    query: string;
+    tag: string;
+    total: number;
+    results: SearchResult[];
+  };
+}
+
+const items = [
+  {
+    name: 'All',
+    value: 'all',
+  },
+  {
+    name: 'Api',
+    description: 'Only results about api documentation & guides',
+    value: 'ui',
+  },
+  {
+    name: 'Core',
+    description: 'Only results about core features',
+    value: 'headless',
+  },
+  {
+    name: 'Blog',
+    description: 'Only results about Blog',
+    value: 'blog',
+  },
+];
+
 // Function to extract breadcrumbs from path
 function getBreadcrumbs(path: string, category: string): string[] {
   const parts = path.split('/').filter(Boolean);
