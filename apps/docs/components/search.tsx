@@ -71,26 +71,17 @@ const items = [
   },
 ];
 
-// Function to build breadcrumb structure from API data
-function buildBreadcrumb(category: string, section: string, path: string): string {
-  const parts: string[] = [];
+// Function to extract page hierarchy from path
+function getPageHierarchy(path: string, category: string) {
+  const segments = path.split('/').filter(Boolean);
   
-  // Add category if available
-  if (category) {
-    parts.push(category);
-  }
+  // Extract parent page from path (e.g., /docs/ui/news -> ui)
+  const parentPage = segments.length > 2 ? segments[1] : null;
   
-  // Parse path to get parent pages
-  const pathSegments = path.split('/').filter(Boolean);
-  if (pathSegments.length > 1) {
-    // Add parent page (e.g., "docs/ui" -> "UI")
-    const parentPage = pathSegments[1];
-    if (parentPage && parentPage !== pathSegments[pathSegments.length - 1]) {
-      parts.push(parentPage.toUpperCase());
-    }
-  }
-  
-  return parts.join(' > ');
+  return {
+    category: category || segments[0] || 'Docs',
+    parent: parentPage ? parentPage.charAt(0).toUpperCase() + parentPage.slice(1) : null,
+  };
 }
 
 export default function CustomSearchDialog(props: SharedProps) {
@@ -123,19 +114,18 @@ export default function CustomSearchDialog(props: SharedProps) {
         if (data.status && data.data.results.length > 0) {
           // Transform results to match fumadocs format with breadcrumbs
           const transformedResults = data.data.results.map((result) => {
-            const breadcrumb = buildBreadcrumb(
-              result.document.category, 
-              result.document.section,
-              result.document.path
-            );
+            const hierarchy = getPageHierarchy(result.document.path, result.document.category);
             
             return {
               id: result.document.path,
               type: 'page',
               content: result.document.title,
               url: result.document.path,
-              // Add locale for breadcrumb display
-              locale: breadcrumb,
+              // Add structured data for page tree display
+              structured: {
+                tag: hierarchy.category,
+                heading: hierarchy.parent,
+              },
             };
           });
           setResults(transformedResults);
