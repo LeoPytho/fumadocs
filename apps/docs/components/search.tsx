@@ -25,6 +25,7 @@ import { buttonVariants } from 'fumadocs-ui/components/ui/button';
 import { cn } from '@/lib/cn';
 import { useTreeContext } from 'fumadocs-ui/contexts/tree';
 import { useRouter } from 'next/navigation';
+import type { PageTree } from 'fumadocs-core/server';
 
 const client = new OramaClient({
   endpoint: 'https://cloud.orama.run/v1/indexes/docs-fk97oe',
@@ -58,6 +59,17 @@ const items = [
   },
 ];
 
+// Define the PageNode type based on fumadocs structure
+type PageNode = Extract<PageTree.Node, { type: 'page' }>;
+
+// Define SearchItemType for the action
+interface SearchItemType {
+  id: string;
+  type: 'action';
+  node: React.ReactNode;
+  onSelect: () => void;
+}
+
 export default function CustomSearchDialog(props: SharedProps) {
   const [open, setOpen] = useState(false);
   const [tag, setTag] = useState<string | undefined>();
@@ -66,12 +78,13 @@ export default function CustomSearchDialog(props: SharedProps) {
     client,
     tag,
   });
-  const { root } = useTreeContext();;
+  const { root } = useTreeContext();
   const router = useRouter();
+  
   const searchMap = useMemo(() => {
-    const map = new Map<string, Item>();
+    const map = new Map<string, PageNode>();
 
-    function onNode(node: Node) {
+    function onNode(node: PageTree.Node) {
       if (node.type === 'page' && typeof node.name === 'string') {
         map.set(node.name.toLowerCase(), node);
       } else if (node.type === 'folder') {
@@ -83,6 +96,7 @@ export default function CustomSearchDialog(props: SharedProps) {
     for (const item of root.children) onNode(item);
     return map;
   }, [root]);
+
   const pageTreeAction = useMemo<SearchItemType | undefined>(() => {
     if (search.length === 0) return;
 
