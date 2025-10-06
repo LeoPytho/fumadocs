@@ -59,7 +59,6 @@ const items = [
   },
 ];
 
-// Define the PageNode type based on fumadocs structure
 type PageNode = Extract<PageTree.Node, { type: 'page' }>;
 
 export default function CustomSearchDialog(props: SharedProps) {
@@ -117,24 +116,6 @@ export default function CustomSearchDialog(props: SharedProps) {
     return undefined;
   }, [router, search, searchMap]);
 
-  const searchItems = useMemo(() => {
-    if (query.data === 'empty' && !pageTreeAction) {
-      return null;
-    }
-
-    const results: any[] = [];
-    
-    if (pageTreeAction) {
-      results.push(pageTreeAction);
-    }
-    
-    if (Array.isArray(query.data)) {
-      results.push(...query.data);
-    }
-    
-    return results.length > 0 ? results : null;
-  }, [query.data, pageTreeAction]);
-
   return (
     <SearchDialog
       search={search}
@@ -152,10 +133,10 @@ export default function CustomSearchDialog(props: SharedProps) {
         <SearchDialogList
           items={
             query.data !== 'empty' || pageTreeAction
-              ? [
+              ? ([
                   ...(pageTreeAction ? [pageTreeAction] : []),
                   ...(Array.isArray(query.data) ? query.data : []),
-                ] as any
+                ] as any)
               : null
           }
         />
