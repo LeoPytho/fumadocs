@@ -122,7 +122,7 @@ export default function CustomSearchDialog(props: SharedProps) {
       return null;
     }
 
-    const results = [];
+    const results: any[] = [];
     
     if (pageTreeAction) {
       results.push(pageTreeAction);
@@ -149,7 +149,16 @@ export default function CustomSearchDialog(props: SharedProps) {
           <SearchDialogInput />
           <SearchDialogClose />
         </SearchDialogHeader>
-        <SearchDialogList items={searchItems} />
+        <SearchDialogList
+          items={
+            query.data !== 'empty' || pageTreeAction
+              ? [
+                  ...(pageTreeAction ? [pageTreeAction] : []),
+                  ...(Array.isArray(query.data) ? query.data : []),
+                ] as any
+              : null
+          }
+        />
         <SearchDialogFooter className="flex flex-row flex-wrap gap-2 items-center">
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger
