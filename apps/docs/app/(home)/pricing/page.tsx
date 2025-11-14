@@ -147,28 +147,25 @@ export default function PricingPage() {
       password: '',
       owner: '',
       email: '',
-      apikey: '',
+      apikey: plan.planType === 'basic' ? '' : '', // Auto generate or custom
     });
     setIsModalOpen(true);
   };
 
-  const handleSubmit = () => {
-    if (!formData.username || !formData.password || !formData.owner || !formData.email) {
-      alert('Please fill all required fields');
-      return;
-    }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     
     const purchaseData = {
       ...formData,
       type: selectedPlan?.planType,
       plan: selectedPlan?.name,
       price: selectedPlan?.price,
-      apikey: formData.apikey || `auto_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     };
     
     console.log('Purchase Data:', purchaseData);
+    // Here you would send this data to your backend API
     
-    alert(`Order submitted successfully!\nPlan: ${selectedPlan?.name}\nAPI Key: ${purchaseData.apikey}\nPlease proceed with payment.`);
+    alert(`Order submitted successfully!\nPlan: ${selectedPlan?.name}\nPlease proceed with payment.`);
     setIsModalOpen(false);
   };
 
@@ -339,9 +336,9 @@ export default function PricingPage() {
 
       {/* Modal */}
       {isModalOpen && selectedPlan && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={() => setIsModalOpen(false)}>
-          <div className="bg-gray-900 rounded-xl max-w-md w-full border border-gray-700 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="p-6 border-b border-gray-700 flex items-center justify-between sticky top-0 bg-gray-900 z-10">
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded-xl max-w-md w-full border border-gray-700 max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-700 flex items-center justify-between sticky top-0 bg-gray-900">
               <div>
                 <h3 className="text-xl font-bold">Subscribe to {selectedPlan.name}</h3>
                 <p className="text-sm text-gray-400">Complete your information below</p>
@@ -354,9 +351,9 @@ export default function PricingPage() {
               </button>
             </div>
             
-            <div className="p-6 space-y-4">
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Username *</label>
+                <label className="block text-sm font-medium mb-2">Username</label>
                 <input
                   type="text"
                   required
@@ -368,7 +365,7 @@ export default function PricingPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Password *</label>
+                <label className="block text-sm font-medium mb-2">Password</label>
                 <input
                   type="password"
                   required
@@ -380,7 +377,7 @@ export default function PricingPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Owner Name *</label>
+                <label className="block text-sm font-medium mb-2">Owner Name</label>
                 <input
                   type="text"
                   required
@@ -392,7 +389,7 @@ export default function PricingPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Email *</label>
+                <label className="block text-sm font-medium mb-2">Email</label>
                 <input
                   type="email"
                   required
@@ -422,31 +419,32 @@ export default function PricingPage() {
               )}
 
               <div className="pt-4 border-t border-gray-700">
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex justify-between items-center mb-4">
                   <span className="text-gray-400">Plan Type:</span>
                   <span className="font-medium">{selectedPlan.planType}</span>
                 </div>
                 <div className="flex justify-between items-center mb-6">
                   <span className="text-gray-400">Total Price:</span>
-                  <span className="text-2xl font-bold text-blue-400">{selectedPlan.price}</span>
+                  <span className="text-2xl font-bold">{selectedPlan.price}</span>
                 </div>
               </div>
 
               <div className="flex gap-3">
                 <button
+                  type="button"
                   onClick={() => setIsModalOpen(false)}
                   className="flex-1 px-4 py-2 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
-                  onClick={handleSubmit}
+                  type="submit"
                   className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
                 >
                   Proceed to Payment
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       )}
