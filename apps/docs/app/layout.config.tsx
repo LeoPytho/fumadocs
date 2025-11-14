@@ -1,5 +1,5 @@
 import { type LinkItemType } from 'fumadocs-ui/layouts/docs';
-import { AlbumIcon, Heart, LayoutTemplate } from 'lucide-react';
+import { AlbumIcon, Heart, LayoutTemplate, UserPlus } from 'lucide-react';
 import Image from 'next/image';
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import { FumadocsIcon } from '@/app/layout.client';
@@ -25,6 +25,13 @@ export const linkItems: LinkItemType[] = [
     active: 'url',
   },
   {
+    type: 'button',
+    text: 'Register',
+    url: '/register', // Ganti dengan URL register yang sesuai
+    icon: <UserPlus />,
+    variant: 'outline',
+  },
+  {
     type: 'icon',
     url: 'https://github.com/j-forces',
     text: 'Github',
@@ -46,7 +53,6 @@ export const logo = (
       className="hidden w-20 md:w-24 [.uwu_&]:block"
       aria-label="JKT48Connect docs"
     />
-
     <FumadocsIcon className="size-5 [.uwu_&]:hidden" fill="currentColor" />
   </>
 );
