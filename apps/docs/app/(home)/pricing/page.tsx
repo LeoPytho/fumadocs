@@ -45,10 +45,11 @@ const plans: PricingPlan[] = [
       { text: 'IP whitelist required', included: true },
       { text: 'Community support', included: true },
       { text: 'Priority support', included: false },
+      { text: 'Custom Apikey', included: false },
       { text: 'Custom rate limits', included: false },
     ],
     cta: 'Get Started',
-    ctaLink: '/docs/getting-started',
+    ctaLink: '/generate',
   },
   {
     name: 'Premium',
@@ -64,6 +65,7 @@ const plans: PricingPlan[] = [
       { text: 'IP whitelist required', included: true },
       { text: 'Priority email support', included: true },
       { text: 'Advanced analytics', included: true },
+      { text: 'Custom Apikey', included: true },
       { text: 'Custom integrations', included: false },
     ],
     cta: 'Subscribe Now',
@@ -84,6 +86,7 @@ const plans: PricingPlan[] = [
       { text: 'IP whitelist required', included: true },
       { text: '24/7 priority support', included: true },
       { text: 'Advanced analytics dashboard', included: true },
+      { text: 'Custom Apikey', included: true },
       { text: 'Custom integrations', included: true },
       { text: 'SLA guarantee', included: true },
     ],
@@ -105,6 +108,7 @@ const plans: PricingPlan[] = [
       { text: 'Dedicated support channel', included: true },
       { text: 'Custom analytics & reporting', included: true },
       { text: 'White-label options', included: true },
+      { text: 'Custom Apikey', included: true },    
       { text: 'Early access to new features', included: true },
     ],
     cta: 'Contact Sales',
@@ -183,6 +187,7 @@ export default function PricingPage() {
                 'Highest priority support',
                 'Direct access to team',
                 'Beta features access',
+                'Custom Token',
                 'Custom SLA agreements',
               ].map((feature, idx) => (
                 <li key={idx} className="flex items-center gap-2">
@@ -254,6 +259,7 @@ export default function PricingPage() {
               <ComparisonRow feature="IP Whitelist" values={['Required', 'Required', 'Required', 'Required', 'Not Required']} />
               <ComparisonRow feature="Support Level" values={['Community', 'Email', '24/7 Priority', 'Dedicated', 'Direct Team']} />
               <ComparisonRow feature="Analytics" values={['Basic', 'Advanced', 'Advanced', 'Custom', 'Custom']} />
+              <ComparisonRow feature="Apikey Custom" values={['✗', '✓', '✓', '✓', '✓']} />
               <ComparisonRow feature="SLA Guarantee" values={['✗', '✗', '✓', '✓', '✓']} />
             </tbody>
           </table>
