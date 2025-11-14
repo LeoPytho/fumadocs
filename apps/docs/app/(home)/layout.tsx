@@ -108,18 +108,6 @@ export default function Layout({ children }: { children: ReactNode }) {
           ),
         },
         ...linkItems,
-        {
-          type: 'custom',
-          on: 'nav',
-          children: (
-            <Link
-              href="/register"
-              className="inline-flex items-center justify-center rounded-md bg-fd-primary px-4 py-2 text-sm font-medium text-fd-primary-foreground hover:bg-fd-primary/90 transition-colors"
-            >
-              Register
-            </Link>
-          ),
-        },
       ]}
       className="dark:bg-neutral-950 dark:[--color-fd-background:var(--color-neutral-950)]"
     >
