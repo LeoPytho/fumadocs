@@ -1,3 +1,6 @@
+"use client"
+
+
 import { Check, Crown, Shield, Sparkles, Users, Code, Newspaper, X } from 'lucide-react';
 import { useState } from 'react';
 
