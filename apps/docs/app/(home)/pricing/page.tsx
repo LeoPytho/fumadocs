@@ -1,16 +1,5 @@
-import { Check, Crown, Shield, Sparkles, Users, Code, Newspaper } from 'lucide-react';
-import { cn } from '@/lib/cn';
-import { buttonVariants } from '@/components/ui/button';
-import { createMetadata } from '@/lib/metadata';
-import Link from 'fumadocs-core/link';
-
-export const metadata = createMetadata({
-  title: 'Pricing - API Key Plans',
-  description: 'Choose the perfect API plan for your JKT48 project',
-  openGraph: {
-    url: 'https://docs.jkt48connect.com/pricing',
-  },
-});
+import { Check, Crown, Shield, Sparkles, Users, Code, Newspaper, X } from 'lucide-react';
+import { useState } from 'react';
 
 interface PlanFeature {
   text: string;
@@ -26,8 +15,8 @@ interface PricingPlan {
   features: PlanFeature[];
   highlighted?: boolean;
   cta: string;
-  ctaLink: string;
   icon: React.ReactNode;
+  planType: string;
 }
 
 const plans: PricingPlan[] = [
@@ -38,6 +27,7 @@ const plans: PricingPlan[] = [
     limit: '2,500',
     expireDays: '30 days',
     icon: <Sparkles className="w-6 h-6" />,
+    planType: 'basic',
     features: [
       { text: '2,500 requests per month', included: true },
       { text: '30 days validity', included: true },
@@ -49,7 +39,6 @@ const plans: PricingPlan[] = [
       { text: 'Custom rate limits', included: false },
     ],
     cta: 'Get Started',
-    ctaLink: '/generate',
   },
   {
     name: 'Premium',
@@ -58,6 +47,7 @@ const plans: PricingPlan[] = [
     limit: '5,000',
     expireDays: '60 days',
     icon: <Crown className="w-6 h-6" />,
+    planType: 'premium',
     features: [
       { text: '5,000 requests per month', included: true },
       { text: '60 days validity', included: true },
@@ -69,7 +59,6 @@ const plans: PricingPlan[] = [
       { text: 'Custom integrations', included: false },
     ],
     cta: 'Subscribe Now',
-    ctaLink: '/subscribe/premium',
   },
   {
     name: 'Enterprise',
@@ -78,6 +67,7 @@ const plans: PricingPlan[] = [
     limit: '25,000',
     expireDays: '152 days',
     icon: <Shield className="w-6 h-6" />,
+    planType: 'enterprise',
     highlighted: true,
     features: [
       { text: '25,000 requests per month', included: true },
@@ -91,7 +81,6 @@ const plans: PricingPlan[] = [
       { text: 'SLA guarantee', included: true },
     ],
     cta: 'Get Enterprise',
-    ctaLink: '/subscribe/enterprise',
   },
   {
     name: 'Premium Plus',
@@ -100,6 +89,7 @@ const plans: PricingPlan[] = [
     limit: 'Unlimited',
     expireDays: 'Permanent',
     icon: <Sparkles className="w-6 h-6 text-yellow-500" />,
+    planType: 'premiumPlus',
     features: [
       { text: 'Unlimited requests', included: true },
       { text: 'Permanent access', included: true },
@@ -112,7 +102,6 @@ const plans: PricingPlan[] = [
       { text: 'Early access to new features', included: true },
     ],
     cta: 'Contact Sales',
-    ctaLink: '/contact',
   },
 ];
 
@@ -141,6 +130,48 @@ const priorityCategories: PriorityCategory[] = [
 ];
 
 export default function PricingPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<PricingPlan | null>(null);
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    owner: '',
+    email: '',
+    apikey: '',
+  });
+
+  const handlePlanClick = (plan: PricingPlan) => {
+    setSelectedPlan(plan);
+    setFormData({
+      username: '',
+      password: '',
+      owner: '',
+      email: '',
+      apikey: '',
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleSubmit = () => {
+    if (!formData.username || !formData.password || !formData.owner || !formData.email) {
+      alert('Please fill all required fields');
+      return;
+    }
+    
+    const purchaseData = {
+      ...formData,
+      type: selectedPlan?.planType,
+      plan: selectedPlan?.name,
+      price: selectedPlan?.price,
+      apikey: formData.apikey || `auto_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    };
+    
+    console.log('Purchase Data:', purchaseData);
+    
+    alert(`Order submitted successfully!\nPlan: ${selectedPlan?.name}\nAPI Key: ${purchaseData.apikey}\nPlease proceed with payment.`);
+    setIsModalOpen(false);
+  };
+
   return (
     <main className="px-4 py-12 w-full max-w-[1400px] mx-auto">
       {/* Header */}
@@ -148,7 +179,7 @@ export default function PricingPage() {
         <h1 className="text-4xl font-bold mb-4">
           Simple, Transparent Pricing
         </h1>
-        <p className="text-xl text-fd-muted-foreground max-w-2xl mx-auto">
+        <p className="text-xl text-gray-400 max-w-2xl mx-auto">
           Choose the perfect plan for your JKT48 project. All plans include access to our comprehensive API.
         </p>
       </div>
@@ -156,7 +187,7 @@ export default function PricingPage() {
       {/* Pricing Cards */}
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 mb-20">
         {plans.map((plan, index) => (
-          <PricingCard key={index} {...plan} />
+          <PricingCard key={index} {...plan} onSelect={() => handlePlanClick(plan)} />
         ))}
       </div>
 
@@ -171,7 +202,7 @@ export default function PricingPage() {
           </div>
           <div>
             <h2 className="text-3xl font-bold">Priority Token</h2>
-            <p className="text-fd-muted-foreground">Exclusive access for verified partners</p>
+            <p className="text-gray-400">Exclusive access for verified partners</p>
           </div>
         </div>
 
@@ -202,11 +233,11 @@ export default function PricingPage() {
             <h3 className="text-lg font-semibold mb-4">Eligible Categories</h3>
             <div className="space-y-4">
               {priorityCategories.map((category, idx) => (
-                <div key={idx} className="flex gap-3 p-3 bg-fd-background/50 rounded-lg border">
-                  <div className="text-fd-primary">{category.icon}</div>
+                <div key={idx} className="flex gap-3 p-3 bg-white/5 rounded-lg border border-gray-700">
+                  <div className="text-blue-400">{category.icon}</div>
                   <div>
                     <p className="font-medium text-sm mb-1">{category.title}</p>
-                    <p className="text-xs text-fd-muted-foreground">{category.description}</p>
+                    <p className="text-xs text-gray-400">{category.description}</p>
                   </div>
                 </div>
               ))}
@@ -215,20 +246,14 @@ export default function PricingPage() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6 border-t border-dashed">
-          <p className="text-sm text-fd-muted-foreground">
+          <p className="text-sm text-gray-400">
             Are you eligible for Priority Token access?
           </p>
           <a
             href="https://forms.gle/KeqJF9nAeEq7hxWP9"
             target="_blank"
             rel="noreferrer noopener"
-            className={cn(
-              buttonVariants({
-                variant: 'default',
-                size: 'lg',
-              }),
-              'bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600',
-            )}
+            className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-medium rounded-lg transition-all"
           >
             Apply for Priority Token
           </a>
@@ -241,9 +266,9 @@ export default function PricingPage() {
           Compare All Features
         </h2>
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
+          <table className="w-full border-collapse border border-gray-700">
             <thead>
-              <tr className="border-b">
+              <tr className="border-b border-gray-700 bg-gray-900">
                 <th className="text-left p-4 font-medium">Feature</th>
                 <th className="text-center p-4 font-medium">Basic</th>
                 <th className="text-center p-4 font-medium">Premium</th>
@@ -292,36 +317,139 @@ export default function PricingPage() {
       </div>
 
       {/* CTA Section */}
-      <div className="mt-20 text-center border border-dashed p-12 rounded-lg">
+      <div className="mt-20 text-center border border-dashed border-gray-700 p-12 rounded-lg">
         <h3 className="text-2xl font-bold mb-4">Still have questions?</h3>
-        <p className="text-fd-muted-foreground mb-6">
+        <p className="text-gray-400 mb-6">
           Our team is here to help you choose the right plan for your needs.
         </p>
         <div className="flex justify-center gap-4">
-          <Link
-            href="/docs"
-            className={cn(
-              buttonVariants({
-                variant: 'outline',
-              }),
-            )}
-          >
+          <a href="/docs" className="px-6 py-2 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors">
             Read Documentation
-          </Link>
+          </a>
           <a
             href="https://wa.me/6285189020193"
             target="_blank"
             rel="noreferrer noopener"
-            className={cn(
-              buttonVariants({
-                variant: 'default',
-              }),
-            )}
+            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
           >
             Contact Support
           </a>
         </div>
       </div>
+
+      {/* Modal */}
+      {isModalOpen && selectedPlan && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={() => setIsModalOpen(false)}>
+          <div className="bg-gray-900 rounded-xl max-w-md w-full border border-gray-700 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="p-6 border-b border-gray-700 flex items-center justify-between sticky top-0 bg-gray-900 z-10">
+              <div>
+                <h3 className="text-xl font-bold">Subscribe to {selectedPlan.name}</h3>
+                <p className="text-sm text-gray-400">Complete your information below</p>
+              </div>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Username *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.username}
+                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500"
+                  placeholder="Enter your username"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Password *</label>
+                <input
+                  type="password"
+                  required
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500"
+                  placeholder="Enter your password"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Owner Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.owner}
+                  onChange={(e) => setFormData({ ...formData, owner: e.target.value })}
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500"
+                  placeholder="Enter owner name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Email *</label>
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500"
+                  placeholder="Enter your email"
+                />
+              </div>
+
+              {selectedPlan.planType !== 'basic' && (
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Custom API Key <span className="text-gray-400">(Optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.apikey}
+                    onChange={(e) => setFormData({ ...formData, apikey: e.target.value })}
+                    className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500"
+                    placeholder="Leave empty for auto-generated key"
+                  />
+                  <p className="text-xs text-gray-400 mt-1">
+                    If left empty, we'll generate a secure API key for you
+                  </p>
+                </div>
+              )}
+
+              <div className="pt-4 border-t border-gray-700">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-gray-400">Plan Type:</span>
+                  <span className="font-medium">{selectedPlan.planType}</span>
+                </div>
+                <div className="flex justify-between items-center mb-6">
+                  <span className="text-gray-400">Total Price:</span>
+                  <span className="text-2xl font-bold text-blue-400">{selectedPlan.price}</span>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="flex-1 px-4 py-2 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSubmit}
+                  className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                >
+                  Proceed to Payment
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
@@ -335,46 +463,44 @@ function PricingCard({
   features,
   highlighted,
   cta,
-  ctaLink,
   icon,
-}: PricingPlan) {
+  onSelect,
+}: PricingPlan & { onSelect: () => void }) {
   return (
     <div
-      className={cn(
-        'relative border rounded-xl p-6 flex flex-col',
+      className={`relative border rounded-xl p-6 flex flex-col ${
         highlighted
-          ? 'border-fd-primary shadow-lg scale-105'
-          : 'border-dashed hover:border-fd-primary/50 transition-all',
-      )}
+          ? 'border-blue-500 shadow-lg shadow-blue-500/20 scale-105'
+          : 'border-gray-700 hover:border-blue-500/50 transition-all'
+      }`}
     >
       {highlighted && (
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-fd-primary text-fd-primary-foreground text-xs font-medium rounded-full">
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-blue-600 text-white text-xs font-medium rounded-full">
           Most Popular
         </div>
       )}
 
       <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 bg-fd-primary/10 rounded-lg">{icon}</div>
+        <div className="p-2 bg-blue-500/10 rounded-lg">{icon}</div>
         <div>
           <h3 className="font-bold text-xl">{name}</h3>
-          <p className="text-sm text-fd-muted-foreground">{description}</p>
+          <p className="text-sm text-gray-400">{description}</p>
         </div>
       </div>
 
       <div className="mb-6">
         <div className="flex items-baseline gap-1">
           <span className="text-3xl font-bold">{price}</span>
-          {price !== 'Free' && !price.includes('Rp') && <span className="text-fd-muted-foreground">/month</span>}
         </div>
       </div>
 
-      <div className="mb-6 p-3 bg-fd-accent rounded-lg">
+      <div className="mb-6 p-3 bg-gray-800 rounded-lg">
         <div className="flex justify-between text-sm mb-1">
-          <span className="text-fd-muted-foreground">Monthly Limit:</span>
+          <span className="text-gray-400">Monthly Limit:</span>
           <span className="font-medium">{limit} requests</span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-fd-muted-foreground">Validity:</span>
+          <span className="text-gray-400">Validity:</span>
           <span className="font-medium">{expireDays}</span>
         </div>
       </div>
@@ -385,41 +511,37 @@ function PricingCard({
             {feature.included ? (
               <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
             ) : (
-              <span className="w-5 h-5 flex-shrink-0 text-fd-muted-foreground">✗</span>
+              <span className="w-5 h-5 flex-shrink-0 text-gray-600">✗</span>
             )}
-            <span className={cn('text-sm', !feature.included && 'text-fd-muted-foreground')}>
+            <span className={`text-sm ${!feature.included && 'text-gray-500'}`}>
               {feature.text}
             </span>
           </li>
         ))}
       </ul>
 
-      <Link
-        href={ctaLink}
-        className={cn(
-          buttonVariants({
-            variant: highlighted ? 'default' : 'outline',
-            className: 'w-full',
-          }),
-        )}
+      <button
+        onClick={onSelect}
+        className={`w-full py-2 px-4 rounded-lg font-medium transition-colors ${
+          highlighted
+            ? 'bg-blue-600 hover:bg-blue-700 text-white'
+            : 'border border-gray-700 hover:bg-gray-800'
+        }`}
       >
         {cta}
-      </Link>
+      </button>
     </div>
   );
 }
 
 function ComparisonRow({ feature, values }: { feature: string; values: string[] }) {
   return (
-    <tr className="border-b hover:bg-fd-accent/50">
+    <tr className="border-b border-gray-700 hover:bg-gray-900/50">
       <td className="p-4 font-medium">{feature}</td>
       {values.map((value, idx) => (
         <td
           key={idx}
-          className={cn(
-            'text-center p-4',
-            idx === values.length - 1 && 'bg-yellow-500/5',
-          )}
+          className={`text-center p-4 ${idx === values.length - 1 ? 'bg-yellow-500/5' : ''}`}
         >
           {value}
         </td>
@@ -430,9 +552,9 @@ function ComparisonRow({ feature, values }: { feature: string; values: string[] 
 
 function FAQItem({ question, answer }: { question: string; answer: string }) {
   return (
-    <div className="border border-dashed p-6 rounded-lg">
+    <div className="border border-dashed border-gray-700 p-6 rounded-lg">
       <h4 className="font-medium mb-2">{question}</h4>
-      <p className="text-sm text-fd-muted-foreground">{answer}</p>
+      <p className="text-sm text-gray-400">{answer}</p>
     </div>
   );
 }
