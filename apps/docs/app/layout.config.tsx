@@ -28,6 +28,7 @@ export const linkItems: LinkItemType[] = [
     type: 'button',
     text: 'Register',
     url: '/register', // Ganti dengan URL register yang sesuai
+    external: true,
   },
   {
     type: 'icon',
