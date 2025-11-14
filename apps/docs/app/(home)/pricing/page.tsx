@@ -8,7 +8,7 @@ export const metadata = createMetadata({
   title: 'Pricing - API Key Plans',
   description: 'Choose the perfect API plan for your JKT48 project',
   openGraph: {
-    url: 'https://docs.jkt48connect.my.id/pricing',
+    url: 'https://docs.jkt48connect.com/pricing',
   },
 });
 
