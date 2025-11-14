@@ -28,8 +28,6 @@ export const linkItems: LinkItemType[] = [
     type: 'button',
     text: 'Register',
     url: '/register', // Ganti dengan URL register yang sesuai
-    icon: <UserPlus />,
-    variant: 'outline',
   },
   {
     type: 'icon',
