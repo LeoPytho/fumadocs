@@ -111,9 +111,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       ]}
       className="dark:bg-neutral-950 dark:[--color-fd-background:var(--color-neutral-950)]"
     >
-      <div className="container max-w-[1120px] mx-auto px-4">
-        {children}
-      </div>
+      {children}
       <Footer />
     </HomeLayout>
   );
@@ -122,7 +120,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 function Footer() {
   return (
     <footer className="mt-auto border-t bg-fd-card py-12 text-fd-secondary-foreground">
-      <div className="container max-w-[1120px] mx-auto px-4 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="container flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="mb-1 text-sm font-semibold">JKT48Connect</p>
           <p className="text-xs">
